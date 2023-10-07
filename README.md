@@ -1,4 +1,4 @@
-# MembershipManagement
+# MembershipManagemer
 Welcome to the MembershipManagement project! This repository houses our database application developed as part of the BDR course on relational databases. Our goal is to create an efficient system for managing subscribers, billing, and administrative tasks for various types of structures, such as fitness centers, climbing centers, and more.
 
 ## Project Phases
