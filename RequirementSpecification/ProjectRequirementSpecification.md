@@ -1,4 +1,4 @@
-# MembershipManagement - Project Requirements Document
+# MembershipManager - Project Requirements Document
 
 ## Objective
 
@@ -8,7 +8,9 @@ As part of the BDR course covering relational databases, we are required to deve
 
 ### Project participants
 Colin Jaques - Student - https://github.com/CoJaques
+
 Walid Slimani - Student - https://github.com/SlWa99
+
 Alexandre Iorio - Student - https://github.com/AlexandreIorio
 
 
@@ -48,13 +50,13 @@ To address this significant administrative problem, it is crucial to compile a l
 To establish such a computerized structure, a database system will be required to store and link the following elements:
 
 #### Users
-Users represent individuals who access your application. They may include both administrators and regular users who interact with various features and functionalities.
-
-#### Employee
-The Employee entity represents individuals who work within your organisation. This entity include attributes to manage and track employee information, roles, and employment details, including the ability to manage contracts and salaries.
+Users represent individuals who access the application. They may include both administrators and regular users who interact with various features and functionalities.
 
 #### Roles and Access
-Roles and Access refer to the permissions and privileges assigned to users within your application. This entity helps define who can perform specific actions and access certain parts of the system.
+Roles and Access refer to the permissions and privileges assigned to users within the application. This entity helps define who can perform specific actions and access certain parts of the system.
+
+#### Employee
+The Employee entity represents individuals who work within the organisation. This entity include attributes to manage and track employee information, roles, and employment details, including the ability to manage contracts and salaries.
 
 #### Members
 Members within the application represent individuals who have subscribed to a strucutre, such as gym or fitness center, Climbing center or many other types of strucutre. 
@@ -75,7 +77,6 @@ Data Templates to Generate Documents are templates used to create various types 
 The Cashier entity is responsible for handling payment transactions and processing financial transactions inside the strucutre. It interacts with billing information and payment gateways.
  
 #### Charges and maintenance
-
 This entity covers activities and expenditure relating to the repair and overall maintenance of infrastructure, equipment and facilities.
 
 #### Accounting Report
