@@ -28,7 +28,7 @@ Alexandre Iorio - Student - https://github.com/AlexandreIorio
 - Writing queries and creating views and automatic triggers.
 
 ### V. Database Application - 21 February, 2024
-- Development of a cross-platform application in `C#` with `Maui` for visualizing and manipulating the database.
+- Development of an application in `C#` for visualizing and manipulating the database.
 - Use of an API to connect the application to the database.
 
 ## Project
