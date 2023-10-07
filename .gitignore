@@ -1,0 +1,16 @@
+
+# Visual Studio Community Folders
+.vs
+[Oo]bj
+[Bb]in
+[Dd]ebug
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstatesà
+
+# Build results
+README.pdf
+1_Issue.pdf
