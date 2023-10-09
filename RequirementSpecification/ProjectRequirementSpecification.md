@@ -1,5 +1,7 @@
 # MembershipManager - Project Requirements Document
 
+Read on GitHub : [https://github.com/AlexandreIorio/MembershipManager/tree/main/RequirementSpecification](https://github.com/AlexandreIorio/MembershipManager/tree/main/RequirementSpecification)
+
 ## Objective
 
 As part of the BDR course covering relational databases, we are required to develop a database application that must be submitted by `21 January, 2024`. The project will be carried out in 5 phases.
