@@ -6,10 +6,8 @@ CREATE TABLE canton (
 abbreviation varchar(2),
 name varchar(50),
 
-PRIMARY KEY (abbreviation)
+PRIMARY KEY (name)
 );
-);
-
 
 Create TABLE city (
 npa int,
@@ -17,7 +15,7 @@ name varchar(50),
 canton_name varchar(50),
 
 PRIMARY KEY (npa),
-FOREIGN KEY (canton_name) REFERENCES Canton(abbreviation)
+FOREIGN KEY (canton_name) REFERENCES Canton(name)
 );
 
 CREATE TABLE structure
@@ -122,10 +120,10 @@ CREATE TABLE users(
     username varchar(50),
     password_hash varchar(50),
     salt varchar(50),
-    employe_no_avs int NOT NULL UNIQUE,
+    no_avs int NOT NULL UNIQUE,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (employe_no_avs) REFERENCES employe(no_avs)
+    FOREIGN KEY (no_avs) REFERENCES employe(no_avs)
 );
 
 CREATE TABLE role(
@@ -179,11 +177,11 @@ FOREIGN KEY (id) REFERENCES documents(id)
 
 CREATE TABLE computed_document(
 id int,
-person_id int,
+no_avs int,
 
 PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES documents(id),
-FOREIGN KEY (person_id) REFERENCES person(no_avs)
+FOREIGN KEY (no_avs) REFERENCES person(no_avs)
 );
 
 CREATE TABLE paiement
