@@ -12,7 +12,7 @@ PRIMARY KEY (name)
 Create TABLE city (
 npa int,
 name varchar(50),
-canton_name varchar(50),
+canton_name varchar(50) NOT NULL,
 
 PRIMARY KEY (npa),
 FOREIGN KEY (canton_name) REFERENCES Canton(name)
@@ -22,7 +22,7 @@ CREATE TABLE structure
 (
 name varchar(50),
 head_office_address varchar(50),
-npa int,
+npa int NOT NULL,
 
 PRIMARY KEY (name),
 FOREIGN KEY (npa) REFERENCES city(npa)
@@ -30,8 +30,8 @@ FOREIGN KEY (npa) REFERENCES city(npa)
 
 CREATE TABLE franchise (
     id int,
-    structure_name varchar(50),
-    npa int,
+    structure_name varchar(50) NOT NULL,
+    npa int NOT NULL,
     address varchar(50),
 
 PRIMARY KEY (id),
@@ -43,7 +43,7 @@ CREATE TABLE person (
 no_avs int,
 last_name varchar(50),
 address varchar(50),
-npa int,
+npa int NOT NULL,
 phone varchar(15), -- does not store the first 0 or the country code
 mobile varchar(15), -- does not store the first 0 or the country code
 email varchar(50),
@@ -66,7 +66,7 @@ FOREIGN KEY (npa) REFERENCES city(npa)
 
 CREATE TABLE Employe (
     no_avs int,
-    franchise_id int,
+    franchise_id int NOT NULL,
     salary int, --cents
     rate int, --percents
 
@@ -77,7 +77,7 @@ CREATE TABLE Employe (
 
 CREATE TABLE member(
     no_avs int,
-    structure_name varchar(50),
+    structure_name varchar(50) NOT NULL,
     subscription_date date,
 
     PRIMARY KEY (no_avs),
@@ -105,8 +105,8 @@ PRIMARY KEY(code)
 
 CREATE TABLE consumption(
     id int,
-    account_id int,
-    code int,
+    account_id int NOT NULL,
+    code int NOT NULL,
     date date,
 
 
@@ -162,7 +162,7 @@ CREATE TABLE role_permission(
 CREATE TABLE documents(
 id int,
 content text,
-franchise_id int,
+franchise_id int NOT NULL,
 
 PRIMARY KEY (id),
 FOREIGN KEY (franchise_id) REFERENCES franchise(id)
@@ -177,7 +177,7 @@ FOREIGN KEY (id) REFERENCES documents(id)
 
 CREATE TABLE computed_document(
 id int,
-no_avs int,
+no_avs int NOT NULL,
 
 PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES documents(id),
@@ -187,7 +187,7 @@ FOREIGN KEY (no_avs) REFERENCES person(no_avs)
 CREATE TABLE paiement
 (
 id int,
-    account_id int,
+    account_id int NOT NULL,
 amount int,
 date date,
 
@@ -217,7 +217,7 @@ FOREIGN KEY (id) REFERENCES paiement(id)
 CREATE TABLE consumable
 (
 code int,
-franchise_id int,
+franchise_id int NOT NULL,
 
 PRIMARY KEY (code),
 FOREIGN KEY(code) REFERENCES product(code),
@@ -227,7 +227,7 @@ FOREIGN KEY (franchise_id) REFERENCES franchise(id)
 CREATE TABLE entry (
     code int,
 subscription_date date,
-strucure_name varchar(50),
+strucure_name varchar(50) NOT NULL,
 
 PRIMARY KEY (code),
 FOREIGN KEY (code) REFERENCES product(code),
