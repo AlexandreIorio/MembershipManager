@@ -1,7 +1,5 @@
 SET search_path TO membershipmanager;
 
-
-
 CREATE TABLE canton (
 abbreviation varchar(2),
 name varchar(50),
@@ -264,3 +262,49 @@ CREATE TABLE subscription
     FOREIGN KEY (code) references entry(code)
 
 );
+
+-- IV --
+
+CREATE VIEW OutstandingBills AS
+SELECT p.no_avs, p.last_name, p.first_name, b.id AS bill_id, b.issue_date, pa.amount
+FROM person p
+	JOIN member m ON p.no_avs = m.no_avs
+	JOIN memberaccount ma ON m.no_avs = ma.id
+	JOIN paiement pa ON ma.id = pa.account_id
+	JOIN bill b ON pa.id = b.id
+WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant à payer
+AND b.issue_date IS NOT NULL;
+
+CREATE TABLE member_log (
+    log_id SERIAL PRIMARY KEY,
+    no_avs int NOT NULL,
+    action_type VARCHAR(50) NOT NULL, -- 'INSERT' pour inscription, 'DELETE' pour suppression
+    action_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (no_avs) REFERENCES person(no_avs)
+);
+
+CREATE OR REPLACE FUNCTION log_member_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO member_log (no_avs, action_type)
+    VALUES (NEW.no_avs, 'INSERT');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER member_after_insert
+AFTER INSERT ON member
+FOR EACH ROW EXECUTE FUNCTION log_member_insert();
+
+CREATE OR REPLACE FUNCTION log_member_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO member_log (no_avs, action_type)
+    VALUES (OLD.no_avs, 'DELETE');
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER member_after_delete
+AFTER DELETE ON member
+FOR EACH ROW EXECUTE FUNCTION log_member_delete();
