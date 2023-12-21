@@ -1,0 +1,199 @@
+@startuml
+skinparam linetype ortho
+
+skinparam nodesep 150
+skinparam ranksep 150
+
+
+left to right direction
+
+CLASS CANTON {
+  abbreviation varchar(2)
+  name varchar(50)
+}
+
+CLASS city {
+  npa int
+  name varchar(50)
+  canton_name varchar(50)
+}
+
+CLASS structure {
+  name varchar(50)
+  head_office_address varchar(50)
+  npa int
+}
+
+CLASS franchise {
+  id int
+  structure_name varchar(50)
+  npa int
+  address varchar(50)
+}
+
+CLASS person {
+  no_avs int
+  last_name varchar(50)
+  address varchar(50)
+  npa int
+  phone varchar(15)
+  mobile varchar(15)
+  email varchar(50)
+}
+
+CLASS person_name {
+  no_avs int
+  name_order int
+  npa int
+  name varchar(50)
+}
+
+CLASS Employe {
+  no_avs int
+  franchise_id int
+  salary int
+  rate int
+}
+
+CLASS member {
+  no_avs int
+  structure_name varchar(50)
+  subscription_date date
+}
+
+CLASS memberaccount {
+  id int
+  credit int
+  debit int
+}
+
+CLASS product {
+  code int
+  price int
+  name varchar(50)
+}
+
+CLASS consumption {
+  id int
+  account_id int
+  code int
+  date date
+}
+
+CLASS users {
+  id int
+  username varchar(50)
+  password_hash varchar(50)
+  salt varchar(50)
+  employe_no_avs int
+}
+
+CLASS role {
+  id int
+  name varchar(50)
+}
+
+CLASS user_role {
+  user_id int
+  role_id int
+}
+
+CLASS permission {
+  id int
+  name varchar(50)
+}
+
+CLASS role_permission {
+  role_id int
+  permission_id int
+}
+
+CLASS documents {
+  id int
+  content text
+  franchise_id int
+}
+
+CLASS template {
+  id int
+}
+
+CLASS computed_document {
+  id int
+  person_id int
+}
+
+CLASS paiement {
+  id int
+  account_id int
+  amount int
+  date date
+}
+
+CLASS cashier {
+  id int
+}
+
+CLASS bill {
+  id int
+  issue_date date
+}
+
+CLASS consumable {
+  code int
+  franchise_id int
+}
+
+CLASS entry {
+  code int
+  subscription_date date
+  strucure_name varchar(50)
+}
+
+CLASS uniqueEntry {
+  code int
+}
+
+CLASS multipleEntry {
+  code int
+  num_of_entry int
+  entries_recorded int
+  validity int
+}
+
+CLASS subscription {
+  code int
+  duration int
+}
+
+CANTON --> city : canton_name
+city --> structure : npa
+structure --> franchise : npa
+person --> city : npa
+person_name --> person : no_avs
+Employe --> person : no_avs
+Employe --> franchise : franchise_id
+member --> person : no_avs
+member --> structure : structure_name
+memberaccount --> member : id
+consumption --> memberaccount : account_id
+consumption --> product : code
+users --> Employe : employe_no_avs
+user_role --> users : user_id
+user_role --> role : role_id
+role_permission --> role : role_id
+role_permission --> permission : permission_id
+documents --> franchise : franchise_id
+template --> documents : id
+computed_document --> documents : id
+computed_document --> person : person_id
+paiement --> memberaccount : account_id
+cashier --> paiement : id
+bill --> paiement : id
+consumable --> product : code
+entry --> product : code
+uniqueEntry --> entry : code
+multipleEntry --> entry : code
+subscription --> entry : code
+
+@enduml
