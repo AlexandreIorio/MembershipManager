@@ -1,34 +1,103 @@
-﻿using System;
+﻿using Npgsql;
 using System.Configuration;
-using System.Collections.Generic;
-using System.Text;
-using Npgsql;
-
-using System.Windows;
 using System.Reflection;
 
 
 namespace MembershipManager.Engine
 {
-
-
     public class DbManager
     {
-        private static readonly DbManager? _instance = new();
-
+        #region Singleton access
         public static DbManager? Db
         {
-            get { return _instance; }
+            get
+            {
+                _instance ??= new DbManager();
+                return _instance;
+            }
         }
 
         private DbManager()
         {
-            _conn = new NpgsqlConnection(getConnectionString());
+            _conn = new NpgsqlConnection(GetConnectionString());
         }
 
-        private NpgsqlConnection _conn;
+        private static DbManager? _instance;
+        #endregion
 
-        private string getConnectionString()
+        #region Db interraction
+        public void Send(NpgsqlCommand cmd)
+        {
+            CheckDbValidity(cmd);
+
+            Db?.OpenConnection();
+            cmd.Connection = _conn;
+            cmd.ExecuteNonQuery();
+            Db?.CloseConnection();
+        }
+
+        public List<T> Receive<T>(NpgsqlCommand cmd) where T : class
+        {
+            CheckDbValidity(cmd);
+
+            Type type = typeof(T);
+            cmd.Connection = _conn;
+            Db?.OpenConnection();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            List<T> results = [];
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    object? obj = Convert(reader, type) ?? throw new ArgumentNullException($"Command call throw exception {cmd.CommandText}");
+                    results.Add((T)obj);
+                }
+            }
+            Db?.CloseConnection();
+
+            return results;
+        }
+
+        private static object? Convert(NpgsqlDataReader reader, Type type)
+        {
+            object? newObject = Activator.CreateInstance(type);
+
+            if (newObject is null) return null;
+
+            foreach (var property in type.GetProperties())
+            {
+                var attributes = property.GetCustomAttributes<Attribute>();
+                if (attributes.FirstOrDefault() is DbAttribute att)
+                {
+                    var valueRead = reader[att.Name];
+                    if (valueRead.GetType() != typeof(DBNull))
+                        property.SetValue(newObject, valueRead);
+                }
+                else if (attributes.FirstOrDefault() is DbRelation)
+                {
+                    Type relationType = property.PropertyType;
+                    object? newRelation = Convert(reader, relationType);
+                    property.SetValue(newObject, newRelation);
+                }
+            }
+
+            return newObject;
+        }
+
+        private static void CheckDbValidity(NpgsqlCommand cmd)
+        {
+            if (cmd.Connection is null) throw new ArgumentNullException("Connection is null");
+            if (Db is null) throw new ArgumentNullException("Db is null");
+            if (cmd.Connection != Db._conn) throw new ArgumentException("Connection is not the same");
+        }
+        #endregion
+
+        #region Db connection management
+        private readonly NpgsqlConnection _conn;
+
+        private static string GetConnectionString()
         {
 
             var AppSetting = ConfigurationManager.AppSettings;
@@ -45,79 +114,14 @@ namespace MembershipManager.Engine
         private void OpenConnection()
         {
             _conn.Open();
-            using (var command = new NpgsqlCommand("SET search_path TO membershipmanager", _conn))
-            {
-                command.ExecuteNonQuery();
-            }
+            using var command = new NpgsqlCommand("SET search_path TO membershipmanager", _conn);
+            command.ExecuteNonQuery();
         }
 
         private void CloseConnection()
         {
             _conn.Close();
         }
-
-        public void send(NpgsqlCommand cmd)
-        {
-            Db.OpenConnection();
-            cmd.Connection = _conn;
-            cmd.ExecuteNonQuery();
-            Db.CloseConnection();
-        }
-
-        public List<T> recieve<T>(NpgsqlCommand cmd) where T : class
-        {
-
-            Type type = typeof(T);
-            cmd.Connection = _conn;
-            Db.OpenConnection();
-            NpgsqlDataReader reader = cmd.ExecuteReader();
-            
-            List<T> results = new List<T>();
-
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    object? obj = converter(reader, type) ?? throw new ArgumentNullException($"Command call throw exception {cmd.CommandText}");
-                    results.Add((T)obj);
-                }
-            }
-            Db.CloseConnection();
-            return results;
-
-        }
-
-        private object? converter(NpgsqlDataReader reader, Type type)
-        {
-            object? myObject = Activator.CreateInstance(type);
-
-            if (myObject == null) return null;
-
-            foreach (PropertyInfo p in type.GetProperties())
-            {
-                var Attributs = p.GetCustomAttributes<Attribute>();
-                if (Attributs.Count() == 0) continue;
-                if (Attributs.First() is DbAttribute att)
-                {
-                    var theValue = reader[att.Name];
-                    if (theValue.GetType() != typeof(DBNull))
-                    {
-                        p.SetValue(myObject, theValue);
-                    }
-                }
-
-                else if (Attributs.First() is DbRelation rel)
-                {
-                    Type relationType = p.PropertyType;
-                    object? myRelation = Activator.CreateInstance(relationType);
-                    myRelation = converter(reader, relationType);
-                    p.SetValue(myObject, myRelation);
-                }
-            }
-            return myObject;
-
-        }
-
-
+        #endregion
     }
 }

@@ -14,24 +14,24 @@ namespace MembershipManager.DataModel.Person
     public class Person
     {
         [DbAttribute("no_avs")]
-        public string NoAvs { get; set; }
+        public string? NoAvs { get; set; }
 
         [DbAttribute("first_name")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [DbAttribute("last_name")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [DbAttribute("address")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         public int CityId { get; set; }
 
         [DbRelation("city_id")]
-        public City City { get; set; }
+        public City? City { get; set; }
 
 
-        public static Person GetPerson(object noAvs)
+        public static Person? GetPerson(object noAvs)
         {
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.CommandText = $"SELECT * FROM fullperson WHERE no_avs = @value1";
@@ -40,7 +40,7 @@ namespace MembershipManager.DataModel.Person
             NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 13) { Value = noAvs };
             cmd.Parameters.Add(param);
 
-            return DbManager.Db.recieve<Person>(cmd).First();
+            return DbManager.Db?.Receive<Person>(cmd).First() ?? null;
         }
 
         public void Insert()
