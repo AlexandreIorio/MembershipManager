@@ -78,7 +78,8 @@ namespace MembershipManager.Engine
                         property.SetValue(newObject, valueRead);
                 }
                 else if (attributes.FirstOrDefault() is DbRelation)
-                {
+                { 
+                    //TODO: l'implémentation de la relation doit se faire via une methode get interfacée, pas possible sinon exemple: Persone -> Member -> Franchise -> Structure -> City c'est la merde
                     Type relationType = property.PropertyType;
                     object? newRelation = Convert(reader, relationType);
                     property.SetValue(newObject, newRelation);

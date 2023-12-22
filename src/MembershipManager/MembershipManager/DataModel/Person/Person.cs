@@ -34,7 +34,7 @@ namespace MembershipManager.DataModel.Person
         public static Person? GetPerson(object noAvs)
         {
             NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"SELECT * FROM fullperson WHERE no_avs = @value1";
+            cmd.CommandText = $"SELECT * FROM get_person WHERE no_avs = @value1";
             NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 13) { Value = noAvs };
             cmd.Parameters.Add(param);
 
