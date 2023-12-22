@@ -1,69 +1,66 @@
+-- create schema membershipmanager if not exists;
+DROP SCHEMA IF EXISTS membershipmanager CASCADE;
+
+CREATE SCHEMA IF NOT EXISTS membershipmanager;
+
 SET search_path TO membershipmanager;
 
 CREATE TABLE canton (
-abbreviation varchar(2),
-name varchar(50),
+abbreviation char(2),
+canton_name varchar(50),
 
-PRIMARY KEY (name)
+PRIMARY KEY (abbreviation)
 );
 
 Create TABLE city (
-npa int,
-name varchar(50),
-canton_name varchar(50) NOT NULL,
+    id int ,
+    city_name varchar(50),
+    npa int,
+    canton_abbreviation char(2) NOT NULL,
 
-PRIMARY KEY (npa),
-FOREIGN KEY (canton_name) REFERENCES Canton(name)
+PRIMARY KEY (id),
+FOREIGN KEY (canton_abbreviation) REFERENCES Canton(abbreviation)
 );
 
 CREATE TABLE structure
 (
 name varchar(50),
 head_office_address varchar(50),
-npa int NOT NULL,
+city_id int NOT NULL,
 
 PRIMARY KEY (name),
-FOREIGN KEY (npa) REFERENCES city(npa)
+FOREIGN KEY (city_id) REFERENCES city(id)
 );
 
 CREATE TABLE franchise (
     id int,
     structure_name varchar(50) NOT NULL,
-    npa int NOT NULL,
+    city_id int NOT NULL,
     address varchar(50),
 
 PRIMARY KEY (id),
 FOREIGN KEY (structure_name) REFERENCES structure(name),
-FOREIGN KEY (npa) REFERENCES city(npa)
+FOREIGN KEY (city_id) REFERENCES city(id)
 );
 
+
+
 CREATE TABLE person (
-no_avs int,
+no_avs char(13),
+first_name varchar(50),
 last_name varchar(50),
 address varchar(50),
-npa int NOT NULL,
+city_id int NOT NULL,
 phone varchar(15), -- does not store the first 0 or the country code
 mobile varchar(15), -- does not store the first 0 or the country code
 email varchar(50),
 
 PRIMARY KEY (no_avs),
-FOREIGN KEY (npa) REFERENCES city(npa)
-);
-
-CREATE TABLE person_name (
-
-no_avs int,
-name_order int,
-npa int,
-name varchar(50),
-
-PRIMARY KEY (no_avs, name_order),
-FOREIGN KEY (no_avs) REFERENCES person(no_avs),
-FOREIGN KEY (npa) REFERENCES city(npa)
+FOREIGN KEY (city_id) REFERENCES city(id)
 );
 
 CREATE TABLE Employe (
-    no_avs int,
+                         no_avs char(13),
     franchise_id int NOT NULL,
     salary int, --cents
     rate int, --percents
@@ -74,7 +71,7 @@ CREATE TABLE Employe (
 );
 
 CREATE TABLE member(
-    no_avs int,
+                       no_avs char(13),
     structure_name varchar(50) NOT NULL,
     subscription_date date,
 
@@ -84,11 +81,12 @@ CREATE TABLE member(
 );
 CREATE TABLE memberaccount (
     id int, -- owner id
+    no_avs char(13),
     credit int, --cents
     debit int, --cents
 
     PRIMARY KEY (id),
-    FOREIGN KEY (id) REFERENCES member(no_avs)
+    FOREIGN KEY (no_avs) REFERENCES member(no_avs)
 );
 
 CREATE TABLE product
@@ -118,7 +116,7 @@ CREATE TABLE users(
     username varchar(50),
     password_hash varchar(50),
     salt varchar(50),
-    no_avs int NOT NULL UNIQUE,
+    no_avs char(13) NOT NULL UNIQUE,
 
     PRIMARY KEY (id),
     FOREIGN KEY (no_avs) REFERENCES employe(no_avs)
@@ -175,7 +173,7 @@ FOREIGN KEY (id) REFERENCES documents(id)
 
 CREATE TABLE computed_document(
 id int,
-no_avs int NOT NULL,
+no_avs char(13) NOT NULL,
 
 PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES documents(id),
@@ -265,19 +263,26 @@ CREATE TABLE subscription
 
 -- IV --
 
+
+
+CREATE VIEW FullPerson AS
+    SELECT * FROM person
+INNER JOIN city ON person.city_id = city.id
+INNER JOIN canton ON city.canton_abbreviation = canton.abbreviation;
+
 CREATE VIEW OutstandingBills AS
 SELECT p.no_avs, p.last_name, p.first_name, b.id AS bill_id, b.issue_date, pa.amount
 FROM person p
 	JOIN member m ON p.no_avs = m.no_avs
-	JOIN memberaccount ma ON m.no_avs = ma.id
+	JOIN memberaccount ma ON m.no_avs = ma.no_avs
 	JOIN paiement pa ON ma.id = pa.account_id
 	JOIN bill b ON pa.id = b.id
-WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant à payer
+WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant àabbreviation payer
 AND b.issue_date IS NOT NULL;
 
 CREATE TABLE member_log (
     log_id SERIAL PRIMARY KEY,
-    no_avs int NOT NULL,
+    no_avs char(13) NOT NULL,
     action_type VARCHAR(50) NOT NULL, -- 'INSERT' pour inscription, 'DELETE' pour suppression
     action_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (no_avs) REFERENCES person(no_avs)
