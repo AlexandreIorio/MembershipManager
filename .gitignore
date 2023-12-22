@@ -17,4 +17,4 @@ README.pdf
 
 *.bkp
 
-src/MembershipManager/MembershipManager/App.config
+App.config
