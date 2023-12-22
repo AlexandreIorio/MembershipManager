@@ -28,20 +28,22 @@ namespace MembershipManager.Engine
         #region Db interraction
         public void Send(NpgsqlCommand cmd)
         {
+            cmd.Connection = _conn;
+
             CheckDbValidity(cmd);
 
             Db?.OpenConnection();
-            cmd.Connection = _conn;
             cmd.ExecuteNonQuery();
             Db?.CloseConnection();
         }
 
         public List<T> Receive<T>(NpgsqlCommand cmd) where T : class
         {
+            cmd.Connection = _conn;
+
             CheckDbValidity(cmd);
 
             Type type = typeof(T);
-            cmd.Connection = _conn;
             Db?.OpenConnection();
             NpgsqlDataReader reader = cmd.ExecuteReader();
 

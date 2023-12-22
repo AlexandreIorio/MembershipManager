@@ -35,8 +35,6 @@ namespace MembershipManager.DataModel.Person
         {
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.CommandText = $"SELECT * FROM fullperson WHERE no_avs = @value1";
-            cmd.CommandText = $"SELECT * FROM fullperson where no_avs = '7563775467937';";
-
             NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 13) { Value = noAvs };
             cmd.Parameters.Add(param);
 
