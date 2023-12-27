@@ -1,5 +1,6 @@
 ﻿using MembershipManager.Engine;
 using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace MembershipManager.DataModel.Company
 {
-    public class Franchise
+    public class Franchise : ISql
     {
+        [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
         public int Id { get; set; }
 
@@ -33,5 +35,18 @@ namespace MembershipManager.DataModel.Company
             return DbManager.Db?.Receive<Franchise>(cmd).First() ?? null;
         }
 
+        public ISql? Get(object pk)
+        {
+            NpgsqlCommand cmd = new();
+            cmd.CommandText = $"SELECT * FROM structure WHERE name = @value1";
+            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Varchar, 50) { Value = pk };
+            cmd.Parameters.Add(param);
+            return DbManager.Db?.Receive<Structure>(cmd).FirstOrDefault();
+        }
+
+        public void Insert()
+        {
+            
+        }
     }
 }

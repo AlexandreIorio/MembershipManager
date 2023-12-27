@@ -6,15 +6,21 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 
 namespace MembershipManager.Engine
 {
     public interface ISql
     {
         #region Abstract Methods
-        public ISql? Get(object pk);
+        public ISql? Get(params object[] pk);
         public void Insert();
-        public object? GetPrimaryKey() {
+
+        #endregion
+
+        #region  Default Methods
+        public object? GetPrimaryKey()
+        {
             foreach (PropertyInfo p in this.GetType().GetProperties())
             {
                 IEnumerable<DbPrimaryKey> attributes = p.GetCustomAttributes<DbPrimaryKey>();
@@ -25,6 +31,7 @@ namespace MembershipManager.Engine
             }
             return null;
         }
+       
         #endregion
 
         #region  Static Methods
@@ -77,6 +84,7 @@ namespace MembershipManager.Engine
 
             return sbAtt.ToString() + " VALUES " + sbVal.ToString();
         }
+
         public static void ComputeCommandeWithValues(NpgsqlCommand cmd, object obj)
         {
             int i = 0;
@@ -110,6 +118,36 @@ namespace MembershipManager.Engine
                 }
             }
         }
+
+        public static string ComputeWhereClause(Type type)
+        {
+            List<string> dbPrimaryKeys = GetPrimaryKeyName(type);
+            StringBuilder sb = new StringBuilder("WHERE ");
+
+            for (int i = 0; i < dbPrimaryKeys.Count; i++)
+            {
+                sb.Append($"{dbPrimaryKeys[i]} = @value{i}");
+                if (i < dbPrimaryKeys.Count - 1) sb.Append(" AND ");
+            }
+
+            return sb.ToString();
+        }
+        private static List<string> GetPrimaryKeyName(Type type)
+        {
+            List<string> dbPrimaryKeys = new List<string>();
+
+            foreach (PropertyInfo p in type.GetProperties())
+            {
+                DbPrimaryKey? pkAttribute = p.GetCustomAttribute<DbPrimaryKey>();
+                if (pkAttribute is not null)
+                {
+                    DbNameable? nameAttribute = p.GetCustomAttribute<DbNameable>();
+                    if (nameAttribute is not null) dbPrimaryKeys.Add(nameAttribute.Name);
+                }
+            }
+            return dbPrimaryKeys;
+        }
+
         #endregion
     }
 

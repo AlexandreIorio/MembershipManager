@@ -13,9 +13,10 @@ using System.Collections.Generic;
 
 namespace MembershipManager.DataModel.Person
 {
+    [DbTableName("person")]
     public class Person : ISql
     {
-        [DbPrimaryKey]
+        [DbPrimaryKey(NpgsqlDbType.Char, 13)]
         [DbAttribute("no_avs")]
         public string? NoAvs { get; set; }
 
@@ -61,12 +62,21 @@ namespace MembershipManager.DataModel.Person
             DbManager.Db?.Send(cmd);
         }
                 
-        public ISql? Get(object pk)
+        public ISql? Get(params object[] pk)
         {
             NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM person WHERE no_avs = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 13) { Value = pk };
-            cmd.Parameters.Add(param);
+
+            DbTableName? tableNameAttribute = GetType().GetCustomAttribute<DbTableName>();
+            if (tableNameAttribute == null) throw new MissingMemberException();
+
+            cmd.CommandText = $"SELECT * FROM {tableNameAttribute.Name} WHERE {ISql.ComputeWhereClause(GetType())}";
+
+            for (int i = 0; i < pk.Length; i++)
+            {
+                NpgsqlParameter param = new NpgsqlParameter($"@value{i + 1}", NpgsqlDbType.Char, 13) { Value = pk[i] };
+                cmd.Parameters.Add(param);
+            }
+
             return DbManager.Db?.Receive<Person>(cmd).FirstOrDefault();
         }
 

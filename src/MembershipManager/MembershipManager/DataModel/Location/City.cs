@@ -6,7 +6,7 @@ namespace MembershipManager.DataModel
 {
     public class City : ISql
     {
-        [DbPrimaryKey]
+        [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
         public int Id { get; private set; }
 
@@ -35,7 +35,7 @@ namespace MembershipManager.DataModel
         {
             NpgsqlCommand cmd = new();
             cmd.CommandText = $"SELECT * FROM city WHERE id = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Integer) { Value = pk };
+            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Integer, 3) { Value = pk };
             cmd.Parameters.Add(param);
             return DbManager.Db?.Receive<City>(cmd).FirstOrDefault();
         }

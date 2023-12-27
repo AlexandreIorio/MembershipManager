@@ -6,7 +6,7 @@ namespace MembershipManager.DataModel
 {
     public class Canton : ISql
     {
-        [DbPrimaryKey]
+        [DbPrimaryKey(NpgsqlDbType.Char, 2)]
         [DbAttribute("abbreviation")]
         public string? Abbreviation { get; private set; }
 

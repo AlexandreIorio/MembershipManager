@@ -15,20 +15,20 @@ namespace MembershipManager
         public MainWindow()
         {
             InitializeComponent();
-            //Member member = new Member("7569854624538");
+            Member member = new Member("7569854624538");
 
 
-            Member p = new Member();
-            p.NoAvs = "7566923410409";
-            p.FirstName = "Jean";
-            p.LastName = "Dupont";
-            p.Address = "Rue de la gare 12";
-            p.City = new City(1000);
-            p.Phone = "021 123 45 67";
-            p.MobilePhone = "079 123 45 67";
-            p.Email = "jean.dupont@tatete.ru";
-            p.Structure = new Structure("GoldGym Fitness");
-            p.Insert();
+            //Member p = new Member();
+            //p.NoAvs = "7566923410409";
+            //p.FirstName = "Jean";
+            //p.LastName = "Dupont";
+            //p.Address = "Rue de la gare 12";
+            //p.City = new City(1000);
+            //p.Phone = "021 123 45 67";
+            //p.MobilePhone = "079 123 45 67";
+            //p.Email = "jean.dupont@tatete.ru";
+            //p.Structure = new Structure("GoldGym Fitness");
+            //p.Insert();
 
         }
     }

@@ -11,7 +11,7 @@ namespace MembershipManager.DataModel.Company
 {
     public class Structure : ISql
     {
-        [DbPrimaryKey]
+        [DbPrimaryKey(NpgsqlDbType.Varchar, 50)]
         [DbAttribute("name")]
         public string? Name { get; set; }
 
