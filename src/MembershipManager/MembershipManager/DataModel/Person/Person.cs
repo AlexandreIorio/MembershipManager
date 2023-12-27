@@ -29,7 +29,7 @@ namespace MembershipManager.DataModel.Person
         [DbAttribute("address")]
         public string? Address { get; set; }
 
-        [DbRelation("city_id")]
+        [DbRelation("city_id", "id")]
         public City? City { get; set; }
 
         [DbAttribute("phone")]
@@ -45,7 +45,7 @@ namespace MembershipManager.DataModel.Person
 
         public Person(string noAvs)
         {
-            Person? p = (Person?)Get(noAvs);
+            Person? p = ISql.Get<Person>(noAvs);
             if (p == null) throw new KeyNotFoundException();
             NoAvs = p.NoAvs;
             FirstName = p.FirstName;
@@ -61,24 +61,5 @@ namespace MembershipManager.DataModel.Person
             ISql.ComputeCommandeWithValues(cmd, this);
             DbManager.Db?.Send(cmd);
         }
-                
-        public ISql? Get(params object[] pk)
-        {
-            NpgsqlCommand cmd = new();
-
-            DbTableName? tableNameAttribute = GetType().GetCustomAttribute<DbTableName>();
-            if (tableNameAttribute == null) throw new MissingMemberException();
-
-            cmd.CommandText = $"SELECT * FROM {tableNameAttribute.Name} WHERE {ISql.ComputeWhereClause(GetType())}";
-
-            for (int i = 0; i < pk.Length; i++)
-            {
-                NpgsqlParameter param = new NpgsqlParameter($"@value{i + 1}", NpgsqlDbType.Char, 13) { Value = pk[i] };
-                cmd.Parameters.Add(param);
-            }
-
-            return DbManager.Db?.Receive<Person>(cmd).FirstOrDefault();
-        }
-
     }
 }

@@ -22,7 +22,9 @@ namespace MembershipManager.Engine
     [AttributeUsage(AttributeTargets.Property)]
     internal class DbConstraint  : Attribute {}
     internal class DbAttribute (string attributeName) : DbNameable (attributeName) {}
-    internal class DbRelation (string attributeName) : DbNameable(attributeName) {}
+    internal class DbRelation (string attributeName, string relAttribteName) : DbNameable(attributeName) {
+        public string RelAttributeName { get;} = relAttribteName;
+    }
     internal class DbPrimaryKey(NpgsqlDbType pkType, int size = 0) : DbConstraint
     {
         public NpgsqlDbType PkType { get; private set; } = pkType;

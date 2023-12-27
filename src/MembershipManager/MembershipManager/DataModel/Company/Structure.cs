@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MembershipManager.DataModel.Company
 {
+    [DbTableName("structure")]
     public class Structure : ISql
     {
         [DbPrimaryKey(NpgsqlDbType.Varchar, 50)]
@@ -18,29 +19,20 @@ namespace MembershipManager.DataModel.Company
         [DbAttribute("head_office_address")]
         public string? HeadOfficeAddress { get; set; }
 
-        [DbRelation("city_id")]
+        [DbRelation("city_id", "id")]
         public City? City { get; set; }
 
         public Structure() { }
 
         public Structure(string name)
         {
-            Structure? s = (Structure?)Get(name);
+            Structure? s = ISql.Get<Structure>(name);
             if (s == null) throw new KeyNotFoundException();
             Name = s.Name;
             HeadOfficeAddress = s.HeadOfficeAddress;
             City = s.City;
         }
 
-
-        public ISql? Get(object pk)
-        {
-            NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM structure WHERE name = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Varchar, 50) { Value = pk };
-            cmd.Parameters.Add(param);
-            return DbManager.Db?.Receive<Structure>(cmd).FirstOrDefault();
-        }
 
         public void Insert()
         {

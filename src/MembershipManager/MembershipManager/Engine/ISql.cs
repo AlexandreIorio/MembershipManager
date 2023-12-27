@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using MembershipManager.DataModel.Person;
+using Npgsql;
 using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
@@ -13,28 +14,40 @@ namespace MembershipManager.Engine
     public interface ISql
     {
         #region Abstract Methods
-        public ISql? Get(params object[] pk);
         public void Insert();
 
         #endregion
 
         #region  Default Methods
-        public object? GetPrimaryKey()
-        {
-            foreach (PropertyInfo p in this.GetType().GetProperties())
-            {
-                IEnumerable<DbPrimaryKey> attributes = p.GetCustomAttributes<DbPrimaryKey>();
-                if (attributes.Count() > 0)
-                {
-                    return p.GetValue(this);
-                }
-            }
-            return null;
-        }
-       
+
+
+
         #endregion
 
         #region  Static Methods
+
+        public static T? Get<T>(params object[] pk) where T : class
+        {
+            Type type = typeof(T);
+            NpgsqlCommand cmd = new();
+
+            DbTableName? tableNameAttribute = type.GetCustomAttribute<DbTableName>();
+            if (tableNameAttribute == null) throw new MissingMemberException();
+
+            cmd.CommandText = $"SELECT * FROM {tableNameAttribute.Name} {ComputeWhereClause(type)}";
+            int i = 0;
+            foreach (PropertyInfo p in type.GetProperties())
+            {
+                DbPrimaryKey? dbPrimaryKey = p.GetCustomAttribute<DbPrimaryKey>();
+                if (i == pk.Length) break;
+                if (dbPrimaryKey is null) continue;
+                NpgsqlParameter param = new NpgsqlParameter($"@value{i}",dbPrimaryKey.PkType, dbPrimaryKey.Size) { Value = pk[i] };
+                cmd.Parameters.Add(param);
+                i++;
+            }
+            return DbManager.Db?.Receive<T>(cmd).FirstOrDefault();
+        }
+
         public static List<Type> InheritedTypes
         {
             get
@@ -112,16 +125,27 @@ namespace MembershipManager.Engine
                     DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
                     var value = p.GetValue(obj);
                     if (value is null) continue;
-                    ISql? sql = (ISql?)value;
-                    NpgsqlParameter param = new NpgsqlParameter($"@value{i++}", sql?.GetPrimaryKey());
+                    ISql? sql = (ISql?)value ?? throw new Exception("ISql is null");
+                    NpgsqlParameter param = new NpgsqlParameter($"@value{i++}", GetDbAttributeByName(sql, rel.Name));
                     cmd.Parameters.Add(param);
                 }
             }
         }
 
-        public static string ComputeWhereClause(Type type)
+        private static object? GetDbAttributeByName(object objstring, string attributeName)
         {
-            List<string> dbPrimaryKeys = GetPrimaryKeyName(type);
+            foreach (PropertyInfo p in objstring.GetType().GetProperties())
+            {
+                DbNameable? attribute = p.GetCustomAttribute<DbNameable>();
+                if (attribute is not null && attribute.Name.Equals(attributeName)) continue;
+                return p.GetValue(objstring);
+            }
+            return null;
+        }
+
+        private static string ComputeWhereClause(Type type)
+        {
+            List<string> dbPrimaryKeys = GetPrimaryKeysName(type);
             StringBuilder sb = new StringBuilder("WHERE ");
 
             for (int i = 0; i < dbPrimaryKeys.Count; i++)
@@ -132,7 +156,7 @@ namespace MembershipManager.Engine
 
             return sb.ToString();
         }
-        private static List<string> GetPrimaryKeyName(Type type)
+        private static List<string> GetPrimaryKeysName(Type type)
         {
             List<string> dbPrimaryKeys = new List<string>();
 

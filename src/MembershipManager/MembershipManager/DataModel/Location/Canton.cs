@@ -4,6 +4,7 @@ using NpgsqlTypes;
 
 namespace MembershipManager.DataModel
 {
+    [DbTableName("canton")]
     public class Canton : ISql
     {
         [DbPrimaryKey(NpgsqlDbType.Char, 2)]
@@ -17,20 +18,13 @@ namespace MembershipManager.DataModel
 
         public Canton(string abbreviation)
         {
-            Canton? c = (Canton?)Get(abbreviation);
+            Canton? c = ISql.Get<Canton>(abbreviation);
             if (c == null) throw new KeyNotFoundException();
             Abbreviation = c.Abbreviation;
             Name = c.Name;
         }
 
-        public ISql? Get(object pk)
-        {
-            NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM canton WHERE abbreviation = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 2) { Value = pk };
-            cmd.Parameters.Add(param);
-            return DbManager.Db?.Receive<Canton>(cmd).FirstOrDefault();
-        }
+       
 
         public void Insert()
         {

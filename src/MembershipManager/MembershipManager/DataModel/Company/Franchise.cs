@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MembershipManager.DataModel.Company
 {
+    [DbTableName("franchise")]
     public class Franchise : ISql
     {
         [DbPrimaryKey(NpgsqlDbType.Integer)]
@@ -21,27 +22,19 @@ namespace MembershipManager.DataModel.Company
         [DbAttribute("address")]
         public string? Address { get; set; }
 
-        [DbRelation("city_id")]
+        [DbRelation("city_id", "id")]
         City? City { get; set; }
 
+        public Franchise() { }
 
-        public static Franchise? GetFranchise(int id)
+        public Franchise(object id)
         {
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"SELECT * FROM get_franchise WHERE id = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id };
-            cmd.Parameters.Add(param);
-
-            return DbManager.Db?.Receive<Franchise>(cmd).First() ?? null;
-        }
-
-        public ISql? Get(object pk)
-        {
-            NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM structure WHERE name = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Varchar, 50) { Value = pk };
-            cmd.Parameters.Add(param);
-            return DbManager.Db?.Receive<Structure>(cmd).FirstOrDefault();
+            Franchise? f = ISql.Get<Franchise>(id);
+            if (f == null) throw new KeyNotFoundException();
+            Id = f.Id;
+            StructureName = f.StructureName;
+            Address = f.Address;
+            City = f.City;
         }
 
         public void Insert()
