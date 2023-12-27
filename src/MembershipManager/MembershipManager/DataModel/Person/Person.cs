@@ -8,10 +8,11 @@ using System.Text;
 using System.Reflection.Metadata.Ecma335;
 using System.IO.Packaging;
 using System.Dynamic;
+using System.Collections.Generic;
 
 namespace MembershipManager.DataModel.Person
 {
-    public class Person
+    public class Person : ISql
     {
         [DbAttribute("no_avs")]
         public string? NoAvs { get; set; }
@@ -25,20 +26,20 @@ namespace MembershipManager.DataModel.Person
         [DbAttribute("address")]
         public string? Address { get; set; }
 
-        public int CityId { get; set; }
-
         [DbRelation("city_id")]
         public City? City { get; set; }
 
+        public Person() { }
 
-        public static Person? GetPerson(object noAvs)
+        public Person(string noAvs)
         {
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"SELECT * FROM get_person WHERE no_avs = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 13) { Value = noAvs };
-            cmd.Parameters.Add(param);
-
-            return DbManager.Db?.Receive<Person>(cmd).First() ?? null;
+            Person? p = (Person?)Get(noAvs);
+            if (p == null) throw new KeyNotFoundException();
+            NoAvs = p.NoAvs;
+            FirstName = p.FirstName;
+            LastName = p.LastName;
+            Address = p.Address;
+            City = p.City;
         }
 
         public void Insert()
@@ -49,7 +50,8 @@ namespace MembershipManager.DataModel.Person
         }
 
 
-        private string ComputeQuery()   {
+        private string ComputeQuery()
+        {
             StringBuilder sbAtt = new("(");
             StringBuilder sbVal = new("(");
             int i = 0;
@@ -78,6 +80,16 @@ namespace MembershipManager.DataModel.Person
                 var value = p.GetValue(this);
                 var parameterValue1 = cmd.Parameters.Add($"@value{i++}", (NpgsqlDbType)value);
             }
+        }
+
+       
+        public ISql? Get(object pk)
+        {
+            NpgsqlCommand cmd = new();
+            cmd.CommandText = $"SELECT * FROM get_person WHERE no_avs = @value1";
+            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 13) { Value = pk };
+            cmd.Parameters.Add(param);
+            return DbManager.Db?.Receive<Person>(cmd).FirstOrDefault();
         }
     }
 }
