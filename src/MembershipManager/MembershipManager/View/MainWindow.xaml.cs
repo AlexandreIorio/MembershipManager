@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using MembershipManager.DataModel;
 using MembershipManager.DataModel.Person;
+using MembershipManager.DataModel.Company;
 using MembershipManager.Engine;
 using Npgsql;
 
@@ -17,7 +18,7 @@ namespace MembershipManager
             //Member member = new Member("7569854624538");
 
 
-            Person p = new Person();
+            Member p = new Member();
             p.NoAvs = "7566923410409";
             p.FirstName = "Jean";
             p.LastName = "Dupont";
@@ -26,6 +27,7 @@ namespace MembershipManager
             p.Phone = "021 123 45 67";
             p.MobilePhone = "079 123 45 67";
             p.Email = "jean.dupont@tatete.ru";
+            p.Structure = new Structure("GoldGym Fitness");
             p.Insert();
 
         }

@@ -54,6 +54,11 @@ namespace MembershipManager.Engine
             foreach (PropertyInfo p in type.GetProperties())
             {
 
+                IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
+                // Ignore properties if from base class and not primary key
+                if (p.DeclaringType != type && !constraints.Any(x => x is DbPrimaryKey))
+                    continue;
+
                 IEnumerable<DbNameable> attributes = p.GetCustomAttributes<DbNameable>();
 
                 if (attributes.Count() > 0)
@@ -77,22 +82,26 @@ namespace MembershipManager.Engine
             int i = 0;
             foreach (PropertyInfo p in obj.GetType().GetProperties())
             {
-                // Ignore properties if from base class
-                if (p.DeclaringType != obj.GetType())
+                IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
+                // Ignore properties if from base class and not primary key
+                if (p.DeclaringType != obj.GetType() && !constraints.Any(x => x is DbPrimaryKey))
                     continue;
-                IEnumerable<DbNameable> attributes = p.GetCustomAttributes<DbNameable>();
-                DbNameable? attribute = attributes.FirstOrDefault();
-                if (attribute is null) continue;
 
-                else if (attribute is DbAttribute att)
+                IEnumerable<DbNameable> attributes = p.GetCustomAttributes<DbNameable>();
+
+                if (attributes.Count() < 0) continue;
+
+                if (attributes.Any(a => a is DbAttribute))
                 {
+                    DbAttribute att = (DbAttribute)attributes.First(a => a is DbAttribute);
                     var value = p.GetValue(obj);
                     NpgsqlParameter param = new NpgsqlParameter($"@value{i++}", value);
                     cmd.Parameters.Add(param);
                 }
 
-                else if (attribute is DbRelation rel)
+                else if (attributes.Any(a => a is DbRelation))
                 {
+                    DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
                     var value = p.GetValue(obj);
                     if (value is null) continue;
                     ISql? sql = (ISql?)value;
