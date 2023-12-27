@@ -6,6 +6,10 @@ namespace MembershipManager.DataModel
 {
     public class City : ISql
     {
+        [DbPrimaryKey]
+        [DbAttribute("id")]
+        public int Id { get; private set; }
+
         [DbAttribute("city_name")]
         public string? Name { get; private set; }
 
@@ -21,6 +25,7 @@ namespace MembershipManager.DataModel
         {
             City? c = (City?)Get(id);
             if (c == null) throw new KeyNotFoundException();
+            Id = c.Id;
             Name = c.Name;
             NPA = c.NPA;
             Canton = c.Canton;
@@ -33,6 +38,11 @@ namespace MembershipManager.DataModel
             NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Integer) { Value = pk };
             cmd.Parameters.Add(param);
             return DbManager.Db?.Receive<City>(cmd).FirstOrDefault();
+        }
+
+        public void Insert()
+        {
+            throw new NotImplementedException();
         }
     }
 }

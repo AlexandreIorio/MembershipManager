@@ -10,10 +10,12 @@ using System.IO.Packaging;
 using System.Dynamic;
 using System.Collections.Generic;
 
+
 namespace MembershipManager.DataModel.Person
 {
     public class Person : ISql
     {
+        [DbPrimaryKey]
         [DbAttribute("no_avs")]
         public string? NoAvs { get; set; }
 
@@ -28,6 +30,15 @@ namespace MembershipManager.DataModel.Person
 
         [DbRelation("city_id")]
         public City? City { get; set; }
+
+        [DbAttribute("phone")]
+        public string? Phone { get; set; }
+
+        [DbAttribute("mobile")]
+        public string? MobilePhone { get; set;}
+
+        [DbAttribute("email")]
+        public string? Email { get; set; }
 
         public Person() { }
 
@@ -45,44 +56,11 @@ namespace MembershipManager.DataModel.Person
         public void Insert()
         {
             NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"INSERT INTO {this.GetType().Name} {ComputeQuery()}";
-            ComputeCommandeWithValues(cmd);
+            cmd.CommandText = $"INSERT INTO person {ISql.ComputeQuery(this.GetType())}";
+            ISql.ComputeCommandeWithValues(cmd, this);
+            DbManager.Db?.Send(cmd);
         }
-
-
-        private string ComputeQuery()
-        {
-            StringBuilder sbAtt = new("(");
-            StringBuilder sbVal = new("(");
-            int i = 0;
-            foreach (PropertyInfo p in this.GetType().GetProperties())
-            {
-                DbAttribute? attribute = p.GetCustomAttribute<DbAttribute>();
-                if (attribute == null) continue;
-                sbAtt.Append(attribute.Name).Append(",");
-                sbVal.Append($"value{i++}");
-
-            }
-
-            sbAtt.Append(")");
-            sbVal.Append(")");
-
-            return sbAtt.ToString() + " VALUE " + sbVal.ToString();
-        }
-
-        private void ComputeCommandeWithValues(NpgsqlCommand cmd)
-        {
-            int i = 0;
-            foreach (PropertyInfo p in this.GetType().GetProperties())
-            {
-                DbAttribute? attribute = p.GetCustomAttribute<DbAttribute>();
-                if (attribute == null) continue;
-                var value = p.GetValue(this);
-                var parameterValue1 = cmd.Parameters.Add($"@value{i++}", (NpgsqlDbType)value);
-            }
-        }
-
-       
+                
         public ISql? Get(object pk)
         {
             NpgsqlCommand cmd = new();
@@ -91,5 +69,6 @@ namespace MembershipManager.DataModel.Person
             cmd.Parameters.Add(param);
             return DbManager.Db?.Receive<Person>(cmd).FirstOrDefault();
         }
+
     }
 }

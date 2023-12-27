@@ -6,6 +6,7 @@ namespace MembershipManager.DataModel
 {
     public class Canton : ISql
     {
+        [DbPrimaryKey]
         [DbAttribute("abbreviation")]
         public string? Abbreviation { get; private set; }
 
@@ -29,6 +30,11 @@ namespace MembershipManager.DataModel
             NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 2) { Value = pk };
             cmd.Parameters.Add(param);
             return DbManager.Db?.Receive<Canton>(cmd).FirstOrDefault();
+        }
+
+        public void Insert()
+        {
+            throw new NotImplementedException();
         }
     }
 }

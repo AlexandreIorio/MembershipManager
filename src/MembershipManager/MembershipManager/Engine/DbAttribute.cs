@@ -6,21 +6,17 @@ using System.Threading.Tasks;
 
 namespace MembershipManager.Engine
 {
-    internal class DbAttribute : Attribute
+    internal class DbNameable : Attribute
     {
         public string Name { get; private set; }
-        public DbAttribute(string attributeName)
+        public DbNameable(string attributeName)
         {
             this.Name = attributeName;
         }
     }
 
-    internal class DbRelation : Attribute
-    {
-        public string Name { get; private set; }
-        public DbRelation(string Name) { 
-            this.Name = Name;
-        }
-
-    }
+    internal class DbConstraint  : Attribute {}
+    internal class DbAttribute (string attributeName) : DbNameable (attributeName) {}
+    internal class DbRelation (string attributeName) : DbNameable(attributeName) {}
+    internal class DbPrimaryKey : DbConstraint{}
 }

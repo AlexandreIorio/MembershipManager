@@ -1,5 +1,6 @@
 ﻿using Npgsql;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
 
 
@@ -7,33 +8,12 @@ namespace MembershipManager.Engine
 {
     public class DbManager
     {
-        #region Singleton access
-        public static DbManager? Db
-        {
-            get
-            {
-                _instance ??= new DbManager();
-                return _instance;
-            }
-        }
-
-        private DbManager()
-        {
-
-        }
-
-        private static DbManager? _instance;
-        #endregion
-
         #region Db interraction
-
 
         public void Send(NpgsqlCommand cmd)
         {
             cmd.Connection = new NpgsqlConnection(GetConnectionString());
-
             CheckDbValidity(cmd);
-
             OpenConnection(cmd.Connection);
             cmd.ExecuteNonQuery();
             CloseConnection(cmd.Connection);
@@ -76,15 +56,17 @@ namespace MembershipManager.Engine
                 if (property.DeclaringType != type)
                     continue;
 
-                var attributes = property.GetCustomAttributes<Attribute>();
-                if (attributes.FirstOrDefault() is DbAttribute att)
+                IEnumerable<Attribute> attributes = property.GetCustomAttributes<Attribute>();
+                if (attributes.Any(a => a is DbAttribute))
                 {
+                    DbAttribute att = (DbAttribute)attributes.First(a => a is DbAttribute);
                     var valueRead = reader[att.Name];
                     if (valueRead.GetType() != typeof(DBNull))
                         property.SetValue(newObject, valueRead);
                 }
-                else if (attributes.FirstOrDefault() is DbRelation rel)
+                else if (attributes.Any(a => a is DbRelation))
                 { 
+                    DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
                     var foreignKey = reader[rel.Name];
                     Type relationType = property.PropertyType;
                     object[] args = { foreignKey };
@@ -134,6 +116,10 @@ namespace MembershipManager.Engine
         {
             connection.Close();
         }
+        #endregion
+
+        #region Singleton
+        public static DbManager Db { get; private set; } = new DbManager();
         #endregion
     }
 }

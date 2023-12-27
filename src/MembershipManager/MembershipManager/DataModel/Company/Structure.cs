@@ -40,5 +40,10 @@ namespace MembershipManager.DataModel.Company
             cmd.Parameters.Add(param);
             return DbManager.Db?.Receive<Structure>(cmd).FirstOrDefault();
         }
+
+        public void Insert()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
