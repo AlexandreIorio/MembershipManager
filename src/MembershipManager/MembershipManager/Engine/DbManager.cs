@@ -19,32 +19,34 @@ namespace MembershipManager.Engine
 
         private DbManager()
         {
-            _conn = new NpgsqlConnection(GetConnectionString());
+
         }
 
         private static DbManager? _instance;
         #endregion
 
         #region Db interraction
+
+
         public void Send(NpgsqlCommand cmd)
         {
-            cmd.Connection = _conn;
+            cmd.Connection = new NpgsqlConnection(GetConnectionString());
 
             CheckDbValidity(cmd);
 
-            Db?.OpenConnection();
+            OpenConnection(cmd.Connection);
             cmd.ExecuteNonQuery();
-            Db?.CloseConnection();
+            CloseConnection(cmd.Connection);
         }
 
         public List<T> Receive<T>(NpgsqlCommand cmd) where T : class
         {
-            cmd.Connection = _conn;
+            cmd.Connection = new NpgsqlConnection(GetConnectionString()); ;
 
             CheckDbValidity(cmd);
 
             Type type = typeof(T);
-            Db?.OpenConnection();
+            OpenConnection(cmd.Connection);
             NpgsqlDataReader reader = cmd.ExecuteReader();
 
             List<T> results = [];
@@ -57,7 +59,7 @@ namespace MembershipManager.Engine
                     results.Add((T)obj);
                 }
             }
-            Db?.CloseConnection();
+            CloseConnection(cmd.Connection);
 
             return results;
         }
@@ -77,11 +79,12 @@ namespace MembershipManager.Engine
                     if (valueRead.GetType() != typeof(DBNull))
                         property.SetValue(newObject, valueRead);
                 }
-                else if (attributes.FirstOrDefault() is DbRelation)
+                else if (attributes.FirstOrDefault() is DbRelation rel)
                 { 
-                    //TODO: l'implémentation de la relation doit se faire via une methode get interfacée, pas possible sinon exemple: Persone -> Member -> Franchise -> Structure -> City c'est la merde
+                    var foreignKey = reader[rel.Name];
                     Type relationType = property.PropertyType;
-                    object? newRelation = Convert(reader, relationType);
+                    object[] args = { foreignKey };
+                    ISql? newRelation = (ISql?)Activator.CreateInstance(relationType, args);
                     property.SetValue(newObject, newRelation);
                 }
             }
@@ -92,14 +95,15 @@ namespace MembershipManager.Engine
         private static void CheckDbValidity(NpgsqlCommand cmd)
         {
             if (cmd.Connection is null) throw new ArgumentNullException("Connection is null");
-            if (Db is null) throw new ArgumentNullException("Db is null");
-            if (cmd.Connection != Db._conn) throw new ArgumentException("Connection is not the same");
+            //TODO revoir les tests car plusieurs connexions peuvent être ouvertes en raison des relations
+
+            //if (Db is null) throw new ArgumentNullException("Db is null");
+            //if (cmd.Connection != Db._conn) throw new ArgumentException("Connection is not the same");
         }
         #endregion
 
         #region Db connection management
-        private readonly NpgsqlConnection _conn;
-
+ 
         private static string GetConnectionString()
         {
 
@@ -114,16 +118,17 @@ namespace MembershipManager.Engine
 
         }
 
-        private void OpenConnection()
+        private static void OpenConnection(NpgsqlConnection connection)
         {
-            _conn.Open();
-            using var command = new NpgsqlCommand("SET search_path TO membershipmanager", _conn);
+            CloseConnection(connection);
+            connection.Open();
+            using var command = new NpgsqlCommand("SET search_path TO membershipmanager", connection);
             command.ExecuteNonQuery();
         }
 
-        private void CloseConnection()
+        private static void CloseConnection(NpgsqlConnection connection)
         {
-            _conn.Close();
+            connection.Close();
         }
         #endregion
     }
