@@ -86,7 +86,7 @@ namespace MembershipManager.DataModel.Person
         public ISql? Get(object pk)
         {
             NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM get_person WHERE no_avs = @value1";
+            cmd.CommandText = $"SELECT * FROM person WHERE no_avs = @value1";
             NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 13) { Value = pk };
             cmd.Parameters.Add(param);
             return DbManager.Db?.Receive<Person>(cmd).FirstOrDefault();

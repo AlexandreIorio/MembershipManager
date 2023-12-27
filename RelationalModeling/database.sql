@@ -263,26 +263,6 @@ CREATE TABLE subscription
 
 -- IV --
 
-
-
-CREATE OR REPLACE VIEW get_persone AS
-    SELECT * FROM person
-        INNER JOIN city ON person.city_id = city.id
-        INNER JOIN canton ON city.canton_abbreviation = canton.abbreviation;
-
-CREATE OR REPLACE VIEW get_member AS
-    SELECT p.no_avs, p.first_name, p.last_name, p.address,
-           p.phone, p.mobile, p.email, p.city_name, p.npa,
-           p.canton_abbreviation, p.canton_name,
-
-           m.structure_name, m.subscription_date,
-           s.head_office_address
-
-    FROM member m
-        INNER JOIN get_persone p ON m.no_avs = p.no_avs
-        INNER JOIN structure s ON m.structure_name = s.name
-        INNER JOIN franchise f ON s.name = f.structure_name;
-
 CREATE VIEW OutstandingBills AS
 SELECT p.no_avs, p.last_name, p.first_name, b.id AS bill_id, b.issue_date, pa.amount
 FROM person p

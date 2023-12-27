@@ -41,7 +41,7 @@ namespace MembershipManager.Engine
 
         public List<T> Receive<T>(NpgsqlCommand cmd) where T : class
         {
-            cmd.Connection = new NpgsqlConnection(GetConnectionString()); ;
+            cmd.Connection = new NpgsqlConnection(GetConnectionString());
 
             CheckDbValidity(cmd);
 
@@ -72,6 +72,10 @@ namespace MembershipManager.Engine
 
             foreach (var property in type.GetProperties())
             {
+                // Ignore properties if from base class
+                if (property.DeclaringType != type)
+                    continue;
+
                 var attributes = property.GetCustomAttributes<Attribute>();
                 if (attributes.FirstOrDefault() is DbAttribute att)
                 {

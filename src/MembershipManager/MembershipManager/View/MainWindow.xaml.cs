@@ -14,9 +14,7 @@ namespace MembershipManager
         public MainWindow()
         {
             InitializeComponent();
-            Person p = new Person();
-            p = Person.GetPerson("7563775467937");
-
+            Member m = new Member("7569854624538");
         }
     }
 }
