@@ -13,9 +13,10 @@ using System.Collections.Generic;
 
 namespace MembershipManager.DataModel.Person
 {
+    [DbTableName("person")]
     public class Person : ISql
     {
-        [DbPrimaryKey]
+        [DbPrimaryKey(NpgsqlDbType.Char, 13)]
         [DbAttribute("no_avs")]
         public string? NoAvs { get; set; }
 
@@ -28,7 +29,7 @@ namespace MembershipManager.DataModel.Person
         [DbAttribute("address")]
         public string? Address { get; set; }
 
-        [DbRelation("city_id")]
+        [DbRelation("city_id", "id")]
         public City? City { get; set; }
 
         [DbAttribute("phone")]
@@ -44,7 +45,7 @@ namespace MembershipManager.DataModel.Person
 
         public Person(string noAvs)
         {
-            Person? p = (Person?)Get(noAvs);
+            Person? p = ISql.Get<Person>(noAvs);
             if (p == null) throw new KeyNotFoundException();
             NoAvs = p.NoAvs;
             FirstName = p.FirstName;
@@ -60,15 +61,5 @@ namespace MembershipManager.DataModel.Person
             ISql.ComputeCommandeWithValues(cmd, this);
             DbManager.Db?.Send(cmd);
         }
-                
-        public ISql? Get(object pk)
-        {
-            NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM person WHERE no_avs = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Char, 13) { Value = pk };
-            cmd.Parameters.Add(param);
-            return DbManager.Db?.Receive<Person>(cmd).FirstOrDefault();
-        }
-
     }
 }

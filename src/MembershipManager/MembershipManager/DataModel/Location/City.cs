@@ -4,9 +4,10 @@ using NpgsqlTypes;
 
 namespace MembershipManager.DataModel
 {
+    [DbTableName("city")]
     public class City : ISql
     {
-        [DbPrimaryKey]
+        [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
         public int Id { get; private set; }
 
@@ -16,14 +17,14 @@ namespace MembershipManager.DataModel
         [DbAttribute("npa")]
         public int NPA { get; private set; }
 
-        [DbRelation("canton_abbreviation")]
+        [DbRelation("canton_abbreviation", "abbreviation")]
         public Canton? Canton { get; private set; }
 
         public City() { }
 
         public City(object id)
         {
-            City? c = (City?)Get(id);
+            City? c = ISql.Get<City>(id);
             if (c == null) throw new KeyNotFoundException();
             Id = c.Id;
             Name = c.Name;
@@ -31,18 +32,12 @@ namespace MembershipManager.DataModel
             Canton = c.Canton;
         }
 
-        public ISql? Get(object pk)
-        {
-            NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM city WHERE id = @value1";
-            NpgsqlParameter param = new NpgsqlParameter("@value1", NpgsqlDbType.Integer) { Value = pk };
-            cmd.Parameters.Add(param);
-            return DbManager.Db?.Receive<City>(cmd).FirstOrDefault();
-        }
-
+       
         public void Insert()
         {
             throw new NotImplementedException();
         }
+
+  
     }
 }
