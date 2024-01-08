@@ -45,13 +45,7 @@ namespace MembershipManager.DataModel.Person
 
         public Person(string noAvs)
         {
-            Person? p = ISql.Get<Person>(noAvs);
-            if (p == null) throw new KeyNotFoundException();
-            NoAvs = p.NoAvs;
-            FirstName = p.FirstName;
-            LastName = p.LastName;
-            Address = p.Address;
-            City = p.City;
+
         }
 
         public void Insert()
@@ -60,6 +54,18 @@ namespace MembershipManager.DataModel.Person
             cmd.CommandText = $"INSERT INTO person {ISql.ComputeQuery(typeof(Person))}";
             ISql.ComputeCommandeWithValues(cmd, this);
             DbManager.Db?.Send(cmd);
+        }
+
+        public ISql Select(params object[] pk)
+        {
+            if (pk.Length != 1) throw new ArgumentException();
+            Person? p = ISql.Get<Person>(pk.);
+            if (p == null) throw new KeyNotFoundException();
+            NoAvs = p.NoAvs;
+            FirstName = p.FirstName;
+            LastName = p.LastName;
+            Address = p.Address;
+            City = p.City;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace MembershipManager.Engine
     {
         #region Abstract Methods
         public void Insert();
+        public ISql Select(params object[] pk)
 
         #endregion
 
@@ -26,7 +27,7 @@ namespace MembershipManager.Engine
 
         #region  Static Methods
 
-        public static T? Get<T>(params object[] pk) where T : class
+        protected static T? Get<T>(params object[] pk) where T : class
         {
             Type type = typeof(T);
             NpgsqlCommand cmd = new();

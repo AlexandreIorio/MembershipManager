@@ -1,0 +1,38 @@
+﻿<Window x:Class="MembershipManager.View.PersonDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MembershipManager.View"
+        mc:Ignorable="d"
+        Title="PersonDetail" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" Content="n° AVS"/>
+        <TextBox x:Name="TbAvs" Grid.Column="1" Grid.Row="0" LostFocus="TbAvs_LostFocus"/>
+
+        <Label Grid.Column="0" Grid.Row="1" Content="Nom"/>
+        <TextBox x:Name="TbFirstName" Grid.Column="1" Grid.Row="1" LostFocus="TbFirstName_LostFocus"/>
+
+        <Label Grid.Column="0" Grid.Row="2" Content="Prénom"/>
+        <TextBox x:Name="TbLastNAme" Grid.Column="1" Grid.Row="2" LostFocus="TbLastNAme_LostFocus"/>
+
+
+
+    </Grid>
+</Window>
