@@ -70,7 +70,8 @@ namespace MembershipManager.Engine
                     var foreignKey = reader[rel.Name];
                     Type relationType = property.PropertyType;
                     object[] args = { foreignKey };
-                    ISql? newRelation = (ISql?)Activator.CreateInstance(relationType, args);
+                    ISql? newRelation = Activator.CreateInstance(relationType) as ISql;
+                    newRelation?.Select(args);
                     property.SetValue(newObject, newRelation);
                 }
             }

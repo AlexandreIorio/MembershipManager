@@ -22,22 +22,22 @@ namespace MembershipManager.DataModel
 
         public City() { }
 
-        public City(object id)
-        {
-            City? c = ISql.Get<City>(id);
-            if (c == null) throw new KeyNotFoundException();
-            Id = c.Id;
-            Name = c.Name;
-            NPA = c.NPA;
-            Canton = c.Canton;
-        }
-
        
         public void Insert()
         {
             throw new NotImplementedException();
         }
 
-  
+        public void Select(params object[] pk)
+        {
+            
+            if (pk.Length != 1) throw new ArgumentException();
+            City? c = ISql.Get<City>(pk[0]);
+            if (c == null) throw new KeyNotFoundException();
+            Id = c.Id;
+            Name = c.Name;
+            NPA = c.NPA;
+            Canton = c.Canton;
+        }
     }
 }

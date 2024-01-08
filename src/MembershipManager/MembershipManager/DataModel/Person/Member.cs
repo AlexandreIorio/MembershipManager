@@ -23,13 +23,6 @@ namespace MembershipManager.DataModel.Person
             this.SubscriptionDate = DateTime.Now;
         }
 
-        public Member(string noAvs) : base(noAvs)
-        {
-            Member? m = ISql.Get<Member>(noAvs);
-            if (m == null) throw new KeyNotFoundException();
-            this.Structure = m.Structure;
-            this.SubscriptionDate = m.SubscriptionDate;
-        }
 
 
         public new void Insert()
@@ -48,6 +41,19 @@ namespace MembershipManager.DataModel.Person
             cmdMember.CommandText = $"INSERT INTO member {ISql.ComputeQuery(this.GetType())}";
             ISql.ComputeCommandeWithValues(cmdMember, this);
             DbManager.Db?.Send(cmdMember);
+        }
+
+        public new void Select(params object[] pk)
+        {
+
+            if (pk.Length != 1) throw new ArgumentException();
+            Member? m = ISql.Get<Member>(pk[0]);
+            if (m == null) throw new KeyNotFoundException();
+
+            base.Select(pk[0]);
+            //Member class
+            this.Structure = m.Structure;
+            this.SubscriptionDate = m.SubscriptionDate;
         }
 
     }

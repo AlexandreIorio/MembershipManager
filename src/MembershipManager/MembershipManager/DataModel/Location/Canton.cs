@@ -16,19 +16,20 @@ namespace MembershipManager.DataModel
 
         public Canton() { } 
 
-        public Canton(string abbreviation)
-        {
-            Canton? c = ISql.Get<Canton>(abbreviation);
-            if (c == null) throw new KeyNotFoundException();
-            Abbreviation = c.Abbreviation;
-            Name = c.Name;
-        }
-
-       
+      
 
         public void Insert()
         {
             throw new NotImplementedException();
+        }
+
+        public void Select(params object[] pk)
+        {
+            if (pk.Length != 1) throw new ArgumentException();
+            Canton? c = ISql.Get<Canton>(pk[0]);
+            if (c == null) throw new KeyNotFoundException();
+            Abbreviation = c.Abbreviation;
+            Name = c.Name;
         }
     }
 }

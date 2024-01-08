@@ -43,11 +43,6 @@ namespace MembershipManager.DataModel.Person
 
         public Person() { }
 
-        public Person(string noAvs)
-        {
-
-        }
-
         public void Insert()
         {
             NpgsqlCommand cmd = new NpgsqlCommand();
@@ -56,16 +51,19 @@ namespace MembershipManager.DataModel.Person
             DbManager.Db?.Send(cmd);
         }
 
-        public ISql Select(params object[] pk)
+        public void Select(params object[] pk)
         {
             if (pk.Length != 1) throw new ArgumentException();
-            Person? p = ISql.Get<Person>(pk.);
+            Person? p = ISql.Get<Person>(pk[0]);
             if (p == null) throw new KeyNotFoundException();
-            NoAvs = p.NoAvs;
-            FirstName = p.FirstName;
-            LastName = p.LastName;
-            Address = p.Address;
-            City = p.City;
+            this.NoAvs = p.NoAvs;
+            this.FirstName = p.FirstName;
+            this.LastName = p.LastName;
+            this.Address = p.Address;
+            this.City = p.City;
+            this.Phone = p.Phone;
+            this.MobilePhone = p.MobilePhone;
+            this.Email = p.Email;
         }
     }
 }

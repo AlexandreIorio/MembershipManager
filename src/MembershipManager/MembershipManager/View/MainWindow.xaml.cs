@@ -16,7 +16,8 @@ namespace MembershipManager
         public MainWindow()
         {
             InitializeComponent();
-            Person p = new Person("7569854624538");
+            Member p = new Member();
+            p.Select("7569854624538");
 
             //PersonDetail pd1 = new PersonDetail();
             //pd1.Show();

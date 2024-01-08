@@ -15,7 +15,7 @@ namespace MembershipManager.Engine
     {
         #region Abstract Methods
         public void Insert();
-        public ISql Select(params object[] pk)
+        public void Select(params object[] pk);
 
         #endregion
 
