@@ -10,15 +10,21 @@ using System.Runtime.CompilerServices;
 namespace MembershipManager.DataModel.Person
 {
     [DbTableName("member")]
+    [DbInherit(typeof(Person))]
     public class Member : Person
     {
         [DbRelation("structure_name", "name")]
-        public Structure Structure { get; set; }
+        public Structure? Structure { get; set; }
 
         [DbAttribute("subscription_date")]
         public DateTime SubscriptionDate { get; set; }
 
         public Member() : base()
+        {
+            this.SubscriptionDate = DateTime.Now;
+        }
+
+        public Member(Person person) : base(person)
         {
             this.SubscriptionDate = DateTime.Now;
         }
@@ -43,17 +49,12 @@ namespace MembershipManager.DataModel.Person
             DbManager.Db?.Send(cmdMember);
         }
 
-        public new void Select(params object[] pk)
+        public static new ISql? Select(params object[] pk)
         {
-
             if (pk.Length != 1) throw new ArgumentException();
             Member? m = ISql.Get<Member>(pk[0]);
             if (m == null) throw new KeyNotFoundException();
-
-            base.Select(pk[0]);
-            //Member class
-            this.Structure = m.Structure;
-            this.SubscriptionDate = m.SubscriptionDate;
+            return m;
         }
 
     }

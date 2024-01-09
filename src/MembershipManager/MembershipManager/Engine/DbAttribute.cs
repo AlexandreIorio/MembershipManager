@@ -30,4 +30,14 @@ namespace MembershipManager.Engine
         public NpgsqlDbType PkType { get; private set; } = pkType;
         public int Size { get; private set; } = size;
     }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    internal class DbInherit : Attribute
+    {
+        public Type InheritType { get; private set; }
+
+        public DbInherit(Type inheritType) {
+            this.InheritType = inheritType;
+        }
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using MembershipManager.DataModel.Person;
+using Npgsql;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
@@ -35,7 +36,7 @@ namespace MembershipManager.Engine
             {
                 while (reader.Read())
                 {
-                    object? obj = Convert(reader, type) ?? throw new ArgumentNullException($"Command call throw exception {cmd.CommandText}");
+                    object? obj = ConverTupleToObject(reader, type) ?? throw new ArgumentNullException($"Command call throw exception {cmd.CommandText}");
                     results.Add((T)obj);
                 }
             }
@@ -44,11 +45,38 @@ namespace MembershipManager.Engine
             return results;
         }
 
-        private static object? Convert(NpgsqlDataReader reader, Type type)
+        private static object? ConverTupleToObject(NpgsqlDataReader reader, Type type)
         {
-            object? newObject = Activator.CreateInstance(type);
+
+            DbInherit? inheritType = type.GetCustomAttributes<DbInherit>().FirstOrDefault();
+            object? newObject;
+            if (inheritType is not null)
+            {
+                //Get primary keys
+                List<string> pks = new(); 
+                foreach (string pkName in ISql.GetPrimaryKeysName(inheritType.InheritType))
+                {
+                    if (pkName is null) continue;
+                    string? pk = reader[pkName].ToString();
+                    if (pk is null) continue;
+                    pks.Add(pk);
+                }
+                object[] args = pks.ToArray();
+                //Get parent object
+                object? parent = ISql.Select(inheritType.InheritType, args);
+
+                //Change type to parent type
+                newObject = Activator.CreateInstance(type,parent);
+            }
+            else
+            {
+                //Create new object
+                newObject = Activator.CreateInstance(type);
+            }
 
             if (newObject is null) return null;
+
+
 
             foreach (var property in type.GetProperties())
             {
@@ -65,13 +93,12 @@ namespace MembershipManager.Engine
                         property.SetValue(newObject, valueRead);
                 }
                 else if (attributes.Any(a => a is DbRelation))
-                { 
+                {
                     DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
                     var foreignKey = reader[rel.Name];
                     Type relationType = property.PropertyType;
                     object[] args = { foreignKey };
-                    ISql? newRelation = Activator.CreateInstance(relationType) as ISql;
-                    newRelation?.Select(args);
+                    ISql? newRelation = ISql.Select(relationType, args);
                     property.SetValue(newObject, newRelation);
                 }
             }
@@ -90,7 +117,7 @@ namespace MembershipManager.Engine
         #endregion
 
         #region Db connection management
- 
+
         private static string GetConnectionString()
         {
 

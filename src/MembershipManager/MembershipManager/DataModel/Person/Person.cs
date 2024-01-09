@@ -36,12 +36,23 @@ namespace MembershipManager.DataModel.Person
         public string? Phone { get; set; }
 
         [DbAttribute("mobile")]
-        public string? MobilePhone { get; set;}
+        public string? MobilePhone { get; set; }
 
         [DbAttribute("email")]
         public string? Email { get; set; }
 
         public Person() { }
+        public Person(Person person)
+        {
+            this.NoAvs = person.NoAvs;
+            this.FirstName = person.FirstName;
+            this.LastName = person.LastName;
+            this.Address = person.Address;
+            this.City = person.City;
+            this.Phone = person.Phone;
+            this.MobilePhone = person.MobilePhone;
+            this.Email = person.Email;
+        }
 
         public void Insert()
         {
@@ -51,19 +62,15 @@ namespace MembershipManager.DataModel.Person
             DbManager.Db?.Send(cmd);
         }
 
-        public void Select(params object[] pk)
+        public static ISql? Select(params object[] pk)
         {
+
             if (pk.Length != 1) throw new ArgumentException();
             Person? p = ISql.Get<Person>(pk[0]);
             if (p == null) throw new KeyNotFoundException();
-            this.NoAvs = p.NoAvs;
-            this.FirstName = p.FirstName;
-            this.LastName = p.LastName;
-            this.Address = p.Address;
-            this.City = p.City;
-            this.Phone = p.Phone;
-            this.MobilePhone = p.MobilePhone;
-            this.Email = p.Email;
+
+            return p;
+
         }
     }
 }
