@@ -1,4 +1,5 @@
-﻿using MembershipManager.Engine;
+﻿using MembershipManager.DataModel.Company;
+using MembershipManager.Engine;
 using Npgsql;
 using NpgsqlTypes;
 
@@ -23,13 +24,15 @@ namespace MembershipManager.DataModel
             throw new NotImplementedException();
         }
 
-        public void Select(params object[] pk)
+        public static ISql? Select(params object[] pk)
         {
+
             if (pk.Length != 1) throw new ArgumentException();
             Canton? c = ISql.Get<Canton>(pk[0]);
             if (c == null) throw new KeyNotFoundException();
-            Abbreviation = c.Abbreviation;
-            Name = c.Name;
+
+            return c;
+
         }
     }
 }

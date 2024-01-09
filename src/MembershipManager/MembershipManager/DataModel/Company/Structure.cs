@@ -31,14 +31,15 @@ namespace MembershipManager.DataModel.Company
             throw new NotImplementedException();
         }
 
-        public void Select(params object[] pk)
+        public static ISql? Select(params object[] pk)
         {
+
             if (pk.Length != 1) throw new ArgumentException();
             Structure? s = ISql.Get<Structure>(pk[0]);
             if (s == null) throw new KeyNotFoundException();
-            Name = s.Name;
-            HeadOfficeAddress = s.HeadOfficeAddress;
-            City = s.City;
+
+            return s;
+
         }
     }
 }

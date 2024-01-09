@@ -15,7 +15,8 @@ namespace MembershipManager.Engine
     {
         #region Abstract Methods
         public void Insert();
-        public void Select(params object[] pk);
+
+        public abstract static ISql? Select(params object[] pk);
 
         #endregion
 
@@ -26,6 +27,19 @@ namespace MembershipManager.Engine
         #endregion
 
         #region  Static Methods
+
+        public static ISql? Select(Type type, object[] pk) 
+        {
+            // Recherche de la méthode statique
+            MethodInfo? methodInfo = type.GetMethod("Select");
+
+            // Appel de la méthode statique
+            object? obj = methodInfo?.Invoke(null,new object[] { pk }) ;
+
+            if (obj is not null && obj is ISql isql) return isql;
+
+            return null;
+        }
 
         protected static T? Get<T>(params object[] pk) where T : class
         {
@@ -90,6 +104,7 @@ namespace MembershipManager.Engine
             }
             //remove last comma
             sbAtt.Remove(sbAtt.Length - 2, 2);
+            sbVal.Remove(sbVal.Length - 2, 2);
             sbVal.Remove(sbVal.Length - 2, 2);
 
 
@@ -157,7 +172,7 @@ namespace MembershipManager.Engine
 
             return sb.ToString();
         }
-        private static List<string> GetPrimaryKeysName(Type type)
+        public static List<string> GetPrimaryKeysName(Type type)
         {
             List<string> dbPrimaryKeys = new List<string>();
 

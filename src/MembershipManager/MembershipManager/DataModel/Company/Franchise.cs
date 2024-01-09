@@ -32,16 +32,18 @@ namespace MembershipManager.DataModel.Company
             
         }
 
-        public void Select(params object[] pk)
+
+        public static ISql? Select(params object[] pk)
         {
+
             if (pk.Length != 1) throw new ArgumentException();
             Franchise? f = ISql.Get<Franchise>(pk[0]);
             if (f == null) throw new KeyNotFoundException();
 
-            Id = f.Id;
-            StructureName = f.StructureName;
-            Address = f.Address;
-            City = f.City;
+            return f;
+
         }
+
+
     }
 }
