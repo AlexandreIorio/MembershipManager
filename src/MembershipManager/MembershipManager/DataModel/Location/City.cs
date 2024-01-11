@@ -52,5 +52,7 @@ namespace MembershipManager.DataModel
             return $"{NPA} {Name}";
         }
 
+        public static List<City>? Cities { get; set; }
+
     }
 }

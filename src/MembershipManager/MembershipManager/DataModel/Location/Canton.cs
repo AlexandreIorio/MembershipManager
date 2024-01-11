@@ -39,5 +39,6 @@ namespace MembershipManager.DataModel
         {
             return $"{Name} - {Abbreviation}";
         }
+        public static List<Canton>? Cantons { get; set; }
     }
 }
