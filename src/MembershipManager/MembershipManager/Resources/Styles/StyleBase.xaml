@@ -3,11 +3,12 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:presentation="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     >
-    
-        
+
+    <!--Local resources-->
     <Thickness x:Key="DefaultMargin">5</Thickness>
         
    
+    <!--Default styles-->
     
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
@@ -30,9 +31,12 @@
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
     </Style>
 
-
+    
+    
+    <!--Specific styles-->
 
     <Style x:Key="LabelTitle" TargetType="Label">
         <Setter Property="FontSize" Value="20"/>
     </Style>
+    
 </ResourceDictionary>

@@ -8,8 +8,9 @@
         Title="SpalshScreen" 
         Height="450" Width="800" 
         ResizeMode="NoResize" 
-        WindowStyle="None" WindowStartupLocation="CenterOwner" 
-        AllowsTransparency="True" Background="Transparent">
+        WindowStyle="None" WindowStartupLocation="CenterScreen" 
+        AllowsTransparency="True" Background="Transparent"
+        >
     <Grid>
         <Rectangle Fill="White" RadiusX="40" RadiusY="40"/>
         <StackPanel x:Name="stackPanel" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">

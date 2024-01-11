@@ -28,7 +28,7 @@ namespace MembershipManager.View.Utils.UserControls
         public Orientation Orientation { get => Sp.Orientation; set => Sp.Orientation = value; }
 
         public string Text { get => Tb.Text; set => Tb.Text = value; }
-        public string Title { get => Lab.Content.ToString(); set => Lab.Content = value; }
+        public string Title { set => Lab.Content = value; }
 
         public double LabelWidth { get => Lab.Width; set => Lab.Width = value; }
         public double TextBoxWidth { get => Tb.Width; set => Tb.Width = value; }

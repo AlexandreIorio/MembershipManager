@@ -11,11 +11,13 @@
     <Page.Resources>
         <sys:Double x:Key="LabelWidth">80</sys:Double>
         <sys:Double x:Key="TextboxWidth">200</sys:Double>
-        
+        <GridLength x:Key="ColLabelWidth">80</GridLength>
+        <GridLength x:Key="ColTextboxWidth">200</GridLength>
+
     </Page.Resources>
 
 
-   
+
 
     <StackPanel HorizontalAlignment="Left">
 
@@ -35,7 +37,15 @@
                      Title="Adresse" 
                      LabelWidth="{StaticResource LabelWidth}" 
                      TextBoxWidth="{StaticResource TextboxWidth}" />
-        <Button x:Name="ButtonCity" Content="Ville" Click="ButtonCity_Click"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="210"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column ="0">Ville</Label>
+
+            <Button Grid.Column="1" x:Name="ButtonCity" Content="Sélectionner" Click="ButtonCity_Click"/>
+        </Grid>
         <local:Entry x:Name="EntryPhone" 
                      Title="Téléphone" 
                      LabelWidth="{StaticResource LabelWidth}" 
@@ -51,5 +61,5 @@
 
     </StackPanel>
 
-    
+
 </Page>

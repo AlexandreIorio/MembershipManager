@@ -28,21 +28,22 @@ namespace MembershipManager.View.Utils
         public Button ButtonSelect { get => BtnSelect; }
 
         private Type _type { get; set; }
-        private List<object> _selectedItems { get; set; } = new List<object>();
         private IEnumerable _items { get; set; }
 
         public ListSelection(IEnumerable list)
         {
             InitializeComponent();
+            EntrySearch.TextBox.Focus();
+
             list = list ?? throw new ArgumentNullException(nameof(list));
 
             _type = list.GetType().GetGenericArguments()[0];
 
+            _items = list;
+            EntrySearch.TextBox.TextChanged += TextBox_TextChanged;
             InitializeList();
             InitializeFilter();
-            _items = list;
-            Lst.ItemsSource = list;
-            EntrySearch.TextBox.TextChanged += TextBox_TextChanged;
+            FilterList();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -70,6 +71,13 @@ namespace MembershipManager.View.Utils
             }
 
             );
+
+    
+
+            if (Lst.Items.Count == 1)
+            {
+                Lst.SelectedIndex = 0;
+            }
         }
 
         private void InitializeList()
@@ -111,24 +119,22 @@ namespace MembershipManager.View.Utils
             }
         }
 
-        private void Lst_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void Lst_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            DialogResult = true;
+            Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogResult = false;
+            Close();
         }
 
         private void BtnSelect_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogResult = true;
+            Close();
         }
     }
 
