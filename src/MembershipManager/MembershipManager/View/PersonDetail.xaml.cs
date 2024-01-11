@@ -39,31 +39,13 @@ namespace MembershipManager.View
 
         }
 
-        private void TbFirstName_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (checkFirstName())
-            {
-                _person.FirstName = TbFirstName.Text;
-            }
-        }
 
-        private bool checkFirstName()
-        {
-            if (string.IsNullOrEmpty(TbFirstName.Text))
-            {
-                TbFirstName.BorderBrush = Brushes.Red;
-                return false;
-            }
-            else
-            {
-                TbFirstName.BorderBrush = Brushes.Black;
-                return true;
-            }
-        }
+
+
 
         private void FillGui()
         {
-            TbFirstName.Text = _person.FirstName;
+            
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)

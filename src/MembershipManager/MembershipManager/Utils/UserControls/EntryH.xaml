@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="MembershipManager.Utils.UserControls.EntryH"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="250">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="ColLabel" Width="auto"/>
+            <ColumnDefinition x:Name="ColEntry" Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="Lab" Content="Label" HorizontalAlignment="Left"/>
+        <TextBox x:Name="Tb" Grid.Column="1" MinWidth="50"/>
+    </Grid>
+</UserControl>
