@@ -24,15 +24,21 @@
             <WrapPanel x:Name="wpFilter">
 
             </WrapPanel>
-            <ListView x:Name="Lst" Margin="0,0,0,10" Grid.Row="1" Height="155" SelectionChanged="Lst_SelectionChanged" MouseDoubleClick="Lst_MouseDoubleClick">
-                <ListView.View>
-                    <GridView x:Name="grdLst">
-
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <Button x:Name="BtnSelect" Content="Sélectionner" Click="BtnSelect_Click"  Margin="0,0,0,20" IsDefault="True" />
-            <Button x:Name="BtnCancel" Content="Annuler" Margin="0,0,0,20" Click="BtnCancel_Click"  IsCancel="True" />
+            <ListView x:Name="Lst"
+                      Grid.Row="1" 
+                      Height="155" 
+                      SelectionChanged="Lst_SelectionChanged" 
+                      MouseDoubleClick="Lst_MouseDoubleClick"
+                      />
+            <Button x:Name="BtnSelect" 
+                    Content="Sélectionner" 
+                    Click="BtnSelect_Click"  
+                    IsDefault="True" />
+            
+            <Button x:Name="BtnCancel" 
+                    Content="Annuler" 
+                    Click="BtnCancel_Click"  
+                    IsCancel="True" />
         </StackPanel>
     </StackPanel>
 </Window>
