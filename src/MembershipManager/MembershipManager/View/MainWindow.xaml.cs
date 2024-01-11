@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using MembershipManager.DataModel;
-using MembershipManager.DataModel.Person;
+using MembershipManager.DataModel.People;
 using MembershipManager.DataModel.Company;
 using MembershipManager.Engine;
 using Npgsql;
@@ -16,11 +16,11 @@ namespace MembershipManager
         public MainWindow()
         {
             InitializeComponent();
-            Member? p = Member.Select("7569854624538") as Member;
-      
+            //Member? p = Member.Select("7569854624538") as Member;
 
-            //PersonDetail pd1 = new PersonDetail();
-            //pd1.Show();
+
+            View.People.Person.PersonDetailWindow pd1 = new ();
+            pd1.Show();
 
 
             //Member p = new Member();
@@ -28,11 +28,11 @@ namespace MembershipManager
             //p.FirstName = "Jean";
             //p.LastName = "Dupont";
             //p.Address = "Rue de la gare 12";
-            //p.City = new City(1000);
+            //p.City = City.Select(1000) as City;
             //p.Phone = "021 123 45 67";
             //p.MobilePhone = "079 123 45 67";
             //p.Email = "jean.dupont@tatete.ru";
-            //p.Structure = new Structure("GoldGym Fitness");
+            //p.Structure = Structure.Select("GoldGym Fitness") as Structure;
             //p.Insert();
 
         }

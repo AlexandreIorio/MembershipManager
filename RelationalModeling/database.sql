@@ -60,7 +60,7 @@ FOREIGN KEY (city_id) REFERENCES city(id)
 );
 
 CREATE TABLE Employe (
-                         no_avs char(13),
+    no_avs char(13),
     franchise_id int NOT NULL,
     salary int, --cents
     rate int, --percents

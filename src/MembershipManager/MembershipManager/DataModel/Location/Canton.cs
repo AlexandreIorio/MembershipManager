@@ -34,5 +34,10 @@ namespace MembershipManager.DataModel
             return c;
 
         }
+
+        public override string ToString()
+        {
+            return $"{Name} - {Abbreviation}";
+        }
     }
 }

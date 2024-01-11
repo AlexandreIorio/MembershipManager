@@ -1,5 +1,5 @@
 ﻿using MembershipManager.Engine;
-using MembershipManager.DataModel;
+
 using System.Diagnostics.Metrics;
 using Npgsql;
 using NpgsqlTypes;
@@ -11,7 +11,7 @@ using System.Dynamic;
 using System.Collections.Generic;
 
 
-namespace MembershipManager.DataModel.Person
+namespace MembershipManager.DataModel.People
 {
     [DbTableName("person")]
     public class Person : ISql

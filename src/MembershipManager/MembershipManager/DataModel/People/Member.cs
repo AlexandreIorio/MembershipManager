@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.CompilerServices;
 
-namespace MembershipManager.DataModel.Person
+namespace MembershipManager.DataModel.People
 {
     [DbTableName("member")]
     [DbInherit(typeof(Person))]
@@ -33,16 +33,8 @@ namespace MembershipManager.DataModel.Person
 
         public new void Insert()
         {
-            Person p = new Person();
-            p.NoAvs = this.NoAvs;
-            p.FirstName = this.FirstName;
-            p.LastName = this.LastName;
-            p.Address = this.Address;
-            p.City = this.City;
-            p.Phone = this.Phone;
-            p.MobilePhone = this.MobilePhone;
-            p.Email = this.Email;
-            p.Insert();
+            Person p = new Person(this);
+            p.Insert(); 
             NpgsqlCommand cmdMember = new NpgsqlCommand();
             cmdMember.CommandText = $"INSERT INTO member {ISql.ComputeQuery(this.GetType())}";
             ISql.ComputeCommandeWithValues(cmdMember, this);

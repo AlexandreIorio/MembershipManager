@@ -1,4 +1,4 @@
-﻿using MembershipManager.DataModel.Person;
+﻿using MembershipManager.DataModel.People;
 using Npgsql;
 using NpgsqlTypes;
 using System;
@@ -63,6 +63,19 @@ namespace MembershipManager.Engine
             return DbManager.Db?.Receive<T>(cmd).FirstOrDefault();
         }
 
+        public static List<T> GetAll<T>() where T : class
+        {
+            Type type = typeof(T);
+            NpgsqlCommand cmd = new();
+
+            DbTableName? tableNameAttribute = type.GetCustomAttribute<DbTableName>();
+            if (tableNameAttribute == null) throw new MissingMemberException();
+
+            cmd.CommandText = $"SELECT * FROM {tableNameAttribute.Name}";
+    
+            return DbManager.Db.Receive<T>(cmd);
+        }
+
         public static List<Type> InheritedTypes
         {
             get
@@ -105,8 +118,6 @@ namespace MembershipManager.Engine
             //remove last comma
             sbAtt.Remove(sbAtt.Length - 2, 2);
             sbVal.Remove(sbVal.Length - 2, 2);
-            sbVal.Remove(sbVal.Length - 2, 2);
-
 
             sbAtt.Append(")");
             sbVal.Append(");");

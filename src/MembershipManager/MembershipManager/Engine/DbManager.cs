@@ -1,4 +1,4 @@
-﻿using MembershipManager.DataModel.Person;
+﻿using MembershipManager.DataModel.People;
 using Npgsql;
 using System.Configuration;
 using System.Linq;
