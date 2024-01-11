@@ -19,10 +19,10 @@ namespace MembershipManager.View.People.Person
     /// </summary>
     public partial class PersonDetailWindow : Window
     {
-        public PersonDetailWindow()
+        public PersonDetailWindow(MembershipManager.DataModel.People.Person? p = null)
         {
             InitializeComponent();
-            MainFrame.Navigate(new PersonDetail());
+            MainFrame.Navigate(new PersonDetail(p));
         }
     }
 }

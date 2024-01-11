@@ -36,7 +36,7 @@ namespace MembershipManager.DataModel.People
         public string? Phone { get; set; }
 
         [DbAttribute("mobile")]
-        public string? MobilePhone { get; set; }
+        public string? Mobile { get; set; }
 
         [DbAttribute("email")]
         public string? Email { get; set; }
@@ -50,7 +50,7 @@ namespace MembershipManager.DataModel.People
             this.Address = person.Address;
             this.City = person.City;
             this.Phone = person.Phone;
-            this.MobilePhone = person.MobilePhone;
+            this.Mobile = person.Mobile;
             this.Email = person.Email;
         }
 

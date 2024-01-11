@@ -52,7 +52,7 @@ namespace MembershipManager.DataModel
             return $"{NPA} {Name}";
         }
 
-        public static List<City>? Cities { get; set; }
+        public static List<City> Cities { get; set; } = new List<City>();
 
     }
 }

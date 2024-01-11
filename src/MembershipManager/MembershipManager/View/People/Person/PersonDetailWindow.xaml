@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MembershipManager.View.People.Person"
         mc:Ignorable="d"
-        Title="PersonDetailWindow" Height="450" Width="800">
+        Title="PersonDetailWindow" Height="450" Width="400"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Frame x:Name="MainFrame"/>
     </Grid>

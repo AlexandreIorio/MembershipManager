@@ -22,10 +22,10 @@ namespace MembershipManager
 
         private void ButtonTest_Click(object sender, RoutedEventArgs e)
         {
-            //Member? p = Member.Select("7569854624538") as Member;
+            Person? p = Person.Select("7569854624538") as Person;
 
 
-            View.People.Person.PersonDetailWindow pd1 = new();
+            View.People.Person.PersonDetailWindow pd1 = new View.People.Person.PersonDetailWindow(p);
             pd1.Show();
 
 
