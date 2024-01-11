@@ -16,10 +16,16 @@ namespace MembershipManager
         public MainWindow()
         {
             InitializeComponent();
+           
+
+        }
+
+        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
             //Member? p = Member.Select("7569854624538") as Member;
 
 
-            View.People.Person.PersonDetailWindow pd1 = new ();
+            View.People.Person.PersonDetailWindow pd1 = new();
             pd1.Show();
 
 

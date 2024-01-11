@@ -5,9 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MembershipManager"
         mc:Ignorable="d"
-        Title="SpalshScreen" Height="450" Width="800" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterOwner">
+        Title="SpalshScreen" 
+        Height="450" Width="800" 
+        ResizeMode="NoResize" 
+        WindowStyle="None" WindowStartupLocation="CenterOwner" 
+        AllowsTransparency="True" Background="Transparent">
     <Grid>
-        <Label>Membership Manager</Label> 
-        
+        <Rectangle Fill="White" RadiusX="40" RadiusY="40"/>
+        <StackPanel x:Name="stackPanel" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+            <Label FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center">Membership Manager</Label>
+            <ProgressBar x:Name="progressBar" 
+                         Height="25" 
+                         Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}" 
+                         Background="#3FFFFFFF" 
+                         BorderBrush="Black" BorderThickness="2" Value="0"/>
+            <Label x:Name="ProgressMessage" HorizontalAlignment="Center">Lancement du programme</Label>
+        </StackPanel>
+
     </Grid>
 </Window>
