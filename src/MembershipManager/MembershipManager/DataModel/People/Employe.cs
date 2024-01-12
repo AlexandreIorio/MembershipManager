@@ -25,7 +25,7 @@ namespace MembershipManager.DataModel.People
             Person p = new Person(this);
             p.Insert();
             NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"INSERT INTO person {ISql.ComputeQuery(typeof(Employe))}";
+            cmd.CommandText = $"INSERT INTO person {ISql.InsertQuery(typeof(Employe))}";
             ISql.ComputeCommandeWithValues(cmd, this);
             DbManager.Db?.Send(cmd);
         }

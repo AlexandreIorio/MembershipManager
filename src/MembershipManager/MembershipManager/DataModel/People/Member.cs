@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.CompilerServices;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace MembershipManager.DataModel.People
 {
@@ -36,7 +39,7 @@ namespace MembershipManager.DataModel.People
             Person p = new Person(this);
             p.Insert(); 
             NpgsqlCommand cmdMember = new NpgsqlCommand();
-            cmdMember.CommandText = $"INSERT INTO member {ISql.ComputeQuery(this.GetType())}";
+            cmdMember.CommandText = $"INSERT INTO member {ISql.InsertQuery(this.GetType())}";
             ISql.ComputeCommandeWithValues(cmdMember, this);
             DbManager.Db?.Send(cmdMember);
         }
@@ -47,6 +50,28 @@ namespace MembershipManager.DataModel.People
             Member? m = ISql.Get<Member>(pk[0]);
             if (m == null) throw new KeyNotFoundException();
             return m;
+        }
+
+        public new bool Validate()
+        {
+            StringBuilder sb = new StringBuilder();
+            bool valid = true;
+            if (base.Validate()) valid = false;
+            if (Structure == null)
+            {
+                sb.AppendLine("La structure est obligatoire");
+                valid = false;
+            }
+            if (valid == false)
+            {
+                MessageBox.Show(sb.ToString(),
+                    "Erreur",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Error);
+
+            }
+            return valid;
+
         }
 
     }

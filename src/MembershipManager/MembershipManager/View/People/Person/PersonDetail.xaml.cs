@@ -26,21 +26,19 @@ namespace MembershipManager.View.People.Person
     public partial class PersonDetail : Page, IGui
     {
         public MembershipManager.DataModel.People.Person Person { get; set; }
-        private bool _IsEditing;
+  
 
-
+        public PersonDetail() => InitializeComponent();
         public PersonDetail(MembershipManager.DataModel.People.Person? person = null)
         {
             InitializeComponent();
             if (person == null)
             {
                 Person = new MembershipManager.DataModel.People.Person();
-                _IsEditing = false;
             }
             else
             {
                 Person = person;
-                _IsEditing = true;
             }
             UpdateGui();
         }
@@ -75,5 +73,7 @@ namespace MembershipManager.View.People.Person
             EntryMobile.Text = Person.Mobile ?? "";
             EntryEmail.Text = Person.Email ?? "";
         }
+
+
     }
 }

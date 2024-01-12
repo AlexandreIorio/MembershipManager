@@ -9,6 +9,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.IO.Packaging;
 using System.Dynamic;
 using System.Collections.Generic;
+using System.Windows;
 
 
 namespace MembershipManager.DataModel.People
@@ -57,7 +58,7 @@ namespace MembershipManager.DataModel.People
         public void Insert()
         {
             NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"INSERT INTO person {ISql.ComputeQuery(typeof(Person))}";
+            cmd.CommandText = $"INSERT INTO person {ISql.InsertQuery(typeof(Person))}";
             ISql.ComputeCommandeWithValues(cmd, this);
             DbManager.Db?.Send(cmd);
         }
@@ -71,6 +72,46 @@ namespace MembershipManager.DataModel.People
 
             return p;
 
+        }
+
+        public bool Validate()
+        {
+            StringBuilder message = new StringBuilder();
+            bool valid = true;
+            if (string.IsNullOrEmpty(NoAvs))
+            {
+                message.AppendLine("Le numéro AVS est obligatoire");
+                valid = false;
+            }
+            if (string.IsNullOrEmpty(FirstName))
+            {
+                message.AppendLine("Le prénom est obligatoire");
+                valid = false;
+            }
+            if (string.IsNullOrEmpty(LastName))
+            {
+                message.AppendLine("Le nom est obligatoire");
+                valid = false;
+            }
+            if (!valid)
+            {
+                MessageBox.Show(message.ToString(),
+                    "Erreur",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Error);
+
+            }
+            return valid;
+        }
+
+        public void Update()
+        {
+            NpgsqlCommand cmd = new NpgsqlCommand();
+            cmd.CommandText = $"UPDATE person SET {ISql.InsertQuery(typeof(Person))} WHERE 'no_avs' = @where;";
+            ISql.ComputeCommandeWithValues(cmd, this, true);
+            NpgsqlParameter param = new NpgsqlParameter($"@where", NoAvs);
+            cmd.Parameters.Add(param);
+            DbManager.Db?.Send(cmd);
         }
     }
 }

@@ -15,8 +15,11 @@ namespace MembershipManager.Engine
     {
         #region Abstract Methods
         public void Insert();
+        public void Update();
 
         public abstract static ISql? Select(params object[] pk);
+
+        public bool Validate();
 
         #endregion
 
@@ -94,15 +97,17 @@ namespace MembershipManager.Engine
                 return inheritedTypes;
             }
         }
-        public static string ComputeQuery(Type type)
+        public static string InsertQuery(Type type, bool ignorePrimary = false)
         {
             StringBuilder sbAtt = new("(");
             StringBuilder sbVal = new("(");
             int i = 0;
             foreach (PropertyInfo p in type.GetProperties())
             {
-
                 IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
+                // Ignore properties if is PrimaryKey and ignorePrimary is true
+                if (constraints.Any(x => x is DbPrimaryKey) && ignorePrimary) continue;
+                
                 // Ignore properties if from base class and not primary key
                 if (p.DeclaringType != type && !constraints.Any(x => x is DbPrimaryKey))
                     continue;
@@ -120,17 +125,20 @@ namespace MembershipManager.Engine
             sbVal.Remove(sbVal.Length - 2, 2);
 
             sbAtt.Append(")");
-            sbVal.Append(");");
+            sbVal.Append(")");
 
             return sbAtt.ToString() + " VALUES " + sbVal.ToString();
         }
 
-        public static void ComputeCommandeWithValues(NpgsqlCommand cmd, object obj)
+        public static void ComputeCommandeWithValues(NpgsqlCommand cmd, object obj, bool ignorePrimary = false)
         {
             int i = 0;
             foreach (PropertyInfo p in obj.GetType().GetProperties())
             {
                 IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
+                // Ignore properties if is PrimaryKey and ignorePrimary is true
+                if (constraints.Any(x => x is DbPrimaryKey) && ignorePrimary) continue;
+
                 // Ignore properties if from base class and not primary key
                 if (p.DeclaringType != obj.GetType() && !constraints.Any(x => x is DbPrimaryKey))
                     continue;

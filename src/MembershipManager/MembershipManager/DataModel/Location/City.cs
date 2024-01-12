@@ -52,6 +52,16 @@ namespace MembershipManager.DataModel
             return $"{NPA} {Name}";
         }
 
+        bool ISql.Validate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update()
+        {
+            throw new NotImplementedException();
+        }
+
         public static List<City> Cities { get; set; } = new List<City>();
 
     }

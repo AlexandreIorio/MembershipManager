@@ -8,6 +8,16 @@
         Title="PersonDetailWindow" Height="450" Width="400"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <Frame x:Name="MainFrame"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Détail du contact" Style="{StaticResource LabelTitle}"/>
+        <Frame Grid.Row="1" x:Name="MainFrame" Source="PersonDetail.xaml"/>
+        <WrapPanel Grid.Row="2">
+            <Button x:Name="ButtonSave" Content="Enregistrer" IsDefault="True" Click="ButtonSave_Click"/>
+            <Button x:Name="ButtonCancel"  Content="Annuler" IsCancel="True"/>
+        </WrapPanel>
     </Grid>
 </Window>

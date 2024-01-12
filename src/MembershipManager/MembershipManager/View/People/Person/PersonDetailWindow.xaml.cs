@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MembershipManager.DataModel.People;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,10 +20,28 @@ namespace MembershipManager.View.People.Person
     /// </summary>
     public partial class PersonDetailWindow : Window
     {
+        private bool _IsEditMode = false;
+        private PersonDetail _PersonDetail;
         public PersonDetailWindow(MembershipManager.DataModel.People.Person? p = null)
         {
             InitializeComponent();
-            MainFrame.Navigate(new PersonDetail(p));
+            _PersonDetail = new PersonDetail(p);
+            MainFrame.Navigate(_PersonDetail);
+            _IsEditMode = p is not null;
+        }
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        {
+            MembershipManager.DataModel.People.Person person = _PersonDetail.Person;
+            if (_IsEditMode)
+            {
+                person.Update();
+            }
+            else
+            {
+                person.Insert();
+            }
+            Close();
         }
     }
 }
