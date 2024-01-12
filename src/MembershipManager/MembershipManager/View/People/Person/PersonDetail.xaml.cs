@@ -25,7 +25,7 @@ namespace MembershipManager.View.People.Person
     /// </summary>
     public partial class PersonDetail : Page, IGui
     {
-        private MembershipManager.DataModel.People.Person? _person;
+        public MembershipManager.DataModel.People.Person? Person { get; set; }
         private bool _IsEditing;
 
 
@@ -34,17 +34,22 @@ namespace MembershipManager.View.People.Person
             InitializeComponent();
             if (person == null)
             {
-                _person = new MembershipManager.DataModel.People.Person();
+                Person = new MembershipManager.DataModel.People.Person();
                 _IsEditing = false;
             }
             else
             {
-                _person = person;
+                Person = person;
                 _IsEditing = true;
             }
+            InitializeEvents();
             UpdateGui();
         }
 
+        private void InitializeEvents()
+        {
+            EntryFirstName.TextChanged += EntryFirstName_TextChanged;
+        }
 
         private void ButtonCity_Click(object sender, RoutedEventArgs e)
         {
@@ -52,27 +57,33 @@ namespace MembershipManager.View.People.Person
             listSelection.ShowDialog();
             if (listSelection.DialogResult == true)
             {
-                _person.City = (City)listSelection.List.SelectedItem;
+                Person.City = (City)listSelection.List.SelectedItem;
                 UpdateGui();
             }
         }
         private void UpdateGui()
         {
-            UpdateGui(_person ?? throw new ArgumentNullException());
+            UpdateGui(Person ?? throw new ArgumentNullException());
         }
 
 
         public void UpdateGui(object content)
         {
-            EntryNoAvs.Text = _person.NoAvs;
-            EntryFirstName.Text = _person.FirstName;
-            EntryLastName.Text = _person.LastName;
-            EntryAddress.Text = _person.Address;
-            if (_person.City == null) ButtonCity.Content = "Sélectionner";
-            else ButtonCity.Content = _person.City.ToString();
-            EntryPhone.Text = _person.Phone;
-            EntryMobile.Text = _person.Mobile;
-            EntryEmail.Text = _person.Email;
+            EntryNoAvs.Text = Person.NoAvs;
+            EntryFirstName.Text = Person.FirstName;
+            EntryLastName.Text = Person.LastName;
+            EntryAddress.Text = Person.Address;
+            if (Person.City == null) ButtonCity.Content = "Sélectionner";
+            else ButtonCity.Content = Person.City.ToString();
+            EntryPhone.Text = Person.Phone;
+            EntryMobile.Text = Person.Mobile;
+            EntryEmail.Text = Person.Email;
+        }
+
+
+        private void EntryFirstName_TextChanged(object? sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
