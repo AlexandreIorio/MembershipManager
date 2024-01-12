@@ -25,7 +25,7 @@ namespace MembershipManager.View.People.Person
     /// </summary>
     public partial class PersonDetail : Page, IGui
     {
-        public MembershipManager.DataModel.People.Person? Person { get; set; }
+        public MembershipManager.DataModel.People.Person Person { get; set; }
         private bool _IsEditing;
 
 
@@ -42,14 +42,10 @@ namespace MembershipManager.View.People.Person
                 Person = person;
                 _IsEditing = true;
             }
-            InitializeEvents();
             UpdateGui();
         }
 
-        private void InitializeEvents()
-        {
-            EntryFirstName.TextChanged += EntryFirstName_TextChanged;
-        }
+        
 
         private void ButtonCity_Click(object sender, RoutedEventArgs e)
         {
@@ -69,21 +65,15 @@ namespace MembershipManager.View.People.Person
 
         public void UpdateGui(object content)
         {
-            EntryNoAvs.Text = Person.NoAvs;
-            EntryFirstName.Text = Person.FirstName;
-            EntryLastName.Text = Person.LastName;
-            EntryAddress.Text = Person.Address;
+            EntryNoAvs.Text = Person.NoAvs ?? "";
+            EntryFirstName.Text = Person.FirstName ?? "" ;
+            EntryLastName.Text = Person.LastName ?? "";
+            EntryAddress.Text = Person.Address ?? "";
             if (Person.City == null) ButtonCity.Content = "Sélectionner";
             else ButtonCity.Content = Person.City.ToString();
-            EntryPhone.Text = Person.Phone;
-            EntryMobile.Text = Person.Mobile;
-            EntryEmail.Text = Person.Email;
-        }
-
-
-        private void EntryFirstName_TextChanged(object? sender, EventArgs e)
-        {
-            throw new NotImplementedException();
+            EntryPhone.Text = Person.Phone ?? "";
+            EntryMobile.Text = Person.Mobile ?? "";
+            EntryEmail.Text = Person.Email ?? "";
         }
     }
 }
