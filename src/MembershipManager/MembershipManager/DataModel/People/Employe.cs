@@ -20,16 +20,6 @@ namespace MembershipManager.DataModel.People
         [DbRelation("franchise_id", "id")]
         Franchise? Franchise { get; set; }
 
-        public new void Insert()
-        {
-            Person p = new Person(this);
-            p.Insert();
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"INSERT INTO person {ISql.ComputeQuery(typeof(Employe))}";
-            ISql.ComputeCommandeWithValues(cmd, this);
-            DbManager.Db?.Send(cmd);
-        }
-
         public new static ISql? Select(params object[] pk)
         {
 

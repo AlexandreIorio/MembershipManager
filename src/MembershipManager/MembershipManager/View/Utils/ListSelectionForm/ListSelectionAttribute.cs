@@ -20,4 +20,6 @@ namespace MembershipManager.View.Utils.ListSelectionForm
     {
         public string HeaderName { get; set; } = headerName;
     }
+
+    internal class Sorted() : Attribute{ }
 }

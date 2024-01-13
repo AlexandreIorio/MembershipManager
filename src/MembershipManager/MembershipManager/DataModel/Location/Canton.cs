@@ -39,6 +39,17 @@ namespace MembershipManager.DataModel
         {
             return $"{Name} - {Abbreviation}";
         }
+
+        bool ISql.Validate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update()
+        {
+            throw new NotImplementedException();
+        }
+
         public static List<Canton> Cantons { get; set; } = new List<Canton>();
     }
 }

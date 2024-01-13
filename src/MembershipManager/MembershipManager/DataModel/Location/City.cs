@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace MembershipManager.DataModel
 {
     [DbTableName("city")]
-    public class City : ISql
+    public class City : ISql, IComparable
     {
         [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
@@ -50,6 +50,21 @@ namespace MembershipManager.DataModel
         public override string ToString()
         {
             return $"{NPA} {Name}";
+        }
+
+        bool ISql.Validate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CompareTo(object? obj)
+        {
+            return ToString().CompareTo(obj?.ToString());
         }
 
         public static List<City> Cities { get; set; } = new List<City>();

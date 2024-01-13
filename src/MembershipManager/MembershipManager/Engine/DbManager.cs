@@ -144,6 +144,11 @@ namespace MembershipManager.Engine
         {
             connection.Close();
         }
+
+        internal void Send(object value)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         #region Singleton

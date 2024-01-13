@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.CompilerServices;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace MembershipManager.DataModel.People
 {
@@ -31,16 +34,6 @@ namespace MembershipManager.DataModel.People
 
 
 
-        public new void Insert()
-        {
-            Person p = new Person(this);
-            p.Insert(); 
-            NpgsqlCommand cmdMember = new NpgsqlCommand();
-            cmdMember.CommandText = $"INSERT INTO member {ISql.ComputeQuery(this.GetType())}";
-            ISql.ComputeCommandeWithValues(cmdMember, this);
-            DbManager.Db?.Send(cmdMember);
-        }
-
         public static new ISql? Select(params object[] pk)
         {
             if (pk.Length != 1) throw new ArgumentException();
@@ -48,6 +41,40 @@ namespace MembershipManager.DataModel.People
             if (m == null) throw new KeyNotFoundException();
             return m;
         }
+        public new void Insert()
+        {
+            base.Insert();
+            if (Validate()) DbManager.Db?.Send(ISql.InsertQuery<Member>(this));
+        }
+
+        public new void Update()
+        {
+            base.Update();
+            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Member>(this));
+        }
+
+        public new bool Validate()
+        {
+            StringBuilder sb = new StringBuilder();
+            bool valid = true;
+            if (!base.Validate()) valid = false;
+            if (Structure == null)
+            {
+                sb.AppendLine("La structure est obligatoire");
+                valid = false;
+            }
+            if (valid == false)
+            {
+                MessageBox.Show(sb.ToString(),
+                    "Erreur",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Error);
+
+            }
+            return valid;
+
+        }
+
 
     }
 }
