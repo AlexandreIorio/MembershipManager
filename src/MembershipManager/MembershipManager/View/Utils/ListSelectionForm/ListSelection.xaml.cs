@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -23,24 +24,25 @@ namespace MembershipManager.View.Utils
     /// </summary>
     public partial class ListSelection : Window
     {
-        public ListBox List { get => Lst; }
         public Button ButtonCancel { get => BtnCancel; }
         public Button ButtonSelect { get => BtnSelect; }
-
+ 
         private Type _type { get; set; }
         private IEnumerable _items { get; set; }
+
+        private bool Ascending = false;
 
         public ListSelection(IEnumerable list)
         {
             InitializeComponent();
-            EntrySearch.TextBox.Focus();
+            TextBoxSearch.Focus();
 
             list = list ?? throw new ArgumentNullException(nameof(list));
 
             _type = list.GetType().GetGenericArguments()[0];
 
             _items = list;
-            EntrySearch.TextBox.TextChanged += TextBox_TextChanged;
+            TextBoxSearch.TextChanged += TextBox_TextChanged;
             InitializeList();
             InitializeFilter();
             FilterList();
@@ -54,11 +56,18 @@ namespace MembershipManager.View.Utils
         private void FilterList()
         {
             ComboBoxItem item = (ComboBoxItem)ComboBoxFilters.SelectedItem;
-            Lst.ItemsSource = _items;
-            List<object> list = Lst.ItemsSource.Cast<object>().ToList();
-            Lst.ItemsSource = list.Where(x =>{
+            List.ItemsSource = _items;
 
-                string? tag = item.Tag.ToString();
+            PropertyInfo? sortedProperty = _type.GetProperties().FirstOrDefault(x => x.GetCustomAttribute<Sorted>() != null);
+            if (sortedProperty is not null)
+            {
+                SortListByProperty(sortedProperty);
+            }
+
+            List<object> list = List.ItemsSource.Cast<object>().ToList();
+            List.ItemsSource = list.Where(x =>{
+
+                string? tag = item.Tag?.ToString();
                 if (tag is null) return false;
 
                 PropertyInfo? prop = x.GetType().GetProperty(tag);
@@ -67,16 +76,16 @@ namespace MembershipManager.View.Utils
                 string? value = prop.GetValue(x)?.ToString();
                 if (value is null) return false;
 
-                return value.Contains(EntrySearch.TextBox.Text, StringComparison.CurrentCultureIgnoreCase);
+                return value.Contains(TextBoxSearch.Text, StringComparison.CurrentCultureIgnoreCase);
             }
 
             );
 
     
 
-            if (Lst.Items.Count == 1)
+            if (List.Items.Count == 1)
             {
-                Lst.SelectedIndex = 0;
+                List.SelectedIndex = 0;
             }
         }
 
@@ -88,12 +97,18 @@ namespace MembershipManager.View.Utils
                 if (p.GetCustomAttribute<Displayed>() is Displayed displayedAttribute)
                 {
                     GridViewColumn column = new GridViewColumn();
-                    column.Header = displayedAttribute.HeaderName;
                     column.DisplayMemberBinding = new Binding(p.Name);
+                    
+                    GridViewColumnHeader header = new GridViewColumnHeader();
+                    header.Click += List_Click;
+                    header.Content = displayedAttribute.HeaderName;
+                    header.Tag = p;
+                    column.Header = header;
                     gv.Columns.Add(column);
                 }
             }
-            Lst.View = gv;
+            List.View = gv;
+      
         }
 
         private void InitializeFilter()
@@ -119,23 +134,26 @@ namespace MembershipManager.View.Utils
             }
         }
 
-        private void Lst_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void List_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
-            Close();
+            PropertyInfo? propertyToSort = ((GridViewColumnHeader)sender).Tag as PropertyInfo;
+            if (propertyToSort is null) return;
+            SortListByProperty(propertyToSort);
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        private void SortListByProperty(PropertyInfo property)
         {
-            DialogResult = false;
-            Close();
+            if (Ascending)
+            {
+                List.ItemsSource = List.ItemsSource.Cast<object>().OrderByDescending(x => property.GetValue(x));
+            }
+            else
+            {
+                List.ItemsSource = List.ItemsSource.Cast<object>().OrderBy(x => property.GetValue(x));
+            }
+            Ascending = !Ascending;
         }
 
-        private void BtnSelect_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-            Close();
-        }
     }
 
 

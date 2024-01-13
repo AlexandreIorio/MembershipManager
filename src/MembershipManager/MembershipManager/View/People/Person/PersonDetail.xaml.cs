@@ -23,56 +23,59 @@ namespace MembershipManager.View.People.Person
     /// <summary>
     /// Logique d'interaction pour PersonDetail.xaml
     /// </summary>
-    public partial class PersonDetail : Page, IGui
+    public partial class PersonDetail : Page
     {
-        private MembershipManager.DataModel.People.Person? _person;
-        private bool _IsEditing;
+        public MembershipManager.DataModel.People.Person Person { get; set; }
 
 
+        public PersonDetail() => InitializeComponent();
         public PersonDetail(MembershipManager.DataModel.People.Person? person = null)
         {
             InitializeComponent();
             if (person == null)
             {
-                _person = new MembershipManager.DataModel.People.Person();
-                _IsEditing = false;
+                Person = new MembershipManager.DataModel.People.Person();
             }
             else
             {
-                _person = person;
-                _IsEditing = true;
+                Person = person;
+                TextBoxNoAvs.IsEnabled = false;
             }
-            UpdateGui();
+            this.DataContext = Person;
         }
+
 
 
         private void ButtonCity_Click(object sender, RoutedEventArgs e)
         {
             ListSelection listSelection = new ListSelection(City.Cities);
+
+            listSelection.List.MouseDoubleClick += (sender, e) =>
+            {
+                listSelection.DialogResult = true; 
+                listSelection.Close();
+            };
+
+            listSelection.ButtonSelect.Click += (sender, e) =>
+            {
+                listSelection.DialogResult = true;
+                listSelection.Close();
+            };
+
+            listSelection.ButtonCancel.Click += (sender, e) =>
+            {
+                listSelection.DialogResult = false;
+                listSelection.Close();
+            };
+
             listSelection.ShowDialog();
             if (listSelection.DialogResult == true)
             {
-                _person.City = (City)listSelection.List.SelectedItem;
-                UpdateGui();
+                Person.City = (City)listSelection.List.SelectedItem;
+                ButtonCity.Content = Person.City;
+           
             }
         }
-        private void UpdateGui()
-        {
-            UpdateGui(_person ?? throw new ArgumentNullException());
-        }
-
-
-        public void UpdateGui(object content)
-        {
-            EntryNoAvs.Text = _person.NoAvs;
-            EntryFirstName.Text = _person.FirstName;
-            EntryLastName.Text = _person.LastName;
-            EntryAddress.Text = _person.Address;
-            if (_person.City == null) ButtonCity.Content = "Sélectionner";
-            else ButtonCity.Content = _person.City.ToString();
-            EntryPhone.Text = _person.Phone;
-            EntryMobile.Text = _person.Mobile;
-            EntryEmail.Text = _person.Email;
-        }
+      
     }
 }

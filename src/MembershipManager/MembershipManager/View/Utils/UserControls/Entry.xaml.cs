@@ -20,6 +20,9 @@ namespace MembershipManager.View.Utils.UserControls
     /// </summary>
     public partial class Entry : UserControl
     {
+      
+        public event EventHandler TextChanged;
+
         public TextBox TextBox { get => Tb; }
         public HorizontalAlignment TextBoxAlignment { get => Tb.HorizontalAlignment; set => Tb.HorizontalAlignment = value; }
 
@@ -38,6 +41,9 @@ namespace MembershipManager.View.Utils.UserControls
             InitializeComponent();
             //default values
             Orientation = Orientation.Horizontal;
+            TextBox.TextChanged += (sender, e) => { TextChanged?.Invoke(sender, e); };
         }
+
+       
     }
 }
