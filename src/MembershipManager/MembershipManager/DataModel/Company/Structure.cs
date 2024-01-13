@@ -30,7 +30,7 @@ namespace MembershipManager.DataModel.Company
 
         public void Insert()
         {
-            throw new NotImplementedException();
+            
         }
 
         public static ISql? Select(params object[] pk)
@@ -72,12 +72,12 @@ namespace MembershipManager.DataModel.Company
 
         public void Update()
         {
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"UPDATE structure SET {ISql.InsertQuery(typeof(Structure))} WHERE 'name' = @where";
-            ISql.ComputeCommandeWithValues(cmd, this);
-            NpgsqlParameter param = new NpgsqlParameter($"@where", Name);
-            cmd.Parameters.Add(param);
-            DbManager.Db?.Send(cmd);
+            //NpgsqlCommand cmd = new NpgsqlCommand();
+            //cmd.CommandText = $"UPDATE structure SET {ISql.InsertQuery(typeof(Structure))} WHERE 'name' = @where";
+            //ISql.ComputeCommandeWithValues(cmd, this);
+            //NpgsqlParameter param = new NpgsqlParameter($"@where", Name);
+            //cmd.Parameters.Add(param);
+            //DbManager.Db?.Send(cmd);
         }
     }
 }

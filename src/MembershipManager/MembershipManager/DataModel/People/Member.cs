@@ -34,16 +34,6 @@ namespace MembershipManager.DataModel.People
 
 
 
-        public new void Insert()
-        {
-            Person p = new Person(this);
-            p.Insert(); 
-            NpgsqlCommand cmdMember = new NpgsqlCommand();
-            cmdMember.CommandText = $"INSERT INTO member {ISql.InsertQuery(this.GetType())}";
-            ISql.ComputeCommandeWithValues(cmdMember, this);
-            DbManager.Db?.Send(cmdMember);
-        }
-
         public static new ISql? Select(params object[] pk)
         {
             if (pk.Length != 1) throw new ArgumentException();
@@ -51,12 +41,23 @@ namespace MembershipManager.DataModel.People
             if (m == null) throw new KeyNotFoundException();
             return m;
         }
+        public new void Insert()
+        {
+            base.Insert();
+            if (Validate()) DbManager.Db?.Send(ISql.InsertQuery<Member>(this));
+        }
+
+        public new void Update()
+        {
+            base.Update();
+            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Member>(this));
+        }
 
         public new bool Validate()
         {
             StringBuilder sb = new StringBuilder();
             bool valid = true;
-            if (base.Validate()) valid = false;
+            if (!base.Validate()) valid = false;
             if (Structure == null)
             {
                 sb.AppendLine("La structure est obligatoire");
@@ -73,6 +74,7 @@ namespace MembershipManager.DataModel.People
             return valid;
 
         }
+
 
     }
 }

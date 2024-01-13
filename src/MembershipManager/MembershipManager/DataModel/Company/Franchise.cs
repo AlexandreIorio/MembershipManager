@@ -30,12 +30,6 @@ namespace MembershipManager.DataModel.Company
 
         public Franchise() { }
 
-        public void Insert()
-        {
-
-        }
-
-
         public static ISql? Select(params object[] pk)
         {
 
@@ -76,13 +70,18 @@ namespace MembershipManager.DataModel.Company
         public void Update()
         {
 
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = $"UPDATE franchise SET {ISql.InsertQuery(typeof(Franchise))} WHERE 'id' = @where";
-            ISql.ComputeCommandeWithValues(cmd, this);
-            NpgsqlParameter param = new NpgsqlParameter($"@where", Id);
-            cmd.Parameters.Add(param);
-            DbManager.Db?.Send(cmd);
+            //NpgsqlCommand cmd = new NpgsqlCommand();
+            //cmd.CommandText = $"UPDATE franchise SET {ISql.InsertQuery(typeof(Franchise))} WHERE 'id' = @where";
+            //ISql.ComputeCommandeWithValues(cmd, this);
+            //NpgsqlParameter param = new NpgsqlParameter($"@where", Id);
+            //cmd.Parameters.Add(param);
+            //DbManager.Db?.Send(cmd);
 
+        }
+
+        public void Insert()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace MembershipManager.Engine
     public interface ISql
     {
         #region Abstract Methods
+
         public void Insert();
         public void Update();
 
@@ -24,7 +25,6 @@ namespace MembershipManager.Engine
         #endregion
 
         #region  Default Methods
-
 
 
         #endregion
@@ -97,16 +97,17 @@ namespace MembershipManager.Engine
                 return inheritedTypes;
             }
         }
-        public static string InsertQuery(Type type, bool ignorePrimary = false)
+        public static NpgsqlCommand InsertQuery<T>(object obj)
         {
-            StringBuilder sbAtt = new("(");
+            Type type = typeof(T);
+            NpgsqlCommand cmd = new NpgsqlCommand();
+            string tableName = type.GetCustomAttribute<DbTableName>()?.Name ?? throw new MissingMemberException();
+            StringBuilder sbAtt = new($"INSERT INTO {tableName} (");
             StringBuilder sbVal = new("(");
             int i = 0;
             foreach (PropertyInfo p in type.GetProperties())
             {
                 IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
-                // Ignore properties if is PrimaryKey and ignorePrimary is true
-                if (constraints.Any(x => x is DbPrimaryKey) && ignorePrimary) continue;
                 
                 // Ignore properties if from base class and not primary key
                 if (p.DeclaringType != type && !constraints.Any(x => x is DbPrimaryKey))
@@ -116,8 +117,32 @@ namespace MembershipManager.Engine
 
                 if (attributes.Count() > 0)
                 {
+                    object? value = p.GetValue(obj);
+                    if(value is null) continue;
+
+                    //Add property name to query
                     sbAtt.Append(attributes.First().Name).Append(", ");
-                    sbVal.Append($"@value{i++}, ");
+                    sbVal.Append($"@value{i}, ");
+
+                    //Add property value to query
+                    if (attributes.Any(a => a is DbAttribute))
+                    {
+                        DbAttribute att = (DbAttribute)attributes.First(a => a is DbAttribute);
+                        
+                        NpgsqlParameter param = new NpgsqlParameter($"@value{i}", value);
+                        cmd.Parameters.Add(param);
+                    }
+
+                    else if (attributes.Any(a => a is DbRelation))
+                    {
+                        DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
+                        if (value is null) continue;
+                        ISql? sql = (ISql?)value ?? throw new Exception("ISql is null");
+                        NpgsqlParameter param = new NpgsqlParameter($"@value{i}", GetDbAttributeByName(sql, rel.Name));
+                        cmd.Parameters.Add(param);
+                    }
+
+                    ++i;
                 }
             }
             //remove last comma
@@ -126,45 +151,89 @@ namespace MembershipManager.Engine
 
             sbAtt.Append(")");
             sbVal.Append(")");
+            cmd.CommandText = sbAtt.Append(" VALUES ").Append(sbVal).ToString();
 
-            return sbAtt.ToString() + " VALUES " + sbVal.ToString();
+            return cmd;
         }
 
-        public static void ComputeCommandeWithValues(NpgsqlCommand cmd, object obj, bool ignorePrimary = false)
+        public static NpgsqlCommand UpdateQuery<T>(object obj)
         {
+            Type type = typeof(T);
+            NpgsqlCommand cmd = new NpgsqlCommand();
+            string tableName = type.GetCustomAttribute<DbTableName>()?.Name ?? throw new MissingMemberException();
+            StringBuilder sbAtt = new($"UPDATE {tableName} SET ");
             int i = 0;
-            foreach (PropertyInfo p in obj.GetType().GetProperties())
+          
+            foreach (PropertyInfo p in type.GetProperties())
             {
                 IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
-                // Ignore properties if is PrimaryKey and ignorePrimary is true
-                if (constraints.Any(x => x is DbPrimaryKey) && ignorePrimary) continue;
 
                 // Ignore properties if from base class and not primary key
-                if (p.DeclaringType != obj.GetType() && !constraints.Any(x => x is DbPrimaryKey))
+                if (p.DeclaringType != type || constraints.Any(x => x is DbPrimaryKey))
                     continue;
 
-                IEnumerable<DbNameable> attributes = p.GetCustomAttributes<DbNameable>();
+                DbNameable? attribute = p.GetCustomAttribute<DbNameable>();
 
-                if (attributes.Count() < 0) continue;
-
-                if (attributes.Any(a => a is DbAttribute))
+                if (attribute is not null)
                 {
-                    DbAttribute att = (DbAttribute)attributes.First(a => a is DbAttribute);
-                    var value = p.GetValue(obj);
-                    NpgsqlParameter param = new NpgsqlParameter($"@value{i++}", value);
-                    cmd.Parameters.Add(param);
-                }
+                    //Add property name to query
+                    sbAtt.Append($"{attribute.Name} = @value{i}").Append(", ");
+    
 
-                else if (attributes.Any(a => a is DbRelation))
-                {
-                    DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
-                    var value = p.GetValue(obj);
-                    if (value is null) continue;
-                    ISql? sql = (ISql?)value ?? throw new Exception("ISql is null");
-                    NpgsqlParameter param = new NpgsqlParameter($"@value{i++}", GetDbAttributeByName(sql, rel.Name));
-                    cmd.Parameters.Add(param);
+                    //Add property value to query
+                    if (attribute is DbAttribute)
+                    {
+                        object? value = p.GetValue(obj) ?? DBNull.Value;
+                        NpgsqlParameter param = new NpgsqlParameter($"@value{i}", value);
+                        cmd.Parameters.Add(param);
+                    }
+
+                    else if (attribute is DbRelation)
+                    {
+                        var value = p.GetValue(obj);
+                        if (value is null) continue;
+                        ISql? sql = (ISql?)value ?? throw new Exception("ISql is null");
+                        object? val = GetDbAttributeByName(sql, attribute.Name) ?? DBNull.Value;
+                        NpgsqlParameter param = new NpgsqlParameter($"@value{i}",val);
+                        cmd.Parameters.Add(param);
+                    }
+
+                    ++i;
                 }
             }
+
+            //remove last comma
+            sbAtt.Remove(sbAtt.Length - 2, 2);
+
+            sbAtt.Append(" WHERE ");
+            List<string> primaryKeysName = GetPrimaryKeysName(type);
+            List<object?> primaryKeysValue = GetPrimaryKeyValue(obj);
+            for (int j = 0; j < primaryKeysName.Count(); j++ )
+            {
+                sbAtt.Append($"{primaryKeysName[j]} = @value{i}").Append(" AND ");
+                NpgsqlParameter param = new NpgsqlParameter($"@value{i}", primaryKeysValue[j]);
+                cmd.Parameters.Add(param);
+                ++i;
+            }
+
+            //remove last AND
+            sbAtt.Remove(sbAtt.Length - 5, 5);
+
+            cmd.CommandText = sbAtt.ToString();
+                        
+            return cmd;
+        }
+
+        private static List<object?> GetPrimaryKeyValue(object obj)
+        {
+            Type type = obj.GetType();
+            List<object?> pkValues = new ();
+            foreach (PropertyInfo p in type.GetProperties())
+            {
+                DbPrimaryKey? attribute = p.GetCustomAttribute<DbPrimaryKey>();
+                if (attribute is not null)  pkValues.Add(p.GetValue(obj));
+            }
+            return pkValues;
         }
 
         private static object? GetDbAttributeByName(object objstring, string attributeName)
