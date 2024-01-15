@@ -27,11 +27,7 @@ namespace MembershipManager.DataModel
         public static ISql? Select(params object[] pk)
         {
 
-            if (pk.Length != 1) throw new ArgumentException();
-            Canton? c = ISql.Get<Canton>(pk[0]);
-            if (c == null) throw new KeyNotFoundException();
-
-            return c;
+           return Cantons.FirstOrDefault(c => c.Abbreviation == (string)pk[0]);
 
         }
 
