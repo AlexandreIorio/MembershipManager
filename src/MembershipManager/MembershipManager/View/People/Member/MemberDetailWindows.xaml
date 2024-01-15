@@ -12,14 +12,14 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="Détail du contact" Style="{StaticResource LabelTitle}"/>
+        <Label Grid.Row="0" Content="Détail du membre" Style="{StaticResource LabelTitle}"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Frame Grid.Column="0"  Source="../Person/PersonDetail.xaml"/>
-            <Frame Grid.Column="1" Source="../Member/MemberDetail.xaml"/>
+            <Frame Grid.Column="1" Source="MemberDetail.xaml"/>
         </Grid>
         <WrapPanel Grid.Row="2">
             <Button x:Name="ButtonSave" Content="Enregistrer" IsDefault="True"/>
