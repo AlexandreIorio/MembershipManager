@@ -17,48 +17,33 @@ using MembershipManager.View.Utils.ListSelectionForm;
 namespace MembershipManager.DataModel.People
 {
     [DbTableName("person")]
-    public class Person : ISql, INotifyPropertyChanged
+    public class Person : ISql, INotifyPropertyChanged, Ilistable
     {
-        [Filtered("Numéro AVS")]
-        [Displayed("Numéro AVS")]
+       
         [DbPrimaryKey(NpgsqlDbType.Char, 13)]
         [DbAttribute("no_avs")]
         public string? NoAvs { get; set; }
 
-        [Sorted]
-        [Filtered("Prénom")]
-        [Displayed("Prénom")]
         [DbAttribute("first_name")]
         public string? FirstName { get; set; }
 
-        [Filtered("Nom")]
-        [Displayed("Nom")]
         [DbAttribute("last_name")]
         public string? LastName { get; set; }
 
-        [Filtered("Adresse")]
-        [Displayed("Adresse")]
         [DbAttribute("address")]
         public string? Address { get; set; }
-
-        [Displayed("Ville")]
+       
         [DbRelation("city_id", "id")]
         public City? City { get; set; }
 
-        [Displayed("Téléphone")]
         [DbAttribute("phone")]
         public string? Phone { get; set; }
 
-        [Displayed("Mobile")]
         [DbAttribute("mobile")]
         public string? Mobile { get; set; }
 
-        [Displayed("Email")]
         [DbAttribute("email")]
         public string? Email { get; set; }
-
-        [Filtered("Tous", true)]
-        public string? FullName { get => ToString(); }
 
         public Person() { }
         public Person(Person person)
@@ -74,7 +59,6 @@ namespace MembershipManager.DataModel.People
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-      
 
         public static ISql? Select(params object[] pk)
         {
@@ -106,6 +90,11 @@ namespace MembershipManager.DataModel.People
                 message.AppendLine("Le nom est obligatoire");
                 valid = false;
             }
+            if (City is null)
+            {
+                message.AppendLine("La ville est obligatoire");
+                valid = false;
+            }
             if (!valid)
             {
                 MessageBox.Show(message.ToString(),
@@ -119,7 +108,7 @@ namespace MembershipManager.DataModel.People
 
         public void Update()
         {
-        if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Person>(this));
+            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Person>(this));
         }
 
         public void Insert()
@@ -131,5 +120,20 @@ namespace MembershipManager.DataModel.People
         {
             return $"{FirstName} {LastName}";
         }
+
+        public static List<SqlViewable> Views
+        {
+            get
+            {
+                NpgsqlCommand cmd = new NpgsqlCommand();
+                cmd.CommandText = @"SELECT first_name, last_name, no_avs, address, city.city_name as city_name, canton.canton_name as canton_name
+                                FROM person
+                                    INNER JOIN city ON city_id = city.id
+                                    INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";
+
+                return DbManager.Db.Views<PersonView>(cmd).Cast<SqlViewable>().ToList();
+            }
+        }
+
     }
 }

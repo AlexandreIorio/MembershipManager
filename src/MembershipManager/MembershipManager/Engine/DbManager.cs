@@ -1,4 +1,5 @@
 ﻿using MembershipManager.DataModel.People;
+using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using System.Configuration;
 using System.Linq;
@@ -18,6 +19,32 @@ namespace MembershipManager.Engine
             OpenConnection(cmd.Connection);
             cmd.ExecuteNonQuery();
             CloseConnection(cmd.Connection);
+        }
+
+        public List<T> Views<T>(NpgsqlCommand cmd)
+        {
+            cmd.Connection = new NpgsqlConnection(GetConnectionString());
+            CheckDbValidity(cmd);
+            Type type = typeof(T);
+            OpenConnection(cmd.Connection);
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            List<object> results = [];
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    object obj = Activator.CreateInstance(type);
+                    if (obj is null) throw new ArgumentNullException($"Command call throw exception {cmd.CommandText}");
+                    foreach (PropertyInfo p in type.GetProperties())
+                    {
+                        if (p.GetCustomAttribute<IgnoreSql>() != null) continue;
+                        var valueRead = reader[p.Name]; 
+                        p.SetValue(obj, valueRead);
+                    }
+                    results.Add(obj);
+                }
+            }
+            return results.Cast<T>().ToList();
         }
 
         public List<T> Receive<T>(NpgsqlCommand cmd) where T : class
@@ -118,7 +145,7 @@ namespace MembershipManager.Engine
 
         #region Db connection management
 
-        private static string GetConnectionString()
+        public static string GetConnectionString()
         {
 
             var AppSetting = ConfigurationManager.AppSettings;

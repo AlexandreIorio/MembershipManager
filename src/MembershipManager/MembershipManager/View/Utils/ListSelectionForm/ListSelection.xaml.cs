@@ -57,6 +57,7 @@ namespace MembershipManager.View.Utils
         {
             ComboBoxItem item = (ComboBoxItem)ComboBoxFilters.SelectedItem;
             List.ItemsSource = _items;
+            if (item is null) return;
 
             PropertyInfo? sortedProperty = _type.GetProperties().FirstOrDefault(x => x.GetCustomAttribute<Sorted>() != null);
             if (sortedProperty is not null)

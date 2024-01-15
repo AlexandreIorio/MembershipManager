@@ -20,49 +20,31 @@ namespace MembershipManager
         public MainWindow()
         {
             InitializeComponent();
+            var PersonView = Person.Views.Cast<PersonView>().ToList();
+
+            int i = 0;
            
 
         }
 
         private void ButtonTest_Click(object sender, RoutedEventArgs e)
         {
-            //Member? p = Member.Select("7569854624538") as Member;
-            //p.SubscriptionDate = DateTime.Now;
-            //p.Update();
-
-            Person? p = Person.Select("7569854624538") as Person;
-
-            View.People.Person.PersonDetailWindow pd1 = new View.People.Person.PersonDetailWindow(p);
-            pd1.Show();
 
 
-            //Member p = new Member();
-            //Person p = new Person();
-            //p.NoAvs = "1";
-            //p.FirstName = "Jean";
-            //p.LastName = "Dupont";
-            //p.Address = "Rue de la gare 12";
-            //p.City = City.Select(1000) as City;
-            //p.Phone = "021 123 45 67";
-            //p.Mobile = "079 123 45 67";
-            //p.Email = "jean.dupont@tatete.ru";
-            //p.Structure = Structure.Select("GoldGym Fitness") as Structure;
-            //p.Insert();
 
         }
 
         private void ButtonContact_Click(object sender, RoutedEventArgs e)
         {
-            ListSelection listSelection = new ListSelection(ISql.GetAll<Person>());
+            ListSelection listSelection = new ListSelection(Person.Views.Cast<PersonView>().ToList());
             listSelection.Width = 800;
 
-            listSelection.MouseDoubleClick += (sender, e) =>
+            listSelection.List.MouseDoubleClick += (sender, e) =>
             {
-                Person? person = listSelection.List.SelectedItem as Person;
-                if (person is null) return;
-                PersonDetailWindow personDetailWindow = new PersonDetailWindow(person);
-                personDetailWindow.ShowDialog();
-                listSelection.List.ItemsSource = ISql.GetAll<Person>();
+                string? noAvs = (listSelection.List.SelectedItem as PersonView)?.no_avs;
+                if (noAvs is null) return;
+                PersonView.EditPerson(noAvs);
+                listSelection.List.ItemsSource = Person.Views.Cast<PersonView>().ToList();
             };
 
             //Define new button
@@ -70,13 +52,14 @@ namespace MembershipManager
             button.Content = "Nouveau contact";
             button.Click += (sender, e) =>
             {
-                PersonDetailWindow personDetailWindow = new PersonDetailWindow();
-                personDetailWindow.ShowDialog();
-                listSelection.List.ItemsSource = ISql.GetAll<Person>();
+                PersonView.NewPerson();
+                listSelection.List.ItemsSource = Person.Views.Cast<PersonView>().ToList();
             };
+
             listSelection.ShowDialog();
         }
 
+       
         private void ButtonMembership_Click(object sender, RoutedEventArgs e)
         {
             ListSelection listSelection = new ListSelection(ISql.GetAll<Member>());
