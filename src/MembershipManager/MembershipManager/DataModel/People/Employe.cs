@@ -11,13 +11,13 @@ namespace MembershipManager.DataModel.People
     public class Employe : Person, ISql
     {
 
-        [DbNameable("salary")]
+        [DbAttribute("salary")]
         public int Salary { get; set; }
 
-        [DbNameable("rate")]
+        [DbAttribute("rate")]
         public int Rate { get; set; }
 
-        [DbRelation("franchise_id", "id")]
+        [DbRelation("franchise_id")]
         Franchise? Franchise { get; set; }
 
         public new static ISql? Select(params object[] pk)

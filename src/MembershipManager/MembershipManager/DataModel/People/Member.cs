@@ -16,7 +16,7 @@ namespace MembershipManager.DataModel.People
     [DbInherit(typeof(Person))]
     public class Member : Person
     {
-        [DbRelation("structure_name", "name")]
+        [DbRelation("structure_name")]
         public Structure? Structure { get; set; }
 
         [DbAttribute("subscription_date")]

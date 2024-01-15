@@ -22,7 +22,7 @@ namespace MembershipManager.DataModel.Company
         [DbAttribute("head_office_address")]
         public string? HeadOfficeAddress { get; set; }
 
-        [DbRelation("city_id", "id")]
+        [DbRelation("city_id")]
         public City? City { get; set; }
 
         public Structure() { }

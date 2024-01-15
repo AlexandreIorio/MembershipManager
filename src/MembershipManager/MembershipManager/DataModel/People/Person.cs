@@ -33,7 +33,7 @@ namespace MembershipManager.DataModel.People
         [DbAttribute("address")]
         public string? Address { get; set; }
        
-        [DbRelation("city_id", "id")]
+        [DbRelation("city_id")]
         public City? City { get; set; }
 
         [DbAttribute("phone")]

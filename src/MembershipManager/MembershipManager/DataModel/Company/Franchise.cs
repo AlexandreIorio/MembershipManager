@@ -25,7 +25,7 @@ namespace MembershipManager.DataModel.Company
         [DbAttribute("address")]
         public string? Address { get; set; }
 
-        [DbRelation("city_id", "id")]
+        [DbRelation("city_id")]
         City? City { get; set; }
 
         public Franchise() { }
