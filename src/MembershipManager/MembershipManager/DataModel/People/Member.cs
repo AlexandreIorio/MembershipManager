@@ -12,6 +12,10 @@ using System.Windows;
 
 namespace MembershipManager.DataModel.People
 {
+    /// <summary>
+    /// This class represents a member
+    /// </summary>
+
     [DbTableName("member")]
     [DbInherit(typeof(Person))]
     public class Member : Person

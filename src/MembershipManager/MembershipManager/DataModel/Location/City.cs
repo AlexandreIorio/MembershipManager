@@ -5,6 +5,10 @@ using System.Linq;
 
 namespace MembershipManager.DataModel
 {
+    /// <summary>
+    /// This class represents a city of switzerland
+    /// </summary>
+
     [DbTableName("city")]
     public class City : ISql, IComparable
     {

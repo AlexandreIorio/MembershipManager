@@ -9,6 +9,4 @@ namespace MembershipManager.View.Utils.ListSelectionForm
     public abstract class SqlViewable
     {
     }
-
-    public class IgnoreSql : Attribute;
 }

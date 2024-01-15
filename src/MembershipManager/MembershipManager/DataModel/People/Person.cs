@@ -16,6 +16,10 @@ using MembershipManager.View.Utils.ListSelectionForm;
 
 namespace MembershipManager.DataModel.People
 {
+    /// <summary>
+    /// This class represents a person
+    /// </summary>
+
     [DbTableName("person")]
     public class Person : ISql, INotifyPropertyChanged, Ilistable
     {
@@ -121,7 +125,7 @@ namespace MembershipManager.DataModel.People
             return $"{FirstName} {LastName}";
         }
 
-        public static List<SqlViewable> Views
+        public static List<PersonView> Views
         {
             get
             {
@@ -131,7 +135,7 @@ namespace MembershipManager.DataModel.People
                                     INNER JOIN city ON city_id = city.id
                                     INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";
 
-                return DbManager.Db.Views<PersonView>(cmd).Cast<SqlViewable>().ToList();
+                return DbManager.Db.Views<PersonView>(cmd);
             }
         }
 

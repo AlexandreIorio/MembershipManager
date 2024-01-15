@@ -8,9 +8,17 @@ using System.Reflection;
 
 namespace MembershipManager.Engine
 {
+    /// <summary>
+    /// This class is used to interact with the database
+    /// </summary>
     public class DbManager
     {
         #region Db interraction
+
+        /// <summary>
+        /// This method is used to send a command to the database
+        /// </summary>
+        /// <param name="cmd">The command to send</param>
 
         public void Send(NpgsqlCommand cmd)
         {
@@ -21,20 +29,26 @@ namespace MembershipManager.Engine
             CloseConnection(cmd.Connection);
         }
 
-        public List<T> Views<T>(NpgsqlCommand cmd)
+        /// <summary>
+        /// This method converts a tuple into an object and uses the property names to retrieve the values in the tuple.
+        /// A property can be ignored by adding the attribute IgnoreSql
+        public List<T> Views<T>(NpgsqlCommand cmd) where T : class
         {
             cmd.Connection = new NpgsqlConnection(GetConnectionString());
+
             CheckDbValidity(cmd);
+
             Type type = typeof(T);
             OpenConnection(cmd.Connection);
             NpgsqlDataReader reader = cmd.ExecuteReader();
+
             List<object> results = [];
             if (reader.HasRows)
             {
                 while (reader.Read())
                 {
-                    object obj = Activator.CreateInstance(type);
-                    if (obj is null) throw new ArgumentNullException($"Command call throw exception {cmd.CommandText}");
+                    object? obj = Activator.CreateInstance(type);
+                    if (obj is null) throw new ArgumentNullException($"Impossible to create an instance of {type.FullName}");
                     foreach (PropertyInfo p in type.GetProperties())
                     {
                         if (p.GetCustomAttribute<IgnoreSql>() != null) continue;
@@ -47,7 +61,16 @@ namespace MembershipManager.Engine
             return results.Cast<T>().ToList();
         }
 
-        public List<T> Receive<T>(NpgsqlCommand cmd) where T : class
+
+        /// <summary>
+        /// This method converts a tuple into an object using DbAttribute and DbRelation attributes to retrieve the values in the tuple.
+        /// A property can be ignored whitout adding Attribute
+        /// </summary>
+        /// <typeparam name="T">The ISql Type </typeparam>
+        /// <param name="cmd">The commande </param>
+        /// <returns>List of ISql</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public List<T> Recieve<T>(NpgsqlCommand cmd) where T : class
         {
             cmd.Connection = new NpgsqlConnection(GetConnectionString());
 
@@ -63,7 +86,7 @@ namespace MembershipManager.Engine
             {
                 while (reader.Read())
                 {
-                    object? obj = ConverTupleToObject(reader, type) ?? throw new ArgumentNullException($"Command call throw exception {cmd.CommandText}");
+                    object? obj = ConverTupleToObject(reader, type) ?? throw new ArgumentNullException($"Impossible to convert sql tuple in {type.FullName}");
                     results.Add((T)obj);
                 }
             }
@@ -72,16 +95,26 @@ namespace MembershipManager.Engine
             return results;
         }
 
+        /// <summary>
+        /// This method converts a tuple into an object using DbAttribute and DbRelation attributes to retrieve the values in the tuple.
+        /// To call this method with inheritance, the type must have the DbInherit attribute and need a copy constructor with the parent type as parameter
+        /// </summary>
+        /// <param name="reader"> The reader to get sql tuple </param>
+        /// <param name="type">The type to get from sql tuple </param>
+        /// <returns></returns>
+
         private static object? ConverTupleToObject(NpgsqlDataReader reader, Type type)
         {
 
             DbInherit? inheritType = type.GetCustomAttributes<DbInherit>().FirstOrDefault();
             object? newObject;
+
+            //Check if type inherit from another type
             if (inheritType is not null)
             {
-                //Get primary keys
+                //Get primary keys of object
                 List<string> pks = new(); 
-                foreach (string pkName in ISql.GetPrimaryKeysName(inheritType.InheritType))
+                foreach (string pkName in ISql.GetPrimaryKeyNames(inheritType.InheritType))
                 {
                     if (pkName is null) continue;
                     string? pk = reader[pkName].ToString();
@@ -92,7 +125,7 @@ namespace MembershipManager.Engine
                 //Get parent object
                 object? parent = ISql.Select(inheritType.InheritType, args);
 
-                //Change type to parent type
+                //Create child with parent
                 newObject = Activator.CreateInstance(type,parent);
             }
             else
@@ -103,15 +136,16 @@ namespace MembershipManager.Engine
 
             if (newObject is null) return null;
 
-
-
             foreach (var property in type.GetProperties())
             {
                 // Ignore properties if from base class
                 if (property.DeclaringType != type)
                     continue;
 
-                IEnumerable<Attribute> attributes = property.GetCustomAttributes<Attribute>();
+
+                IEnumerable<DbNameable> attributes = property.GetCustomAttributes<DbNameable>();
+
+                //Get property value from sql tuple
                 if (attributes.Any(a => a is DbAttribute))
                 {
                     DbAttribute att = (DbAttribute)attributes.First(a => a is DbAttribute);
@@ -119,6 +153,8 @@ namespace MembershipManager.Engine
                     if (valueRead.GetType() != typeof(DBNull))
                         property.SetValue(newObject, valueRead);
                 }
+
+                //Get relation value from sql tuple
                 else if (attributes.Any(a => a is DbRelation))
                 {
                     DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
@@ -133,6 +169,9 @@ namespace MembershipManager.Engine
             return newObject;
         }
 
+        /// <summary>
+        /// This method is used to check if the command is valid
+        /// </summary>
         private static void CheckDbValidity(NpgsqlCommand cmd)
         {
             if (cmd.Connection is null) throw new ArgumentNullException("Connection is null");
@@ -145,6 +184,10 @@ namespace MembershipManager.Engine
 
         #region Db connection management
 
+        /// <summary>
+        /// This method is used to get the connection string from the app.config file
+        /// </summary>
+        /// <returns></returns>
         public static string GetConnectionString()
         {
 
@@ -159,6 +202,10 @@ namespace MembershipManager.Engine
 
         }
 
+        /// <summary>
+        /// This method is used to open a connection to the database
+        /// </summary>
+        /// <param name="connection"></param>
         private static void OpenConnection(NpgsqlConnection connection)
         {
             CloseConnection(connection);
@@ -167,14 +214,12 @@ namespace MembershipManager.Engine
             command.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// This method is used to close a connection to the database
+        /// </summary>
         private static void CloseConnection(NpgsqlConnection connection)
         {
             connection.Close();
-        }
-
-        internal void Send(object value)
-        {
-            throw new NotImplementedException();
         }
         #endregion
 

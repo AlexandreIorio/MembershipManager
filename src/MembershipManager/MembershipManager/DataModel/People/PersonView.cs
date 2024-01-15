@@ -12,6 +12,9 @@ using MembershipManager.View.Utils.ListSelectionForm;
 
 namespace MembershipManager.DataModel.People
 {
+    /// <summary>
+    /// This class represents a view of a person
+    /// </summary>  
     public class PersonView : SqlViewable
     {
         [Displayed("N° Avs")]

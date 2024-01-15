@@ -76,6 +76,13 @@ namespace MembershipManager.Engine
     {
 
     }
+
+    /// <summary>
+    /// Used to specify that a property is ignored and not mapped to the database
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class IgnoreSql: Attribute { }
+
     #endregion
 
 

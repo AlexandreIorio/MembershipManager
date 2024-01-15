@@ -20,7 +20,7 @@ using System.Windows.Shapes;
 namespace MembershipManager.View.Utils
 {
     /// <summary>
-    /// Logique d'interaction pour ListSelection.xaml
+    /// This class is used to display a list of Ilistable item and select one of them.
     /// </summary>
     public partial class ListSelection : Window
     {

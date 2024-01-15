@@ -5,6 +5,9 @@ using NpgsqlTypes;
 
 namespace MembershipManager.DataModel
 {
+    /// <summary>
+    /// This class represents a canton of switzerland
+    /// </summary>
     [DbTableName("canton")]
     public class Canton : ISql
     {
