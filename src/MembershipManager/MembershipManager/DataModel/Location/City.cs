@@ -1,8 +1,7 @@
 ﻿using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
-using Npgsql;
 using NpgsqlTypes;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace MembershipManager.DataModel
 {
@@ -23,7 +22,7 @@ namespace MembershipManager.DataModel
         public int NPA { get; private set; }
 
         [Displayed("Canton")]
-        [DbRelation("canton_abbreviation", "abbreviation")]
+        [DbRelation("canton_abbreviation")]
         public Canton? Canton { get; private set; }
 
         [Filtered("Tous", true)]
@@ -38,12 +37,7 @@ namespace MembershipManager.DataModel
 
         public static ISql? Select(params object[] pk)
         {
-
-            if (pk.Length != 1) throw new ArgumentException();
-            City? c = ISql.Get<City>(pk[0]);
-            if (c == null) throw new KeyNotFoundException();
-
-            return c;
+            return Cities.FirstOrDefault(c => c.Id == (int)pk[0]); 
         }
 
         
