@@ -47,8 +47,8 @@ FOREIGN KEY (city_id) REFERENCES city(id)
 
 CREATE TABLE person (
 no_avs char(13),
-first_name varchar(50),
-last_name varchar(50),
+first_name varchar(50) NOT NULL,
+last_name varchar(50) NOT NULL,
 address varchar(50),
 city_id int NOT NULL,
 phone varchar(15), -- does not store the first 0 or the country code
@@ -183,7 +183,7 @@ FOREIGN KEY (no_avs) REFERENCES person(no_avs)
 CREATE TABLE paiement
 (
 id int,
-    account_id int NOT NULL,
+account_id int NOT NULL,
 amount int,
 date date,
 
