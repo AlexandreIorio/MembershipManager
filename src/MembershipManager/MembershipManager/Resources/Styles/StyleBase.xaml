@@ -31,8 +31,12 @@
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
     </Style>
 
-    
-    
+    <Style TargetType="DatePicker">
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+    </Style>
+
+
+
     <!--Specific styles-->
 
     <Style x:Key="LabelTitle" TargetType="Label">

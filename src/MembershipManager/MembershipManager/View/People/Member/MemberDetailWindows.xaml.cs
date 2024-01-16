@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MembershipManager.View.People.Person;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,17 @@ namespace MembershipManager.View.People.Member
     /// </summary>
     public partial class MemberDetailWindows : Window
     {
-        public MemberDetailWindows()
+        private bool _IsEditMode = false;
+        private MemberDetail _memberDetail;
+        private PersonDetail _PersonDetail;
+        public MemberDetailWindows(MembershipManager.DataModel.People.Member? m = null)
         {
             InitializeComponent();
+            _PersonDetail = new PersonDetail(m);
+            _memberDetail = new MemberDetail(m);
+            PersonFrame.Navigate(_PersonDetail);
+            MemberFrame.Navigate(_memberDetail);
+            _IsEditMode = m is not null;
         }
     }
 }

@@ -18,8 +18,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Frame Grid.Column="0"  Source="../Person/PersonDetail.xaml"/>
-            <Frame Grid.Column="1" Source="MemberDetail.xaml"/>
+            <Frame x:Name="PersonFrame" Grid.Column="0"  Source="../Person/PersonDetail.xaml"/>
+            <Frame x:Name="MemberFrame" Grid.Column="1" Source="MemberDetail.xaml"/>
         </Grid>
         <WrapPanel Grid.Row="2">
             <Button x:Name="ButtonSave" Content="Enregistrer" IsDefault="True"/>

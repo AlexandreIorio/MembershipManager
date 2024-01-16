@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Controls;
 using System.Windows;
+using System.ComponentModel;
 
 namespace MembershipManager.DataModel.People
 {
@@ -36,6 +37,7 @@ namespace MembershipManager.DataModel.People
             this.SubscriptionDate = DateTime.Now;
         }
 
+        public new event PropertyChangedEventHandler? PropertyChanged;
 
 
         public static new ISql? Select(params object[] pk)
@@ -79,6 +81,21 @@ namespace MembershipManager.DataModel.People
 
         }
 
+        public new static List<MemberView> Views
+        {
+            get
+            {
+                NpgsqlCommand cmd = new NpgsqlCommand();
+                cmd.CommandText = @"SELECT member.no_avs, first_name, last_name, address, subscription_date, structure.name as structure_name, city.name as city_name, canton.name as canton_name
+                                    FROM member
+                                        INNER JOIN structure ON structure_name = structure.name
+                                        INNER JOIN person ON member.no_avs = person.no_avs 
+                                        INNER JOIN city ON person.city_id = city.id
+                                        INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";
+
+                return DbManager.Db.Views<MemberView>(cmd);
+            }
+        }
 
     }
 }

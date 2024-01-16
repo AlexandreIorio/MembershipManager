@@ -79,5 +79,14 @@ namespace MembershipManager.DataModel.Company
             //cmd.Parameters.Add(param);
             //DbManager.Db?.Send(cmd);
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Structure s)
+            {
+                return s.Name == Name;
+            }
+            return false; 
+        }
     }
 }
