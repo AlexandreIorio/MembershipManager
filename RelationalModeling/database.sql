@@ -79,13 +79,13 @@ CREATE TABLE member(
     FOREIGN KEY (no_avs) REFERENCES person(no_avs),
     FOREIGN KEY (structure_name) REFERENCES structure(name)
 );
+
 CREATE TABLE memberaccount (
-    id int, -- owner id
+    id  SERIAL PRIMARY KEY, -- owner id
     no_avs char(13),
     credit int, --cents
     debit int, --cents
 
-    PRIMARY KEY (id),
     FOREIGN KEY (no_avs) REFERENCES member(no_avs)
 );
 
@@ -184,8 +184,8 @@ CREATE TABLE paiement
 (
 id int,
 account_id int NOT NULL,
-amount int,
-date date,
+amount int NOT NULL,
+date date NOT NULL,
 
 PRIMARY KEY (id),
 FOREIGN KEY (account_id) REFERENCES memberAccount(id)
@@ -270,7 +270,7 @@ FROM person p
 	JOIN memberaccount ma ON m.no_avs = ma.no_avs
 	JOIN paiement pa ON ma.id = pa.account_id
 	JOIN bill b ON pa.id = b.id
-WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant àabbreviation payer
+WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant à payer
 AND b.issue_date IS NOT NULL;
 
 CREATE TABLE member_log (
@@ -290,6 +290,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 CREATE TRIGGER member_after_insert
 AFTER INSERT ON member
 FOR EACH ROW EXECUTE FUNCTION log_member_insert();
@@ -306,3 +307,18 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER member_after_delete
 AFTER DELETE ON member
 FOR EACH ROW EXECUTE FUNCTION log_member_delete();
+
+-- Création de la fonction pour insérer un memberAccount
+CREATE OR REPLACE FUNCTION create_member_account()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO memberaccount (no_avs)
+    VALUES (NEW.no_avs);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Création du déclencheur pour appeler la fonction lors de l'insertion dans la table member
+CREATE TRIGGER member_after_create
+AFTER INSERT ON member
+FOR EACH ROW EXECUTE FUNCTION create_member_account();

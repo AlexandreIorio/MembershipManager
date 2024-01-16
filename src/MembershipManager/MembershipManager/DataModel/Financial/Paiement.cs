@@ -1,14 +1,9 @@
-﻿using MembershipManager.DataModel.People;
-using MembershipManager.Engine;
+﻿using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using NpgsqlTypes;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace MembershipManager.DataModel.Financial
@@ -95,13 +90,19 @@ namespace MembershipManager.DataModel.Financial
 
         public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            NpgsqlCommand cmd = new()
-            {
-                CommandText = @"SELECT no_avs, first_name, last_name, address, city.name as city_name, canton.name as canton_name
-                                FROM person
-                                    INNER JOIN city ON city_id = city.id
-                                    INNER JOIN canton ON canton_abbreviation = canton.abbreviation;"
-            };
+
+            if (sqlParam.Length > 1) throw new ArgumentException();
+            if (sqlParam.Length == 0) sqlParam[0] = new NpgsqlParameter("$1", "true");
+
+            string SqlQuery = @"SELECT paiement.id, amount, date, p.first_name, p.last_name
+                                    FROM paiement
+                                    INNER JOIN  memberaccount ON paiement.account_id = memberaccount.id
+                                    INNER JOIN member AS m ON memberaccount.no_avs = m.no_avs
+                                    INNER JOIN person AS p ON m.no_avs = p.no_avs
+                                    WHERE m.no_avs = $1 ;";
+
+            NpgsqlCommand cmd = new(SqlQuery);
+            cmd.Parameters.AddRange(sqlParam);
 
             return DbManager.Db.Views<PaiementView>(cmd).Cast<SqlViewable>().ToList();
         }
