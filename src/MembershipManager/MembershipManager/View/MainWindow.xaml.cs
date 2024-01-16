@@ -10,6 +10,7 @@ using MembershipManager.View.Utils;
 using MembershipManager.View.People.Person;
 using System.Windows.Controls;
 using MembershipManager.View.People.Member;
+using MembershipManager.DataModel.Financial;
 
 namespace MembershipManager
 {
@@ -33,7 +34,7 @@ namespace MembershipManager
         {
             ListSelection listSelection = new ListSelection(Member.Views().Cast<MemberView>());
             listSelection.Width = 800;
-
+            listSelection.List.ContextMenu = MemberView.ContextMenu();
             listSelection.MouseDoubleClick += (sender, e) =>
             {
                 string? noAvs = (listSelection.List.SelectedItem as MemberView)?.no_avs;
@@ -53,6 +54,13 @@ namespace MembershipManager
 
             listSelection.ShowDialog();
 
+        }
+
+        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
+            ListSelection listSelection = new ListSelection(Paiement.Views().Cast<PaiementView>());
+            listSelection.Width = 800;
+            listSelection.ShowDialog();
         }
     }
 }

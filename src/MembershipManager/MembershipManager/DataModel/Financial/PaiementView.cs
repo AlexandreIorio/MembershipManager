@@ -7,18 +7,13 @@ namespace MembershipManager.DataModel.Financial
 {
     public class PaiementView : SqlViewable
     {
-        [Displayed("Id")]
-        [Filtered("Id")]
-        public string? id { get; set; }
+
+        public int? id { get; set; }
 
         [Sorted]
-        [Filtered("Montant")]
-        [Displayed("Montant")]
-        public string? amount { get; set; }
-
         [Filtered("Date")]
         [Displayed("Date")]
-        public string? date { get; set; }
+        public DateTime? date { get; set; }
 
         [Filtered("Prénom")]
         [Displayed("Prénom")]
@@ -26,6 +21,11 @@ namespace MembershipManager.DataModel.Financial
 
         [Displayed("Nom")]
         public string? last_name { get; set; }
+
+        [Filtered("Montant")]
+        [Displayed("Montant")]
+        public int? amount { get; set; }
+
 
         [IgnoreSql]
         [Filtered("Tout", true)]

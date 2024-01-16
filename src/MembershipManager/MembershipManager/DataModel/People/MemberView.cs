@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace MembershipManager.DataModel.People
 {
@@ -18,8 +19,9 @@ namespace MembershipManager.DataModel.People
         public string? structure_name { get; set; }
 
         #region Events
-        public static void EditMember(string noAvs)
+        public static void EditMember(string? noAvs)
         {
+            if (noAvs is null) throw new ArgumentNullException(nameof(noAvs));
             Member? member = (Member?)Member.Select(noAvs);
             if (member is null) return;
             MemberDetailWindows memberDetailWindow = new MemberDetailWindows(member);
@@ -30,6 +32,61 @@ namespace MembershipManager.DataModel.People
         {
             MemberDetailWindows memberDetailWindow = new MemberDetailWindows(new Member());
             memberDetailWindow.ShowDialog();
+        }
+
+        public static ContextMenu ContextMenu()
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem edit = new MenuItem();
+            edit.Header = "Modifier";
+            edit.Click += (sender, e) =>
+            {
+                MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);
+                if (member is null) return;
+
+                MemberView.EditMember(member.no_avs);
+            };
+            contextMenu.Items.Add(edit);
+
+            MenuItem delete = new MenuItem();
+            delete.Header = "Supprimer";
+            delete.Click += (sender, e) =>
+            {
+                string? noAvs = (sender as MemberView)?.no_avs;
+                if (noAvs is null) return;
+                //Member.Delete(noAvs);
+            };
+            contextMenu.Items.Add(delete);
+
+            MenuItem account = new MenuItem();
+            account.Header = "Compte";
+            account.Click += (sender, e) =>
+            {
+                string? noAvs = (sender as MemberView)?.no_avs;
+                if (noAvs is null) return;
+                //Member.Delete(noAvs);
+            };
+            contextMenu.Items.Add(account);
+
+
+            return contextMenu;
+        }
+
+        private static MemberView? GetContextMenuSelectedObject(MenuItem menuItem)
+        {
+            // Get element from menu item
+            if (menuItem == null) return null;
+            ContextMenu? contextMenu = menuItem.Parent as ContextMenu;
+            if (contextMenu == null) return null;
+
+            ListView? list = contextMenu.PlacementTarget as ListView;
+            if (list == null) return null;
+
+            MemberView? member = list.SelectedItem as MemberView;
+            if (member == null) return null;
+
+            if (member.no_avs is null) return null;
+            return member;
         }
 
         #endregion

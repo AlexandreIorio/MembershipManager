@@ -90,19 +90,24 @@ namespace MembershipManager.DataModel.Financial
 
         public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-
             if (sqlParam.Length > 1) throw new ArgumentException();
-            if (sqlParam.Length == 0) sqlParam[0] = new NpgsqlParameter("$1", "true");
 
-            string SqlQuery = @"SELECT paiement.id, amount, date, p.first_name, p.last_name
+            NpgsqlCommand cmd = new NpgsqlCommand();
+
+            StringBuilder SqlQuery = new StringBuilder(@"SELECT paiement.id, amount, date, p.first_name, p.last_name
                                     FROM paiement
                                     INNER JOIN  memberaccount ON paiement.account_id = memberaccount.id
                                     INNER JOIN member AS m ON memberaccount.no_avs = m.no_avs
-                                    INNER JOIN person AS p ON m.no_avs = p.no_avs
-                                    WHERE m.no_avs = $1 ;";
+                                    INNER JOIN person AS p ON m.no_avs = p.no_avs");
 
-            NpgsqlCommand cmd = new(SqlQuery);
-            cmd.Parameters.AddRange(sqlParam);
+
+            if (sqlParam.Length == 1)
+            {
+                SqlQuery.Append(" WHERE paiement.id = @id");
+                cmd.Parameters.Add(sqlParam[0]);
+            }
+
+            cmd.CommandText = SqlQuery.ToString();
 
             return DbManager.Db.Views<PaiementView>(cmd).Cast<SqlViewable>().ToList();
         }
