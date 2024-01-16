@@ -6,16 +6,22 @@ using System.Threading.Tasks;
 
 namespace MembershipManager.DataModel.Financial
 {
-    internal interface ITransaction
+    public interface ITransaction
     {
         enum TransactionType
         {
-            DEBIT, CREDIT
+            DEBIT = 1, CREDIT = -1
         }
         Account? Account { get; set; }
         DateTime? Date { get; set; }
         string? Description { get; set; }
         int? Amount { get; set; }
         TransactionType? Type { get; set; }
+        
+        public int GetAmount()
+        {
+            if (Amount is null || Type is null) return 0;
+            return (int)Amount * (int)Type;
+        }
     }
 }
