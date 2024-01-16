@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace MembershipManager.View.Utils.ListSelectionForm
         /// <summary>
         /// This property is used to store sql tuples of a sql query
         /// </summary>
-        public static List<SqlViewable>? Views { get; }
-       
+        public abstract static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam);
+
     }
 }

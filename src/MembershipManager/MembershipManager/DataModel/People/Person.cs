@@ -1,17 +1,11 @@
 ﻿using MembershipManager.Engine;
-
-using System.Diagnostics.Metrics;
+using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using NpgsqlTypes;
-using System.Reflection;
-using System.Text;
-using System.Reflection.Metadata.Ecma335;
-using System.IO.Packaging;
-using System.Dynamic;
-using System.Collections.Generic;
-using System.Windows;
+using System.Collections.Immutable;
 using System.ComponentModel;
-using MembershipManager.View.Utils.ListSelectionForm;
+using System.Text;
+using System.Windows;
 
 
 namespace MembershipManager.DataModel.People
@@ -23,7 +17,7 @@ namespace MembershipManager.DataModel.People
     [DbTableName("person")]
     public class Person : ISql, INotifyPropertyChanged, Ilistable
     {
-       
+
         [DbPrimaryKey(NpgsqlDbType.Char, 13)]
         [DbAttribute("no_avs")]
         public string? NoAvs { get; set; }
@@ -36,7 +30,7 @@ namespace MembershipManager.DataModel.People
 
         [DbAttribute("address")]
         public string? Address { get; set; }
-       
+
         [DbRelation("city_id")]
         public City? City { get; set; }
 
@@ -84,6 +78,12 @@ namespace MembershipManager.DataModel.People
                 message.AppendLine("Le numéro AVS est obligatoire");
                 valid = false;
             }
+            else if (NoAvs.Length > 13)
+            {
+                message.AppendLine("Le numéro AVS ne peut pas dépasser 13 caractères");
+                valid = false;
+            }
+
             if (string.IsNullOrEmpty(FirstName))
             {
                 message.AppendLine("Le prénom est obligatoire");
@@ -125,19 +125,15 @@ namespace MembershipManager.DataModel.People
             return $"{FirstName} {LastName}";
         }
 
-        public static List<PersonView> Views
+        public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            get
-            {
-                NpgsqlCommand cmd = new NpgsqlCommand();
-                cmd.CommandText = @"SELECT no_avs, first_name, last_name, address, city.name as city_name, canton.name as canton_name
+            NpgsqlCommand cmd = new NpgsqlCommand();
+            cmd.CommandText = @"SELECT no_avs, first_name, last_name, address, city.name as city_name, canton.name as canton_name
                                 FROM person
                                     INNER JOIN city ON city_id = city.id
                                     INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";
 
-                return DbManager.Db.Views<PersonView>(cmd);
-            }
+            return DbManager.Db.Views<PersonView>(cmd).Cast<SqlViewable>().ToList();
         }
-
     }
 }
