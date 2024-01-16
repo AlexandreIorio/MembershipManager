@@ -10,6 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Controls;
 using System.Windows;
 using System.ComponentModel;
+using MembershipManager.View.Utils.ListSelectionForm;
 
 namespace MembershipManager.DataModel.People
 {
@@ -81,10 +82,9 @@ namespace MembershipManager.DataModel.People
 
         }
 
-        public new static List<MemberView> Views
+        public new static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            get
-            {
+           
                 NpgsqlCommand cmd = new NpgsqlCommand();
                 cmd.CommandText = @"SELECT member.no_avs, first_name, last_name, address, subscription_date, structure.name as structure_name, city.name as city_name, canton.name as canton_name
                                     FROM member
@@ -93,8 +93,8 @@ namespace MembershipManager.DataModel.People
                                         INNER JOIN city ON person.city_id = city.id
                                         INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";
 
-                return DbManager.Db.Views<MemberView>(cmd);
-            }
+                return DbManager.Db.Views<MemberView>(cmd).Cast<SqlViewable>().ToList();
+            
         }
 
     }

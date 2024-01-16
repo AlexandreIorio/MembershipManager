@@ -23,22 +23,12 @@ namespace MembershipManager.View.People.Member
     /// </summary>
     public partial class MemberDetail : Page
     {
-        public MembershipManager.DataModel.People.Member? Member { get; set; }
-        public MemberDetail(MembershipManager.DataModel.People.Member? member = null)
+        public MemberDetail(MembershipManager.DataModel.People.Member? member)
         {
             InitializeComponent();
             InitializeCombobox();
-            if (Member == null)
-            {
-                Member = new MembershipManager.DataModel.People.Member();
-            }
-            else
-            {
-                Member = member;
-                int index = ComboboxStructure.Items.IndexOf(Member.Structure);
-                //ComboboxStructure.SelectedItem = Se;
-            }
-            this.DataContext = Member;
+            ComboboxStructure.SelectedItem = member.Structure;
+            this.DataContext = member;
         }
 
         private void InitializeCombobox()

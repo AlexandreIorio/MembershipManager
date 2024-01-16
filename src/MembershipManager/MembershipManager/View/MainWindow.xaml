@@ -17,8 +17,6 @@
         </Style>
     </Window.Resources>
     <WrapPanel>
-        <Button x:Name="ButtonContact" Content="Contacts" Click="ButtonContact_Click"/>
-        <Button x:Name="ButtonMembership" Content="Membres" Click="ButtonMembership_Click"/>
-        
+        <Button x:Name="ButtonMembership" Content="Membres" Click="ButtonMembership_Click"/>        
     </WrapPanel>
 </Window>

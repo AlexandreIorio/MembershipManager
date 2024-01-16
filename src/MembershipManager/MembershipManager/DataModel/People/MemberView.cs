@@ -28,7 +28,7 @@ namespace MembershipManager.DataModel.People
 
         public static void NewMember()
         {
-            MemberDetailWindows memberDetailWindow = new MemberDetailWindows();
+            MemberDetailWindows memberDetailWindow = new MemberDetailWindows(new Member());
             memberDetailWindow.ShowDialog();
         }
 
