@@ -29,18 +29,13 @@ namespace MembershipManager.View.People.Person
 
 
         public PersonDetail() => InitializeComponent();
-        public PersonDetail(MembershipManager.DataModel.People.Person? person = null)
+        public PersonDetail(MembershipManager.DataModel.People.Person person)
         {
             InitializeComponent();
-            if (person == null)
-            {
-                Person = new MembershipManager.DataModel.People.Person();
-            }
-            else
-            {
-                Person = person;
-                TextBoxNoAvs.IsEnabled = false;
-            }
+
+            Person = person;
+            TextBoxNoAvs.IsEnabled = Person.NoAvs is null;
+
             this.DataContext = Person;
         }
 
@@ -52,7 +47,7 @@ namespace MembershipManager.View.People.Person
 
             listSelection.List.MouseDoubleClick += (sender, e) =>
             {
-                listSelection.DialogResult = true; 
+                listSelection.DialogResult = true;
                 listSelection.Close();
             };
 
@@ -73,9 +68,9 @@ namespace MembershipManager.View.People.Person
             {
                 Person.City = (City)listSelection.List.SelectedItem;
                 ButtonCity.Content = Person.City;
-           
+
             }
         }
-      
+
     }
 }

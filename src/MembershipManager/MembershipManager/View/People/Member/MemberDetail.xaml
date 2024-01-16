@@ -29,9 +29,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" Content="Date d'inscription"/>
-            <DatePicker Grid.Column="1" Grid.Row="0" SelectedDate="{Binding Member.SubscriptionDate, Mode=TwoWay}"/>
+            <DatePicker Grid.Column="1" Grid.Row="0" SelectedDate="{Binding SubscriptionDate, Mode=TwoWay}"/>
             <Label Grid.Column="0" Grid.Row="1" Content="Structure"/>
-            <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Structures}" SelectedItem="{Binding Member.Structure, Mode=TwoWay}" DisplayMemberPath="Name"/>
+            <ComboBox x:Name="ComboboxStructure" Grid.Column="1" SelectedItem="{Binding Structure}" Grid.Row="1" DisplayMemberPath="Name"/>
         </Grid>
     </StackPanel>
 </Page>

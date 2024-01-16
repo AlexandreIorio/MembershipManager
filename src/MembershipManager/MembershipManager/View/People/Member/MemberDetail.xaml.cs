@@ -1,5 +1,8 @@
-﻿using System;
+﻿using MembershipManager.DataModel.People;
+using MembershipManager.Engine;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +23,17 @@ namespace MembershipManager.View.People.Member
     /// </summary>
     public partial class MemberDetail : Page
     {
-        public MemberDetail()
+        public MemberDetail(MembershipManager.DataModel.People.Member? member)
         {
             InitializeComponent();
+            InitializeCombobox();
+            ComboboxStructure.SelectedItem = member.Structure;
+            this.DataContext = member;
+        }
+
+        private void InitializeCombobox()
+        {
+            ComboboxStructure.ItemsSource = ISql.GetAll<MembershipManager.DataModel.Company.Structure>();
         }
     }
 }
