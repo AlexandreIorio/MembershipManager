@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MembershipManager.DataModel.Financial;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace MembershipManager.View.Financial
     /// </summary>
     public partial class AccountDetailWindows : Window
     {
+        public List<ITransaction> Transactions { get; set; } = new List<ITransaction>();
         public AccountDetailWindows()
         {
             InitializeComponent();
