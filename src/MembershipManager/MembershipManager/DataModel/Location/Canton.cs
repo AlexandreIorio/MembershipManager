@@ -15,7 +15,7 @@ namespace MembershipManager.DataModel
         [DbAttribute("abbreviation")]
         public string? Abbreviation { get; private set; }
 
-        [DbAttribute("canton_name")]
+        [DbAttribute("name")]
         public string? Name { get; private set; }
 
         public Canton() { } 

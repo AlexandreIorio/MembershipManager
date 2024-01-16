@@ -130,7 +130,7 @@ namespace MembershipManager.DataModel.People
             get
             {
                 NpgsqlCommand cmd = new NpgsqlCommand();
-                cmd.CommandText = @"SELECT first_name, last_name, no_avs, address, city.city_name as city_name, canton.canton_name as canton_name
+                cmd.CommandText = @"SELECT no_avs, first_name, last_name, address, city.name as city_name, canton.name as canton_name
                                 FROM person
                                     INNER JOIN city ON city_id = city.id
                                     INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";

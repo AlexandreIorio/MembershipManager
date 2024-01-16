@@ -1,6 +1,6 @@
 ﻿SET search_path TO membershipmanager;
 
-INSERT INTO canton(canton_name, abbreviation) VALUES
+INSERT INTO canton(name, abbreviation) VALUES
 ('Argovie', 'AG'),
 ('Appenzell Rhodes-Intérieures', 'AI'),
 ('Appenzell Rhodes-Extérieures', 'AR'),

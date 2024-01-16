@@ -7,14 +7,14 @@ SET search_path TO membershipmanager;
 
 CREATE TABLE canton (
 abbreviation char(2),
-canton_name varchar(50),
+name varchar(50),
 
 PRIMARY KEY (abbreviation)
 );
 
 Create TABLE city (
     id int ,
-    city_name varchar(50),
+    name varchar(50),
     npa int,
     canton_abbreviation char(2) NOT NULL,
 
