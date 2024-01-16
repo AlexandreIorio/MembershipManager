@@ -1,7 +1,7 @@
 ﻿
 SET search_path TO membershipmanager;
 
-INSERT INTO city (id, city_name, npa, canton_abbreviation) values
+INSERT INTO city (id, name, npa, canton_abbreviation) values
 (1, 'Aadorf', 8355, 'TG'),                                                
 (2, 'Aarau', 5000, 'AG'),
 (3, 'Aarberg', 3270, 'BE'),

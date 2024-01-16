@@ -15,7 +15,7 @@ namespace MembershipManager.DataModel
         [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
         public int Id { get; private set; }
-        [DbAttribute("city_name")]
+        [DbAttribute("name")]
         [Displayed("Ville")]
         [Filtered("Nom de la ville")]
         public string? Name { get; private set; }
