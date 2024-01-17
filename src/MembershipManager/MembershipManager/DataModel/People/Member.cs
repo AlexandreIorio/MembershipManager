@@ -82,6 +82,11 @@ namespace MembershipManager.DataModel.People
 
         }
 
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
         public new static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
            

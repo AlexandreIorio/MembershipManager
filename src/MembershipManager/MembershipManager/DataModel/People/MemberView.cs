@@ -1,4 +1,5 @@
-﻿using MembershipManager.View.People.Member;
+﻿using MembershipManager.View.Financial;
+using MembershipManager.View.People.Member;
 using MembershipManager.View.People.Person;
 using MembershipManager.View.Utils.ListSelectionForm;
 using System;
@@ -62,9 +63,12 @@ namespace MembershipManager.DataModel.People
             account.Header = "Compte";
             account.Click += (sender, e) =>
             {
-                string? noAvs = (sender as MemberView)?.no_avs;
-                if (noAvs is null) return;
-                //Member.Delete(noAvs);
+                MemberView? memberView = GetContextMenuSelectedObject((MenuItem)sender);
+                Member? member = (Member?)Member.Select(memberView?.no_avs);
+
+                if (member is null) return;
+                AccountDetailWindows accountDetailWindow = new AccountDetailWindows(member);
+                accountDetailWindow.ShowDialog();
             };
             contextMenu.Items.Add(account);
 
