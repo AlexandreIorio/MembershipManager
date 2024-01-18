@@ -76,7 +76,7 @@
                 <DataGridTemplateColumn Header="Amount">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextAlignment="Right" Text="{Binding ComputedAmount, StringFormat={}{N2}}">
+                            <TextBlock TextAlignment="Right" Text="{Binding ComputedAmount}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
