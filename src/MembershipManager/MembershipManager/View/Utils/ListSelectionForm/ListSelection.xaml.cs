@@ -85,8 +85,12 @@ namespace MembershipManager.View.Utils
             {
                 if (p.GetCustomAttribute<Displayed>() is Displayed displayedAttribute)
                 {
+                    //Get TextFormat attribute if exists
+                    string? format = p.GetCustomAttribute<TextFormat>()?.Format;
+
                     GridViewColumn column = new GridViewColumn();
                     column.DisplayMemberBinding = new Binding(p.Name);
+                    if (format is not null) column.DisplayMemberBinding.StringFormat = format;
 
                     GridViewColumnHeader header = new GridViewColumnHeader();
                     header.Click += List_Click;

@@ -3,6 +3,7 @@ using MembershipManager.Engine;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace MembershipManager
 {
@@ -25,6 +26,8 @@ namespace MembershipManager
         }
         protected override async void OnStartup(StartupEventArgs e)
         {
+
+            InitializeCultures();
             MainWindow mainWindow = new MainWindow();
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
@@ -64,9 +67,21 @@ namespace MembershipManager
             mainWindow.Show();
         }
 
-        private void LoadInitialisationActions()
+        private static void InitializeCultures()
         {
+            CultureInfo cultureInfo = new CultureInfo("fr-CH");
+            cultureInfo.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
+            cultureInfo.DateTimeFormat.LongDatePattern = "dddd, d MMMM yyyy";
+            cultureInfo.DateTimeFormat.ShortTimePattern = "HH:mm";
+            cultureInfo.DateTimeFormat.LongTimePattern = "HH:mm:ss";
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+            cultureInfo.NumberFormat.NumberGroupSeparator = " ";
 
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;
+
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(
+                XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
         }
 
     }

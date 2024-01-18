@@ -3,12 +3,14 @@ using MembershipManager.View.Financial;
 using MembershipManager.View.People.Member;
 using MembershipManager.View.Utils;
 using MembershipManager.View.Utils.ListSelectionForm;
+using System.Globalization;
 using System.Windows.Controls;
 
 namespace MembershipManager.DataModel.People
 {
     public class MemberView : PersonView
     {
+        [TextFormat("{0:d}")]
         [Displayed("Date d'inscription")]
         public DateTime subscription_date { get; set; }
 
