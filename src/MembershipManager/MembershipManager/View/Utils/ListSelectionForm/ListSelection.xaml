@@ -1,0 +1,45 @@
+﻿<Window x:Class="MembershipManager.View.Utils.ListSelection"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MembershipManager.View.Utils.UserControls"
+      mc:Ignorable="d"
+      Title="ListSelection" Width="400" MinWidth="300" Height="Auto" MinHeight="400"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" x:Name="Title" Style="{StaticResource LabelTitle}">Selection</Label>
+        <Grid x:Name="grid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Label>Recherche</Label>
+            <TextBox Grid.Column="1" x:Name="TextBoxSearch"/>
+            <ComboBox Grid.Column="2" x:Name="ComboBoxFilters"/>
+        </Grid>
+
+        <ListView x:Name="List"
+                      Grid.Row="2"  
+                     />
+        <StackPanel x:Name="StackPanelButtons" Grid.Row="3">
+
+            <Button x:Name="BtnSelect" 
+                    Content="Sélectionner" 
+                    IsDefault="True" />
+
+            <Button x:Name="BtnCancel" 
+                    Content="Annuler" 
+                    IsCancel="True" />
+
+        </StackPanel>
+    </Grid>
+</Window>

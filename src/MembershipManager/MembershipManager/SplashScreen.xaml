@@ -1,0 +1,27 @@
+﻿<Window x:Class="MembershipManager.SplashScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MembershipManager"
+        mc:Ignorable="d"
+        Title="SpalshScreen" 
+        Height="450" Width="800" 
+        ResizeMode="NoResize" 
+        WindowStyle="None" WindowStartupLocation="CenterScreen" 
+        AllowsTransparency="True" Background="Transparent"
+        >
+    <Grid>
+        <Rectangle Fill="White" RadiusX="40" RadiusY="40"/>
+        <StackPanel x:Name="stackPanel" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+            <Label FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center">Membership Manager</Label>
+            <ProgressBar x:Name="progressBar" 
+                         Height="25" 
+                         Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}" 
+                         Background="#3FFFFFFF" 
+                         BorderBrush="Black" BorderThickness="2" Value="0"/>
+            <Label x:Name="ProgressMessage" HorizontalAlignment="Center">Lancement du programme</Label>
+        </StackPanel>
+
+    </Grid>
+</Window>

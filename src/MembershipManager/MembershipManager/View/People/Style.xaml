@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+
+    <sys:Double x:Key="LabelWidth">80</sys:Double>
+    <sys:Double x:Key="TextboxWidth">200</sys:Double>
+    <GridLength x:Key="ColLabelWidth">80</GridLength>
+    <GridLength x:Key="ColTextboxWidth">200</GridLength>
+
+</ResourceDictionary>

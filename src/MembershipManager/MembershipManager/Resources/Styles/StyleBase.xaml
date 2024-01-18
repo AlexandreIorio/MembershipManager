@@ -1,0 +1,50 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:presentation="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    >
+
+    <!--Local resources-->
+    <Thickness x:Key="DefaultMargin">5</Thickness>
+        
+   
+    <!--Default styles-->
+    
+    <Style TargetType="TextBox">
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+    </Style>
+
+    <Style TargetType="Label">
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+    </Style>
+
+
+    <Style TargetType="ComboBox">
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+    </Style>
+
+    <Style TargetType="ListView">
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+    </Style>
+
+    <Style TargetType="DatePicker">
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+    </Style>
+
+
+    <Style TargetType="MenuItem">
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <!--Specific styles-->
+
+    <Style x:Key="LabelTitle" TargetType="Label">
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+    
+</ResourceDictionary>

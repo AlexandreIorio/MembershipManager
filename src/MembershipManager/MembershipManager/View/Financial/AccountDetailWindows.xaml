@@ -1,0 +1,78 @@
+<Window x:Class="MembershipManager.View.Financial.AccountDetailWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MembershipManager.View.Financial"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="AccountDetailWindows" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Label Style="{StaticResource LabelTitle}">Account Detail</Label>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label>Membre :</Label>
+                <Label Grid.Column="1"
+                       Content="{Binding Member , FallbackValue='Nom du membre'}"/>
+                <Label Grid.Row="1" >N° AVS :</Label>
+                <Label Grid.Row="1" Grid.Column="1" 
+                       DataContext="{Binding Member}" 
+                       Content="{Binding NoAvs , FallbackValue='Numéro AVS'}"/>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label>Solde du compte</Label>
+                <Label Grid.Column="1" Content="{Binding Balance}"></Label>
+            </Grid>
+
+        </Grid>
+        <DataGrid Grid.Row="2" x:Name="transactionsDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Transactions}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+                <DataGridTemplateColumn Header="Amount">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ComputedAmount}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Amount}" Value="{x:Static sys:Int32.MinValue}">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+
+</Window>
