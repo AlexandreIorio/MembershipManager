@@ -14,7 +14,7 @@ namespace MembershipManager.View.Financial
     {
         public List<ITransaction>? Transactions { get; set; }
         public Member Member { get; private set; }
-        public MemberAccount? Account { get; private set; }
+        public MemberAccount Account { get; private set; }
 
         public string MemberName
         {
@@ -43,8 +43,8 @@ namespace MembershipManager.View.Financial
         public AccountDetailWindows(Member member)
         {
             InitializeComponent();
-            Member = member;
-            Account = (MemberAccount?)MemberAccount.Select(member.NoAvs);
+            Member = member ?? throw new NullReferenceException("Member can't be null ");
+            Account = MemberAccount.Select(Member.NoAvs) as MemberAccount ?? throw new NullReferenceException("Member account can't be null");
             RefreshTransactions();
             DataContext = this;
         }
@@ -80,7 +80,7 @@ namespace MembershipManager.View.Financial
 
         private void ButtonAddPaiement_Click(object sender, RoutedEventArgs e)
         {
-
+            PaiementDetailWindows paiementDetailWindows = new PaiementDetailWindows(Account);
         }
 
         private void ButtonAddConsuption_Click(object sender, RoutedEventArgs e)

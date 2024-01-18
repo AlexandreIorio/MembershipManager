@@ -11,7 +11,10 @@ namespace MembershipManager.View.Financial
 
         private bool _IsEditMode = false;
         private PaiementDetail _paiement;
-        public PaiementDetailWindows(Paiement? p = null)
+
+        public PaiementDetailWindows(MemberAccount account) : this(new Paiement() { Account = account}) {}
+
+        public PaiementDetailWindows(Paiement? p)
         {
             InitializeComponent();
             _paiement = new PaiementDetail(p);
