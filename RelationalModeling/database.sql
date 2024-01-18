@@ -182,7 +182,7 @@ FOREIGN KEY (no_avs) REFERENCES person(no_avs)
 
 CREATE TABLE paiement
 (
-id int,
+id SERIAL,
 account_id varchar(13) NOT NULL,
 amount int NOT NULL,
 date date NOT NULL,

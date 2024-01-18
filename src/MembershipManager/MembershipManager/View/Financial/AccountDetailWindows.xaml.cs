@@ -65,7 +65,7 @@ namespace MembershipManager.View.Financial
             if (TransactionsDataGrid.SelectedItem is PaiementView paiementView)
             {
                 if (paiementView is null) return;
-                Paiement? paiement = Paiement.Select(paiementView.id) as Paiement;
+                Paiement? paiement = Paiement.Select(paiementView.id ?? throw new NullReferenceException("The id of paiement can't be null")) as Paiement;
                 if (paiement is null) return;
                 PaiementDetailWindows paiementDetailWindows = new PaiementDetailWindows(paiement);
                 paiementDetailWindows.ShowDialog();
@@ -81,6 +81,8 @@ namespace MembershipManager.View.Financial
         private void ButtonAddPaiement_Click(object sender, RoutedEventArgs e)
         {
             PaiementDetailWindows paiementDetailWindows = new PaiementDetailWindows(Account);
+            paiementDetailWindows.ShowDialog();
+            RefreshTransactions();
         }
 
         private void ButtonAddConsuption_Click(object sender, RoutedEventArgs e)
