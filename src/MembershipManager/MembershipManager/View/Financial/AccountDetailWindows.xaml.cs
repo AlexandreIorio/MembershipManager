@@ -83,5 +83,15 @@ namespace MembershipManager.View.Financial
             }
 
         }
+
+        private void ButtonAddPaiement_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonAddConsuption_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

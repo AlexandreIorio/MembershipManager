@@ -42,13 +42,34 @@
     </Style>
 
     <Style TargetType="DataGridCell">
-        <Setter Property="BorderThickness" Value="5" />
+
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="Transparent" />
+
     </Style>
 
-<!--Specific styles-->
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style TargetType="DataGridRow"
+>
+        <Setter Property="BorderThickness" Value="0,0,0,0"/>
+        <Setter Property="BorderBrush" Value="Transparent" />
+
+    </Style>
+
+    <Style x:Key="StyleDataGrid" TargetType="DataGrid">
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
+        <Setter Property="RowBackground" Value="WhiteSmoke"/>
+        <Setter Property="AlternatingRowBackground" Value="PapayaWhip"/>
+    </Style>
+
+    <!--Specific styles-->
 
     <Style x:Key="LabelTitle" TargetType="Label">
         <Setter Property="FontSize" Value="20"/>
     </Style>
-    
+
 </ResourceDictionary>

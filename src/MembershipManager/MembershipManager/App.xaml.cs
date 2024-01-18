@@ -3,6 +3,7 @@ using MembershipManager.Engine;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -27,6 +28,12 @@ namespace MembershipManager
         }
         protected override async void OnStartup(StartupEventArgs e)
         {
+            CultureInfo currentCulture = new CultureInfo("fr-CH");
+            currentCulture.NumberFormat.NumberGroupSeparator = " ";
+            currentCulture.NumberFormat.NumberDecimalSeparator = ".";
+            Thread.CurrentThread.CurrentCulture = currentCulture;
+            Thread.CurrentThread.CurrentUICulture = currentCulture;
+
             MainWindow mainWindow = new MainWindow();
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
