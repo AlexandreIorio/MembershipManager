@@ -13,7 +13,7 @@ namespace MembershipManager
     /// </summary>
     public partial class App : Application
     {
-        private const int splashScreenDelay = 2000;
+        private const int splashScreenDelay = 1000;
         private List<Tuple<Action, string>> InitialisationActions = new List<Tuple<Action, string>>();
 
         public App()
