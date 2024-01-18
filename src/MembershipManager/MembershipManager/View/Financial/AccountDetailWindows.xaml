@@ -9,11 +9,6 @@
         Title="AccountDetailWindows" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <sys:Double x:Key="ButtonWidth">150</sys:Double>
-        <Style x:Key="Monetary" TargetType="Label">
-            <Setter Property="ContentStringFormat" Value="{}{0:N2}"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-        </Style>
-        
     </Window.Resources>
 
     <Grid>
