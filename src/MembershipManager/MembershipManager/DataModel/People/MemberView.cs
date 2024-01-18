@@ -64,6 +64,7 @@ namespace MembershipManager.DataModel.People
             account.Click += (sender, e) =>
             {
                 MemberView? memberView = GetContextMenuSelectedObject((MenuItem)sender);
+                if (memberView is null) return;
                 Member? member = (Member?)Member.Select(memberView?.no_avs);
 
                 if (member is null) return;

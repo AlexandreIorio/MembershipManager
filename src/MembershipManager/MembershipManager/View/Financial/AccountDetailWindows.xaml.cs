@@ -1,4 +1,5 @@
-﻿using MembershipManager.DataModel.Financial;
+﻿using MembershipManager.DataModel.Buyable;
+using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace MembershipManager.View.Financial
             {
                 return Member.FirstName + " " + Member.LastName;
             }
-        }   
+        }
 
         public double Balance
         {
@@ -53,6 +54,27 @@ namespace MembershipManager.View.Financial
             Transactions = ITransaction.Views(new Npgsql.NpgsqlParameter("@id", Account.NoAvs)).Cast<ITransaction>().ToList();
             InitializeComponent();
             DataContext = this;
+        }
+
+
+        private void TransactionsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (TransactionsDataGrid.SelectedItem is null) return;
+
+            if (TransactionsDataGrid.SelectedItem is PaiementView paiementView)
+            {
+                if (paiementView is null) return;
+                Paiement? paiement = Paiement.Select(paiementView.id) as Paiement;
+                if (paiement is null) return;
+                PaiementDetailWindows paiementDetailWindows = new PaiementDetailWindows(paiement);
+                paiementDetailWindows.ShowDialog();
+
+            }
+            else if (TransactionsDataGrid.SelectedItem is ConsumptionView consumption)
+            {
+                MessageBox.Show("Consumption selected");
+            }
+
         }
     }
 }

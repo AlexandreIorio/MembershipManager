@@ -27,8 +27,6 @@ namespace MembershipManager.View.People.Person
     {
         public MembershipManager.DataModel.People.Person Person { get; set; }
 
-
-        public PersonDetail() => InitializeComponent();
         public PersonDetail(MembershipManager.DataModel.People.Person person)
         {
             InitializeComponent();

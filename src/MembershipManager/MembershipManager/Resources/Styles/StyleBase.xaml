@@ -6,10 +6,10 @@
 
     <!--Local resources-->
     <Thickness x:Key="DefaultMargin">5</Thickness>
-        
-   
+
+
     <!--Default styles-->
-    
+
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
     </Style>
@@ -41,7 +41,11 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
-    <!--Specific styles-->
+    <Style TargetType="DataGridCell">
+        <Setter Property="BorderThickness" Value="5" />
+    </Style>
+
+<!--Specific styles-->
 
     <Style x:Key="LabelTitle" TargetType="Label">
         <Setter Property="FontSize" Value="20"/>
