@@ -322,3 +322,18 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER member_after_create
 AFTER INSERT ON member
 FOR EACH ROW EXECUTE FUNCTION create_member_account();
+
+-- Création de la fonction déclencheur pour définir la date d'abonnement
+CREATE OR REPLACE FUNCTION set_subscription_date()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Mise à jour de la subscription_date avec la date et l'heure actuelles
+    NEW.subscription_date := CURRENT_DATE;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Création du déclencheur pour appeler la fonction lors de l'insertion dans la table member
+CREATE TRIGGER member_before_insert
+BEFORE INSERT ON member
+FOR EACH ROW EXECUTE FUNCTION set_subscription_date();
