@@ -40,12 +40,6 @@ namespace MembershipManager
                 listSelection.List.ItemsSource = Member.Views().Cast<MemberView>();
             };
 
-            //Define new button
-            listSelection.ButtonRefresh.Click += (sender, e) =>
-            {
-                listSelection.UpdateList(Member.Views().Cast<MemberView>());
-            };
-
             listSelection.ShowDialog();
 
         }
