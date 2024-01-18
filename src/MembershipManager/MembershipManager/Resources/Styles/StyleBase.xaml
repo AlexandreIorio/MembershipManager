@@ -6,10 +6,10 @@
 
     <!--Local resources-->
     <Thickness x:Key="DefaultMargin">5</Thickness>
-        
-   
+
+
     <!--Default styles-->
-    
+
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
     </Style>
@@ -41,10 +41,35 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
+    <Style TargetType="DataGridCell">
+
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="Transparent" />
+
+    </Style>
+
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style TargetType="DataGridRow"
+>
+        <Setter Property="BorderThickness" Value="0,0,0,0"/>
+        <Setter Property="BorderBrush" Value="Transparent" />
+
+    </Style>
+
+    <Style x:Key="StyleDataGrid" TargetType="DataGrid">
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
+        <Setter Property="RowBackground" Value="WhiteSmoke"/>
+        <Setter Property="AlternatingRowBackground" Value="PapayaWhip"/>
+    </Style>
+
     <!--Specific styles-->
 
     <Style x:Key="LabelTitle" TargetType="Label">
         <Setter Property="FontSize" Value="20"/>
     </Style>
-    
+
 </ResourceDictionary>

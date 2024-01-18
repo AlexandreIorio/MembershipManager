@@ -3,6 +3,7 @@ using MembershipManager.Engine;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,7 +14,11 @@ namespace MembershipManager
     /// </summary>
     public partial class App : Application
     {
-        private const int splashScreenDelay = 1000;
+#if DEBUG
+        private const int splashScreenDelay = 0;
+#else
+        private const int splashScreenDelay = 3000;
+#endif
         private List<Tuple<Action, string>> InitialisationActions = new List<Tuple<Action, string>>();
 
         public App()
@@ -23,6 +28,12 @@ namespace MembershipManager
         }
         protected override async void OnStartup(StartupEventArgs e)
         {
+            CultureInfo currentCulture = new CultureInfo("fr-CH");
+            currentCulture.NumberFormat.NumberGroupSeparator = " ";
+            currentCulture.NumberFormat.NumberDecimalSeparator = ".";
+            Thread.CurrentThread.CurrentCulture = currentCulture;
+            Thread.CurrentThread.CurrentUICulture = currentCulture;
+
             MainWindow mainWindow = new MainWindow();
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
@@ -57,7 +68,7 @@ namespace MembershipManager
                 Thread.Sleep((int)minActionTime);
                 return true;
             });
-            
+
             splashScreen.Close();
             mainWindow.Show();
         }

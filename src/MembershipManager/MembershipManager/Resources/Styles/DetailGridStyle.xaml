@@ -5,7 +5,7 @@
 
     <sys:Double x:Key="LabelWidth">80</sys:Double>
     <sys:Double x:Key="TextboxWidth">200</sys:Double>
-    <GridLength x:Key="ColLabelWidth">80</GridLength>
+    <GridLength x:Key="ColLabelWidth">150</GridLength>
     <GridLength x:Key="ColTextboxWidth">200</GridLength>
 
 </ResourceDictionary>
