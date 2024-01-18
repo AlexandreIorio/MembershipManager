@@ -7,7 +7,6 @@
     <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateFranchise.sql" />
     <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulatePerson.sql" />
     <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateMember.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateEmploye.sql" />
     <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateConsumption.sql" />
     <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulatePaiement.sql" />
     <script-mode>FILE</script-mode>

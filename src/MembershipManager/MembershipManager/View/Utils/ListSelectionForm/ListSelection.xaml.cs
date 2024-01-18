@@ -14,8 +14,6 @@ namespace MembershipManager.View.Utils
     {
         public Button ButtonCancel { get => BtnCancel; }
         public Button ButtonSelect { get => BtnSelect; }
-        public Button ButtonRefresh { get => BtnRefresh; }
-
         private Type _type { get; set; }
         private IEnumerable _items { get; set; }
 

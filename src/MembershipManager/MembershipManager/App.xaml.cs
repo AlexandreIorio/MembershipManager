@@ -25,12 +25,6 @@ namespace MembershipManager
         }
         protected override async void OnStartup(StartupEventArgs e)
         {
-            CultureInfo currentCulture = new CultureInfo("fr-CH");
-            currentCulture.NumberFormat.NumberGroupSeparator = " ";
-            currentCulture.NumberFormat.NumberDecimalSeparator = ".";
-            Thread.CurrentThread.CurrentCulture = currentCulture;
-            Thread.CurrentThread.CurrentUICulture = currentCulture;
-
             MainWindow mainWindow = new MainWindow();
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
