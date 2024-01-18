@@ -20,7 +20,7 @@ namespace MembershipManager.Engine
         /// <summary>
         /// Abstract method to delete a row in the database
         /// </summary>
-        public void Delete();
+        public abstract static void Delete(params object[] pk);
 
         /// <summary>
         /// Abstract method to select a row in the database

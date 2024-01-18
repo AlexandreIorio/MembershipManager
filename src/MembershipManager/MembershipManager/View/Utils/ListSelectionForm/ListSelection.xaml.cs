@@ -14,7 +14,6 @@ namespace MembershipManager.View.Utils
     {
         public Button ButtonCancel { get => BtnCancel; }
         public Button ButtonSelect { get => BtnSelect; }
-
         private Type _type { get; set; }
         private IEnumerable _items { get; set; }
 
@@ -142,6 +141,12 @@ namespace MembershipManager.View.Utils
                 List.ItemsSource = List.ItemsSource.Cast<object>().OrderBy(x => property.GetValue(x));
             }
             Ascending = !Ascending;
+        }
+
+        public void UpdateList(IEnumerable list)
+        {
+            _items = list;
+            FilterList();
         }
 
     }

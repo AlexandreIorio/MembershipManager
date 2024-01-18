@@ -1,5 +1,7 @@
-﻿using MembershipManager.View.Financial;
+﻿using MembershipManager.Engine;
+using MembershipManager.View.Financial;
 using MembershipManager.View.People.Member;
+using MembershipManager.View.Utils;
 using MembershipManager.View.Utils.ListSelectionForm;
 using System.Windows.Controls;
 
@@ -16,30 +18,33 @@ namespace MembershipManager.DataModel.People
         #region Events
         public static void EditMember(string? noAvs)
         {
-            if (noAvs is null) throw new ArgumentNullException(nameof(noAvs));
+            ArgumentNullException.ThrowIfNull(noAvs);
             Member? member = (Member?)Member.Select(noAvs);
             if (member is null) return;
-            MemberDetailWindows memberDetailWindow = new MemberDetailWindows(member);
+            MemberDetailWindows memberDetailWindow = new(member);
             memberDetailWindow.ShowDialog();
         }
 
         public static void NewMember()
         {
-            MemberDetailWindows memberDetailWindow = new MemberDetailWindows(new Member());
+            MemberDetailWindows memberDetailWindow = new(new Member());
             memberDetailWindow.ShowDialog();
         }
 
-        public static ContextMenu ContextMenu()
+        public static ContextMenu ContextMenu(ListSelection viewer)
         {
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem edit = new MenuItem();
-            edit.Header = "Modifier";
+            ContextMenu contextMenu = new();
+            MenuItem edit = new()
+            {
+                Header = "Modifier"
+            };
             edit.Click += (sender, e) =>
             {
                 MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);
                 if (member is null) return;
 
-                MemberView.EditMember(member.no_avs);
+                EditMember(member.no_avs);
+                viewer.UpdateList(Member.Views().Cast<MemberView>());
             };
             contextMenu.Items.Add(edit);
 
@@ -47,9 +52,10 @@ namespace MembershipManager.DataModel.People
             delete.Header = "Supprimer";
             delete.Click += (sender, e) =>
             {
-                string? noAvs = (sender as MemberView)?.no_avs;
-                if (noAvs is null) return;
-                //Member.Delete();
+                MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);
+                if (member is null) return;
+                ISql.Delete(typeof(Member), member.no_avs);
+                viewer.UpdateList(Member.Views().Cast<MemberView>());
             };
 
             contextMenu.Items.Add(delete);

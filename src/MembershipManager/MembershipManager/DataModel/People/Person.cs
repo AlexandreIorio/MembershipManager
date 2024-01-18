@@ -135,7 +135,7 @@ namespace MembershipManager.DataModel.People
             return DbManager.Db.Views<PersonView>(cmd).Cast<SqlViewable>().ToList();
         }
 
-        public void Delete()
+        public static void Delete(params object[] pk)
         {
             throw new NotImplementedException();
         }

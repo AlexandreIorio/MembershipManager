@@ -32,8 +32,6 @@ namespace MembershipManager.DataModel.People
         {
         }
 
-
-
         public static new ISql? Select(params object[] pk)
         {
             if (pk.Length != 1) throw new ArgumentException();
@@ -41,6 +39,7 @@ namespace MembershipManager.DataModel.People
             if (m == null) throw new KeyNotFoundException();
             return m;
         }
+
         public new void Insert()
         {
             base.Insert();
@@ -73,6 +72,11 @@ namespace MembershipManager.DataModel.People
             }
             return valid;
 
+        }
+
+        public static new void Delete(params object[] pk)
+        {
+            ISql.Erase<Member>(pk);
         }
 
         public override string ToString()

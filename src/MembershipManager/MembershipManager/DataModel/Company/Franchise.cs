@@ -77,7 +77,7 @@ namespace MembershipManager.DataModel.Company
             throw new NotImplementedException();
         }
 
-        public void Delete()
+        public static void Delete(params object[] pk)
         {
             throw new NotImplementedException();
         }
