@@ -114,7 +114,7 @@ namespace MembershipManager.DataModel.Financial
             return DbManager.Db.Views<PaiementView>(cmd).Cast<SqlViewable>().ToList();
         }
 
-        public void Delete()
+        public static void Delete(params object[] pk)
         {
             throw new NotImplementedException();
         }

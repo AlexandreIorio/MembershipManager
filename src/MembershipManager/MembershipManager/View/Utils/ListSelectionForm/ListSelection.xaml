@@ -36,6 +36,10 @@
                     Content="Sélectionner" 
                     IsDefault="True" />
 
+            <Button x:Name="BtnRefresh" 
+                    Content="Raffraîchir" 
+                    IsDefault="True" />
+
             <Button x:Name="BtnCancel" 
                     Content="Annuler" 
                     IsCancel="True" />

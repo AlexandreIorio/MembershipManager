@@ -109,7 +109,7 @@ namespace MembershipManager.DataModel.Buyable
             return DbManager.Db.Views<ConsumptionView>(cmd).Cast<SqlViewable>().ToList();
         }
 
-        public void Delete()
+        public static void Delete(params object[] pk)
         {
             throw new NotImplementedException();
         }

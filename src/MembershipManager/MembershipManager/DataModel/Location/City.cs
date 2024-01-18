@@ -64,7 +64,7 @@ namespace MembershipManager.DataModel
             return ToString().CompareTo(obj?.ToString());
         }
 
-        public void Delete()
+        public static void Delete(params object[] pk)
         {
             throw new NotImplementedException();
         }

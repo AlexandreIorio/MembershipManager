@@ -14,19 +14,15 @@ namespace MembershipManager
         public MainWindow()
         {
             InitializeComponent();
-            var PersonView = Person.Views().Cast<PersonView>().ToList();
-
-            int i = 0;
-
-
         }
-
 
         private void ButtonMembership_Click(object sender, RoutedEventArgs e)
         {
-            ListSelection listSelection = new ListSelection(Member.Views().Cast<MemberView>());
-            listSelection.Width = 800;
-            listSelection.List.ContextMenu = MemberView.ContextMenu();
+            ListSelection listSelection = new(Member.Views().Cast<MemberView>())
+            {
+                Width = 800
+            };
+            listSelection.List.ContextMenu = MemberView.ContextMenu(listSelection);
             listSelection.MouseDoubleClick += (sender, e) =>
             {
                 string? noAvs = (listSelection.List.SelectedItem as MemberView)?.no_avs;
@@ -42,6 +38,12 @@ namespace MembershipManager
             {
                 MemberView.NewMember();
                 listSelection.List.ItemsSource = Member.Views().Cast<MemberView>();
+            };
+
+            //Define new button
+            listSelection.ButtonRefresh.Click += (sender, e) =>
+            {
+                listSelection.UpdateList(Member.Views().Cast<MemberView>());
             };
 
             listSelection.ShowDialog();
