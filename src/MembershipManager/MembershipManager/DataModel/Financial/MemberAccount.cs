@@ -1,4 +1,7 @@
 ﻿using MembershipManager.Engine;
+using Npgsql;
+using System.Security.Principal;
+using System.Transactions;
 
 namespace MembershipManager.DataModel.Financial
 {
@@ -41,5 +44,10 @@ namespace MembershipManager.DataModel.Financial
         {
             throw new NotImplementedException();
         }
+
+        public double Balance => _transactions?.Sum(t => t.ComputedAmount) ?? 0;
+
+        [IgnoreSql]
+        private List<ITransaction> _transactions => ITransaction.Views(new NpgsqlParameter("@id", NoAvs))?.Cast<ITransaction>().ToList();
     }
 }

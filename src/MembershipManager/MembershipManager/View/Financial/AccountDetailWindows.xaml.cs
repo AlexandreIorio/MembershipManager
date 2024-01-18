@@ -24,21 +24,7 @@ namespace MembershipManager.View.Financial
             }
         }
 
-        public double Balance
-        {
-            get
-            {
-                double balance = 0;
-                if (Transactions != null)
-                {
-                    foreach (ITransaction t in Transactions)
-                    {
-                        balance += t.ComputedAmount;
-                    }
-                }
-                return balance;
-            }
-        }
+        public double Balance => Account?.Balance ?? 0;
 
         public AccountDetailWindows(Member member)
         {

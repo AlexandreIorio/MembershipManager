@@ -3,7 +3,7 @@ using MembershipManager.View.Financial;
 using MembershipManager.View.People.Member;
 using MembershipManager.View.Utils;
 using MembershipManager.View.Utils.ListSelectionForm;
-using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace MembershipManager.DataModel.People
@@ -17,7 +17,6 @@ namespace MembershipManager.DataModel.People
         [Displayed("Structure")]
         public string? structure_name { get; set; }
 
-        #region Events
         public static void EditMember(string? noAvs)
         {
             ArgumentNullException.ThrowIfNull(noAvs);
@@ -56,6 +55,7 @@ namespace MembershipManager.DataModel.People
             {
                 MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);
                 if (member is null) return;
+                if (!CanDeleteMember(member.no_avs)) return;
                 ISql.Delete(typeof(Member), member.no_avs);
                 viewer.UpdateList(Member.Views().Cast<MemberView>());
             };
@@ -84,21 +84,29 @@ namespace MembershipManager.DataModel.People
         {
             // Get element from menu item
             if (menuItem == null) return null;
-            ContextMenu? contextMenu = menuItem.Parent as ContextMenu;
-            if (contextMenu == null) return null;
+            if (menuItem.Parent is not ContextMenu contextMenu) return null;
 
-            ListView? list = contextMenu.PlacementTarget as ListView;
-            if (list == null) return null;
+            if (contextMenu.PlacementTarget is not ListView list) return null;
 
-            MemberView? member = list.SelectedItem as MemberView;
-            if (member == null) return null;
+            if (list.SelectedItem is not MemberView member) return null;
 
             if (member.no_avs is null) return null;
             return member;
         }
 
-        #endregion
+        private static bool CanDeleteMember(string? noAvs)
+        {
+            ArgumentNullException.ThrowIfNull(noAvs);
+            Member? member = (Member?)Member.Select(noAvs);
+            if (member is null) return false;
+            if (member.Account?.Balance != 0)
+            {
+                MessageBox.Show("Impossible de supprimer un membre avec un solde différent de 0");
+                return false;
+            }
+
+            return true;
+        }
     }
-
-
 }
+
