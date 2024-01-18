@@ -9,6 +9,11 @@
         Title="AccountDetailWindows" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <sys:Double x:Key="ButtonWidth">150</sys:Double>
+        <Style x:Key="Monetary" TargetType="Label">
+            <Setter Property="ContentStringFormat" Value="{}{0:N2}"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        
     </Window.Resources>
 
     <Grid>
@@ -55,7 +60,7 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Label>Solde</Label>
-                        <Label Grid.Column="1" Content="{Binding Balance,StringFormat={}{0:N2}, FallbackValue=0.00 }"></Label>
+                        <Label x:Name="LabelBalance" Style="{StaticResource Monetary}"  Grid.Column="1" Content="{Binding Balance, FallbackValue=0.00 }"></Label>
                     </Grid>
                 </GroupBox>
 
@@ -74,19 +79,9 @@
                 <DataGridTextColumn Header="Date" Binding="{Binding Date , StringFormat='dd.MM.yyyy'}" />
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
                 <DataGridTemplateColumn Header="Amount">
-                    <DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellTemplate x:Uid="Monetary">
                         <DataTemplate>
-                            <TextBlock TextAlignment="Right" Text="{Binding ComputedAmount}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Amount}" Value="{x:Static sys:Int32.MinValue}">
-                                                <Setter Property="Foreground" Value="Red"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                            <Label Style="{StaticResource Monetary}" Content ="{Binding ComputedAmount}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
