@@ -2,7 +2,6 @@
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using NpgsqlTypes;
-using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Text;
 using System.Windows;

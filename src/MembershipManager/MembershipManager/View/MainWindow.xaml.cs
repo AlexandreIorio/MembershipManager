@@ -1,16 +1,8 @@
-﻿using System.Windows;
-using MembershipManager.DataModel;
+﻿using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
-using MembershipManager.DataModel.Company;
-using MembershipManager.Engine;
-using Npgsql;
-using MembershipManager.View;
-using MembershipManager.View.Utils.ListSelectionForm;
 using MembershipManager.View.Utils;
-using MembershipManager.View.People.Person;
+using System.Windows;
 using System.Windows.Controls;
-using MembershipManager.View.People.Member;
-using MembershipManager.DataModel.Financial;
 
 namespace MembershipManager
 {
@@ -28,7 +20,7 @@ namespace MembershipManager
 
 
         }
-  
+
 
         private void ButtonMembership_Click(object sender, RoutedEventArgs e)
         {

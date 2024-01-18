@@ -1,10 +1,5 @@
 ﻿using MembershipManager.DataModel.Company;
 using MembershipManager.Engine;
-using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace MembershipManager.DataModel.People
 {

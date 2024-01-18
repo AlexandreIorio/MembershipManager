@@ -1,22 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MembershipManager.DataModel;
+using MembershipManager.View.Utils;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MembershipManager.DataModel;
-using MembershipManager.DataModel.People;
-using MembershipManager.Engine;
-using MembershipManager.View.Utils;
-using MembershipManager.View.Utils.ListSelectionForm;
 
 namespace MembershipManager.View.People.Person
 {

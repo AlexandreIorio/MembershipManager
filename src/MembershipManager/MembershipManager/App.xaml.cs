@@ -1,11 +1,8 @@
 ﻿using MembershipManager.DataModel;
 using MembershipManager.Engine;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace MembershipManager
 {

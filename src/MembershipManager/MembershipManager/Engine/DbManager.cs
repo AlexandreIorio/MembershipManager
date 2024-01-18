@@ -1,8 +1,5 @@
-﻿using MembershipManager.DataModel.People;
-using MembershipManager.View.Utils.ListSelectionForm;
-using Npgsql;
+﻿using Npgsql;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
 
 
@@ -52,7 +49,7 @@ namespace MembershipManager.Engine
                     foreach (PropertyInfo p in type.GetProperties())
                     {
                         if (p.GetCustomAttribute<IgnoreSql>() != null) continue;
-                        var valueRead = reader[p.Name]; 
+                        var valueRead = reader[p.Name];
                         p.SetValue(obj, valueRead);
                     }
                     results.Add(obj);
@@ -113,7 +110,7 @@ namespace MembershipManager.Engine
             if (inheritType is not null)
             {
                 //Get primary keys of object
-                List<string> pks = new(); 
+                List<string> pks = new();
                 foreach (string pkName in ISql.GetPrimaryKeyNames(inheritType.InheritType))
                 {
                     if (pkName is null) continue;
@@ -126,7 +123,7 @@ namespace MembershipManager.Engine
                 object? parent = ISql.Select(inheritType.InheritType, args);
 
                 //Create child with parent
-                newObject = Activator.CreateInstance(type,parent);
+                newObject = Activator.CreateInstance(type, parent);
             }
             else
             {

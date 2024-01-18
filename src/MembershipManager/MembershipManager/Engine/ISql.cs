@@ -1,13 +1,6 @@
-﻿using MembershipManager.DataModel.People;
-using Npgsql;
-using NpgsqlTypes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Npgsql;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Navigation;
 
 namespace MembershipManager.Engine
 {

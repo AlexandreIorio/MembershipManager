@@ -1,6 +1,4 @@
-﻿using MembershipManager.DataModel.Company;
-using MembershipManager.Engine;
-using Npgsql;
+﻿using MembershipManager.Engine;
 using NpgsqlTypes;
 
 namespace MembershipManager.DataModel
@@ -18,9 +16,9 @@ namespace MembershipManager.DataModel
         [DbAttribute("name")]
         public string? Name { get; private set; }
 
-        public Canton() { } 
+        public Canton() { }
 
-      
+
 
         public void Insert()
         {
@@ -30,7 +28,7 @@ namespace MembershipManager.DataModel
         public static ISql? Select(params object[] pk)
         {
 
-           return Cantons.FirstOrDefault(c => c.Abbreviation == (string)pk[0]);
+            return Cantons.FirstOrDefault(c => c.Abbreviation == (string)pk[0]);
 
         }
 

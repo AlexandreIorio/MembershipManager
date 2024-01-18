@@ -30,7 +30,7 @@ namespace MembershipManager.DataModel.People
 
         [IgnoreSql]
         [Filtered("Tout", true)]
-        public string ? FullName { get => $"{first_name} {last_name}"; }
+        public string? FullName { get => $"{first_name} {last_name}"; }
 
         #region Events
         public static void EditPerson(string noAvs)

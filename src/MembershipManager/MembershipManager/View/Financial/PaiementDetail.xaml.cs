@@ -1,21 +1,8 @@
-﻿using MembershipManager.DataModel;
-using MembershipManager.DataModel.Financial;
+﻿using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
 using MembershipManager.View.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MembershipManager.View.Financial
 {
@@ -31,7 +18,7 @@ namespace MembershipManager.View.Financial
         {
             InitializeComponent();
             if (paiement is null) throw new ArgumentNullException(nameof(paiement));
-            
+
             if (paiement.Account?.NoAvs is not null)
             {
                 Member = Member.Select(paiement.Account?.NoAvs ?? "") as Member;

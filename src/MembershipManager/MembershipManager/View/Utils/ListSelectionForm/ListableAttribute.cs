@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MembershipManager.View.Utils.ListSelectionForm
+﻿namespace MembershipManager.View.Utils.ListSelectionForm
 {
 
     ///These attributes are used to define the behaviour of the list selection form
@@ -19,7 +13,7 @@ namespace MembershipManager.View.Utils.ListSelectionForm
     {
         public bool IsDefault { get; set; } = isDefault;
         public string FriendlyName { get; set; } = friendlyName;
-       
+
     }
 
     /// <summary>
@@ -34,5 +28,5 @@ namespace MembershipManager.View.Utils.ListSelectionForm
     /// <summary>
     /// This attribute is used to define that the list is default sorted by this property
     /// </summary>
-    internal class Sorted() : Attribute{ }
+    internal class Sorted() : Attribute { }
 }
