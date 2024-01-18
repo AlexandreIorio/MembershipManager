@@ -55,7 +55,7 @@ namespace MembershipManager.DataModel.People
             {
                 string? noAvs = (sender as MemberView)?.no_avs;
                 if (noAvs is null) return;
-                Member.Delete(noAvs);
+                //Member.Delete();
             };
 
             contextMenu.Items.Add(delete);

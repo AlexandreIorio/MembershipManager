@@ -65,6 +65,11 @@ namespace MembershipManager.DataModel
             return ToString().CompareTo(obj?.ToString());
         }
 
+        public void Delete()
+        {
+            throw new NotImplementedException();
+        }
+
         public static List<City> Cities { get; set; } = new List<City>();
 
     }

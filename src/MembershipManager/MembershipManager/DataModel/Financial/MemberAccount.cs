@@ -27,6 +27,11 @@ namespace MembershipManager.DataModel.Financial
             return ma == null ? throw new KeyNotFoundException() : (ISql)ma;
         }
 
+        public void Delete()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Insert()
         {
             throw new NotImplementedException();

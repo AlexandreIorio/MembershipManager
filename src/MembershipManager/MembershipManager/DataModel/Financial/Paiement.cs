@@ -113,5 +113,10 @@ namespace MembershipManager.DataModel.Financial
 
             return DbManager.Db.Views<PaiementView>(cmd).Cast<SqlViewable>().ToList();
         }
+
+        public void Delete()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

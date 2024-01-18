@@ -88,5 +88,10 @@ namespace MembershipManager.DataModel.Company
             }
             return false; 
         }
+
+        public void Delete()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

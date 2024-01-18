@@ -114,5 +114,10 @@ namespace MembershipManager.DataModel.Buyable
 
             return DbManager.Db.Views<ConsumptionView>(cmd).Cast<SqlViewable>().ToList();
         }
+
+        public void Delete()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

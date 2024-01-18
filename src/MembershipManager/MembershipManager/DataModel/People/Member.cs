@@ -94,6 +94,5 @@ namespace MembershipManager.DataModel.People
             return DbManager.Db.Views<MemberView>(cmd).Cast<SqlViewable>().ToList();
 
         }
-
     }
 }

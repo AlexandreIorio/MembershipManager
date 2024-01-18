@@ -49,6 +49,11 @@ namespace MembershipManager.DataModel
             throw new NotImplementedException();
         }
 
+        public void Delete()
+        {
+            throw new NotImplementedException();
+        }
+
         public static List<Canton> Cantons { get; set; } = new List<Canton>();
     }
 }

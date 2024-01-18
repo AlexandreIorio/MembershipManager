@@ -83,5 +83,10 @@ namespace MembershipManager.DataModel.Company
         {
             throw new NotImplementedException();
         }
+
+        public void Delete()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
