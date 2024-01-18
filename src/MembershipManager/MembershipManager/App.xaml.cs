@@ -13,7 +13,11 @@ namespace MembershipManager
     /// </summary>
     public partial class App : Application
     {
-        private const int splashScreenDelay = 1000;
+#if DEBUG
+        private const int splashScreenDelay = 0;
+#else
+        private const int splashScreenDelay = 3000;
+#endif
         private List<Tuple<Action, string>> InitialisationActions = new List<Tuple<Action, string>>();
 
         public App()
@@ -57,7 +61,7 @@ namespace MembershipManager
                 Thread.Sleep((int)minActionTime);
                 return true;
             });
-            
+
             splashScreen.Close();
             mainWindow.Show();
         }
