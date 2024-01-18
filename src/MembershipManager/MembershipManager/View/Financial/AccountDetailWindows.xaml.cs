@@ -49,11 +49,18 @@ namespace MembershipManager.View.Financial
 
         public AccountDetailWindows(Member member)
         {
+            InitializeComponent();
             Member = member;
             Account = (MemberAccount)MemberAccount.Select(member.NoAvs);
-            Transactions = ITransaction.Views(new Npgsql.NpgsqlParameter("@id", Account.NoAvs)).Cast<ITransaction>().ToList();
-            InitializeComponent();
+            RefreshTransactions();
             DataContext = this;
+        }
+
+        private void RefreshTransactions()
+        {
+            Transactions = ITransaction.Views(new Npgsql.NpgsqlParameter("@id", Account.NoAvs)).Cast<ITransaction>().ToList();
+            TransactionsDataGrid.ItemsSource = Transactions;
+  
         }
 
 
@@ -68,7 +75,7 @@ namespace MembershipManager.View.Financial
                 if (paiement is null) return;
                 PaiementDetailWindows paiementDetailWindows = new PaiementDetailWindows(paiement);
                 paiementDetailWindows.ShowDialog();
-
+                RefreshTransactions();
             }
             else if (TransactionsDataGrid.SelectedItem is ConsumptionView consumption)
             {

@@ -50,7 +50,7 @@
             </Grid>
 
         </Grid>
-        <DataGrid Grid.Row="2" x:Name="TransactionsDataGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Transactions}" MouseDoubleClick="TransactionsDataGrid_MouseDoubleClick">
+        <DataGrid Grid.Row="2" x:Name="TransactionsDataGrid" IsReadOnly="True" AutoGenerateColumns="False" MouseDoubleClick="TransactionsDataGrid_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />

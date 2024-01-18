@@ -24,8 +24,8 @@ namespace MembershipManager.View.Financial
     /// </summary>
     public partial class PaiementDetail : Page
     {
-        public Paiement Paiement;
-        public Member? Member;
+        public Paiement Paiement { get; set; }
+        public Member? Member { get; set; }
         public double? ComputedAmount { get => Paiement.Amount / 100.0; set => Paiement.Amount = (int?)(value * 100); }
         public PaiementDetail(Paiement paiement)
         {
@@ -35,10 +35,11 @@ namespace MembershipManager.View.Financial
             if (paiement.Account?.NoAvs is not null)
             {
                 Member = Member.Select(paiement.Account?.NoAvs ?? "") as Member;
-                ButtonMember.Content = Member?.ToString();
                 ButtonMember.IsEnabled = false;
+                ButtonMember.Content = Member.ToString();
             }
             Paiement = paiement;
+            TextBoxAmount.Text = ComputedAmount.ToString();
             this.DataContext = Paiement;
             TextBoxAmount.DataContext = this;
         }
@@ -79,6 +80,21 @@ namespace MembershipManager.View.Financial
                 if (member is null) return;
                 Paiement.Account = (MemberAccount?)MemberAccount.Select(member.NoAvs ?? "");
                 ButtonMember.Content = member.ToString();
+            }
+        }
+
+        private void TextBoxAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TextBoxAmount.Text == "") return;
+            if (double.TryParse(TextBoxAmount.Text, out double amount))
+            {
+                ComputedAmount = amount;
+            }
+            else
+            {
+                MessageBox.Show("La valeur entrée n'est pas un nombre");
+                TextBoxAmount.Clear();
+                TextBoxAmount.Focus();
             }
         }
     }

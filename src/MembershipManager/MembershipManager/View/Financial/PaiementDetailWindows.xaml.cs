@@ -34,6 +34,7 @@ namespace MembershipManager.View.Financial
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
+            
             Paiement paiement = _paiement.Paiement;
             if (_IsEditMode)
             {
