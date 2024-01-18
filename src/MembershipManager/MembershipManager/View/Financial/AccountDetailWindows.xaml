@@ -50,14 +50,14 @@
             </Grid>
 
         </Grid>
-        <DataGrid Grid.Row="2" x:Name="transactionsDataGrid" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="2" x:Name="transactionsDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Transactions}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
-                <DataGridTextColumn Header="Description" Binding="{Binding Decription}" />
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
                 <DataGridTemplateColumn Header="Amount">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Amount}">
+                            <TextBlock Text="{Binding ComputedAmount}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>

@@ -5,7 +5,7 @@ using MembershipManager.View.Utils.ListSelectionForm;
 
 namespace MembershipManager.DataModel.Financial
 {
-    public class PaiementView : SqlViewable
+    public class PaiementView : SqlViewable, ITransaction
     {
 
         public int? id { get; set; }
@@ -13,8 +13,8 @@ namespace MembershipManager.DataModel.Financial
         [Sorted]
         [Filtered("Date")]
         [Displayed("Date")]
-        public DateTime? date { get; set; }
-
+ 
+        public DateTime? Date { get; set; }
         [Filtered("Prénom")]
         [Displayed("Prénom")]
         public string? first_name { get; set; }
@@ -24,11 +24,19 @@ namespace MembershipManager.DataModel.Financial
 
         [Filtered("Montant")]
         [Displayed("Montant")]
-        public int? amount { get; set; }
-
+        public int? Amount { get; set; }
 
         [IgnoreSql]
         [Filtered("Tout", true)]
         public string? FullName { get => $"{first_name} {last_name}"; }
+
+        [IgnoreSql]
+        public string? Description => $"Paiement du: {Date?.ToString("dd.MM.yyyy")}";
+
+
+        [IgnoreSql]
+        public double ComputedAmount => Math.Round(((Amount ?? 0) / 100.0), 2);
+
+        public string? Account_id { get; set; }
     }
 }

@@ -24,6 +24,16 @@ namespace MembershipManager.DataModel.People
 
         public new event PropertyChangedEventHandler? PropertyChanged;
 
+        public Member() : base()
+        {
+        }
+
+        public Member(Person person) : base(person)
+        {
+        }
+
+
+
         public static new ISql? Select(params object[] pk)
         {
             if (pk.Length != 1) throw new ArgumentException();

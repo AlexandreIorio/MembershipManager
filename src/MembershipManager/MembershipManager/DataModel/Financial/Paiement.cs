@@ -8,20 +8,23 @@ using System.Windows;
 
 namespace MembershipManager.DataModel.Financial
 {
+    [DbTableName("paiement")]
     internal class Paiement : ISql, INotifyPropertyChanged, Ilistable
     {
+
+
         [DbPrimaryKey(NpgsqlDbType.Char, 13)]
         [DbAttribute("id")]
         public int? Id { get; set; }
 
-        [DbAttribute("amount")]
-        public int? Amount { get; set; }
+        [DbRelation("account_id")]
+        public MemberAccount? Account { get; set; }
 
         [DbAttribute("date")]
         public DateTime? Date { get; set; }
-
-        [DbRelation("account_id")]
-        public Account? Account { get; set; }
+        public string? Description { get; set; }
+        [DbAttribute("amount")]
+        public int? Amount { get; set; }
 
 
         public Paiement() { }
@@ -94,16 +97,16 @@ namespace MembershipManager.DataModel.Financial
 
             NpgsqlCommand cmd = new NpgsqlCommand();
 
-            StringBuilder SqlQuery = new StringBuilder(@"SELECT paiement.id, amount, date, p.first_name, p.last_name
+            StringBuilder SqlQuery = new StringBuilder(@"SELECT paiement.id, paiement.account_id, amount, date, p.first_name, p.last_name
                                     FROM paiement
                                     INNER JOIN  memberaccount ON paiement.account_id = memberaccount.id
-                                    INNER JOIN member AS m ON memberaccount.no_avs = m.no_avs
+                                    INNER JOIN member AS m ON memberaccount.id = m.no_avs
                                     INNER JOIN person AS p ON m.no_avs = p.no_avs");
 
 
             if (sqlParam.Length == 1)
             {
-                SqlQuery.Append(" WHERE paiement.id = @id");
+                SqlQuery.Append(" WHERE paiement.account_id = @id");
                 cmd.Parameters.Add(sqlParam[0]);
             }
 

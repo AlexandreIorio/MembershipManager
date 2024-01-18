@@ -1,4 +1,8 @@
-﻿using System;
+﻿using MembershipManager.DataModel.Buyable;
+using MembershipManager.Engine;
+using MembershipManager.View.Utils.ListSelectionForm;
+using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,20 +12,22 @@ namespace MembershipManager.DataModel.Financial
 {
     public interface ITransaction
     {
-        enum TransactionType
+        public string? Account_id { get; set; }
+        public DateTime? Date { get; set; }
+        public string? Description { get; }
+        public int? Amount { get; set; }
+       
+        public double ComputedAmount { get; }
+
+        public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            DEBIT = 1, CREDIT = -1
-        }
-        Account? Account { get; set; }
-        DateTime? Date { get; set; }
-        string? Description { get; set; }
-        int? Amount { get; set; }
-        TransactionType? Type { get; set; }
-        
-        public int GetAmount()
-        {
-            if (Amount is null || Type is null) return 0;
-            return (int)Amount * (int)Type;
+            List<SqlViewable> list = new List<SqlViewable>();
+            List<SqlViewable>? paiements = Paiement.Views(sqlParam);
+            if (paiements != null) list.AddRange(paiements);
+            List<SqlViewable>? consumption = Consumption.Views(sqlParam);
+            if (consumption != null) list.AddRange(consumption);
+  
+            return list.Cast<SqlViewable>().ToList();
         }
     }
 }

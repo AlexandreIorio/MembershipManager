@@ -81,18 +81,18 @@ CREATE TABLE member(
 );
 
 CREATE TABLE memberaccount (
-    id  SERIAL PRIMARY KEY, -- owner id
-    no_avs char(13),
-    credit int, --cents
-    debit int, --cents
+    id char(13),
+    available_entry int,
+    subscription_issue date,
 
-    FOREIGN KEY (no_avs) REFERENCES member(no_avs)
+    PRIMARY KEY (id),
+    FOREIGN KEY (id) REFERENCES member(no_avs)
 );
 
 CREATE TABLE product
 (
-code int,
-price int, --cents
+code varchar(50),
+amount int, --cents
 
 name varchar(50),
 
@@ -101,14 +101,14 @@ PRIMARY KEY(code)
 
 CREATE TABLE consumption(
     id int,
-    account_id int NOT NULL,
-    code int NOT NULL,
+    name varchar(50),
+    account_id varchar(13) NOT NULL,
+    code varchar(50) NOT NULL,
+    amount int, --cents
     date date,
 
-
     PRIMARY KEY (id),
-    FOREIGN KEY (account_id) REFERENCES memberAccount(id),
-    FOREIGN KEY (code) REFERENCES product(code)
+    FOREIGN KEY (account_id) REFERENCES memberAccount(id)
 );
 
 CREATE TABLE users(
@@ -183,7 +183,7 @@ FOREIGN KEY (no_avs) REFERENCES person(no_avs)
 CREATE TABLE paiement
 (
 id int,
-account_id int NOT NULL,
+account_id varchar(13) NOT NULL,
 amount int NOT NULL,
 date date NOT NULL,
 
@@ -212,53 +212,12 @@ FOREIGN KEY (id) REFERENCES paiement(id)
 
 CREATE TABLE consumable
 (
-code int,
+code varchar(50) NOT NULL,
 franchise_id int NOT NULL,
 
 PRIMARY KEY (code),
 FOREIGN KEY(code) REFERENCES product(code),
 FOREIGN KEY (franchise_id) REFERENCES franchise(id)
-);
-
-CREATE TABLE entry (
-    code int,
-subscription_date date,
-strucure_name varchar(50) NOT NULL,
-
-PRIMARY KEY (code),
-FOREIGN KEY (code) REFERENCES product(code),
-FOREIGN KEY (strucure_name) REFERENCES structure(name)
-);
-
-CREATE TABLE uniqueEntry
-(
-    code int,
-
-    PRIMARY KEY (code),
-    FOREIGN KEY (code) references entry(code)
-
-);
-
-CREATE TABLE multipleEntry
-(
-    code int,
-    num_of_entry int,
-    entries_recorded int,
-    validity int, --month
-
-    PRIMARY KEY (code),
-    FOREIGN KEY (code) references entry(code)
-
-);
-
-CREATE TABLE subscription
-(
-    code int,
-    duration int, --month
-
-    PRIMARY KEY (code),
-    FOREIGN KEY (code) references entry(code)
-
 );
 
 -- IV --
@@ -267,7 +226,7 @@ CREATE VIEW OutstandingBills AS
 SELECT p.no_avs, p.last_name, p.first_name, b.id AS bill_id, b.issue_date, pa.amount
 FROM person p
 	JOIN member m ON p.no_avs = m.no_avs
-	JOIN memberaccount ma ON m.no_avs = ma.no_avs
+	JOIN memberaccount ma ON m.no_avs = ma.id
 	JOIN paiement pa ON ma.id = pa.account_id
 	JOIN bill b ON pa.id = b.id
 WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant à payer
@@ -312,7 +271,7 @@ FOR EACH ROW EXECUTE FUNCTION log_member_delete();
 CREATE OR REPLACE FUNCTION create_member_account()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO memberaccount (no_avs)
+    INSERT INTO memberaccount (id)
     VALUES (NEW.no_avs);
     RETURN NEW;
 END;

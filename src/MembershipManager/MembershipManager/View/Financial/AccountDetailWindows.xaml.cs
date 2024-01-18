@@ -23,6 +23,7 @@ namespace MembershipManager.View.Financial
     {
         public List<ITransaction> Transactions { get; set; } = new List<ITransaction>();
         public Member Member { get; private set; }
+        public MemberAccount? Account { get; private set; }
 
         public string MemberName
         {
@@ -32,14 +33,14 @@ namespace MembershipManager.View.Financial
             }
         }   
 
-        public int Balance
+        public double Balance
         {
             get
             {
-                int balance = 200;
+                double balance = 0;
                 foreach (ITransaction t in Transactions)
                 {
-                    balance += t.GetAmount();
+                    balance += t.ComputedAmount;
                 }
                 return balance;
             }
@@ -48,6 +49,8 @@ namespace MembershipManager.View.Financial
         public AccountDetailWindows(Member member)
         {
             Member = member;
+            Account = (MemberAccount)MemberAccount.Select(member.NoAvs);
+            Transactions = ITransaction.Views(new Npgsql.NpgsqlParameter("@id", Account.NoAvs)).Cast<ITransaction>().ToList();
             InitializeComponent();
             DataContext = this;
         }
