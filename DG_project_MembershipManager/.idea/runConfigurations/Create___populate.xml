@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Create + populate" type="DatabaseScript">
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/database.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/InsertCanton.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/InsertCity.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateStructure.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateFranchise.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulatePerson.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateMember.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateConsumption.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulatePaiement.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="0c215394-239a-485a-93a6-0ff6ee15e35c" namespace="database/&quot;membershipmanager&quot;/schema/&quot;membershipmanager&quot;" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -9,11 +9,10 @@ using System.Windows;
 namespace MembershipManager.DataModel.Financial
 {
     [DbTableName("paiement")]
-    internal class Paiement : ISql, INotifyPropertyChanged, Ilistable
+    public class Paiement : ISql, INotifyPropertyChanged, Ilistable
     {
 
-
-        [DbPrimaryKey(NpgsqlDbType.Char, 13)]
+        [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
         public int? Id { get; set; }
 
@@ -22,7 +21,7 @@ namespace MembershipManager.DataModel.Financial
 
         [DbAttribute("date")]
         public DateTime? Date { get; set; }
-        public string? Description { get; set; }
+
         [DbAttribute("amount")]
         public int? Amount { get; set; }
 
@@ -113,6 +112,11 @@ namespace MembershipManager.DataModel.Financial
             cmd.CommandText = SqlQuery.ToString();
 
             return DbManager.Db.Views<PaiementView>(cmd).Cast<SqlViewable>().ToList();
+        }
+
+        public static void Delete(params object[] pk)
+        {
+            throw new NotImplementedException();
         }
     }
 }

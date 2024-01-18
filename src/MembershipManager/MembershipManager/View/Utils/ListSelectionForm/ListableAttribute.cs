@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace MembershipManager.View.Utils.ListSelectionForm
 {
@@ -19,7 +15,7 @@ namespace MembershipManager.View.Utils.ListSelectionForm
     {
         public bool IsDefault { get; set; } = isDefault;
         public string FriendlyName { get; set; } = friendlyName;
-       
+
     }
 
     /// <summary>
@@ -34,5 +30,16 @@ namespace MembershipManager.View.Utils.ListSelectionForm
     /// <summary>
     /// This attribute is used to define that the list is default sorted by this property
     /// </summary>
-    internal class Sorted() : Attribute{ }
+    internal class Sorted() : Attribute { }
+
+    /// <summary>
+    /// This attribute is used to define that the list can be display this property
+    /// </summary>
+    /// <param name="headerName">The name to display in the header</param>
+    internal class TextFormat(string format) : Attribute
+    {
+        public string Format { get; set; } = format;
+    }
+
+
 }

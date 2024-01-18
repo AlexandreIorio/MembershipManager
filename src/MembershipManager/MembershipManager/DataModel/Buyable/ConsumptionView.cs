@@ -1,11 +1,6 @@
 ﻿using MembershipManager.DataModel.Financial;
 using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MembershipManager.DataModel.Buyable
 {
@@ -33,10 +28,10 @@ namespace MembershipManager.DataModel.Buyable
         [IgnoreSql]
         public string? Description => Name;
 
- 
+
         public string? Account_id { get; set; }
 
         [IgnoreSql]
-        public double ComputedAmount => Math.Round((-(Amount ?? 0) / 100.0),2);
+        public double ComputedAmount => Math.Round((-(Amount ?? 0) / 100.0), 2);
     }
 }

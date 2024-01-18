@@ -1,4 +1,5 @@
 ﻿using MembershipManager.DataModel.Company;
+using MembershipManager.DataModel.Financial;
 using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
@@ -19,6 +20,9 @@ namespace MembershipManager.DataModel.People
         [DbRelation("structure_name")]
         public Structure? Structure { get; set; }
 
+        [DbRelation("no_avs")]
+        public MemberAccount? Account { get; set; }
+
         [DbAttribute("subscription_date")]
         public DateTime SubscriptionDate { get; set; }
 
@@ -32,8 +36,6 @@ namespace MembershipManager.DataModel.People
         {
         }
 
-
-
         public static new ISql? Select(params object[] pk)
         {
             if (pk.Length != 1) throw new ArgumentException();
@@ -41,6 +43,7 @@ namespace MembershipManager.DataModel.People
             if (m == null) throw new KeyNotFoundException();
             return m;
         }
+
         public new void Insert()
         {
             base.Insert();
@@ -75,6 +78,12 @@ namespace MembershipManager.DataModel.People
 
         }
 
+        public static new void Delete(params object[] pk)
+        {
+            if (pk.Length != 1) throw new ArgumentException();
+            ISql.Erase<Member>(pk);
+        }
+
         public override string ToString()
         {
             return base.ToString();
@@ -94,6 +103,5 @@ namespace MembershipManager.DataModel.People
             return DbManager.Db.Views<MemberView>(cmd).Cast<SqlViewable>().ToList();
 
         }
-
     }
 }

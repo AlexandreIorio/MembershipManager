@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MembershipManager.DataModel.Financial
+﻿namespace MembershipManager.DataModel.Financial
 {
-    internal class Cashier  : Paiement
+    internal class Cashier : Paiement
     {
     }
 }

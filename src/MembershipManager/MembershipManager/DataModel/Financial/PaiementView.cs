@@ -1,6 +1,4 @@
-﻿using MembershipManager.DataModel.People;
-using MembershipManager.Engine;
-using MembershipManager.View.People.Person;
+﻿using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 
 namespace MembershipManager.DataModel.Financial
@@ -13,7 +11,7 @@ namespace MembershipManager.DataModel.Financial
         [Sorted]
         [Filtered("Date")]
         [Displayed("Date")]
- 
+
         public DateTime? Date { get; set; }
         [Filtered("Prénom")]
         [Displayed("Prénom")]

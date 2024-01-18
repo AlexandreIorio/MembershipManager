@@ -1,21 +1,9 @@
 ﻿using MembershipManager.View.Utils.ListSelectionForm;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MembershipManager.View.Utils
 {
@@ -26,7 +14,6 @@ namespace MembershipManager.View.Utils
     {
         public Button ButtonCancel { get => BtnCancel; }
         public Button ButtonSelect { get => BtnSelect; }
- 
         private Type _type { get; set; }
         private IEnumerable _items { get; set; }
 
@@ -66,7 +53,8 @@ namespace MembershipManager.View.Utils
             }
 
             List<object> list = List.ItemsSource.Cast<object>().ToList();
-            List.ItemsSource = list.Where(x =>{
+            List.ItemsSource = list.Where(x =>
+            {
 
                 string? tag = item.Tag?.ToString();
                 if (tag is null) return false;
@@ -82,7 +70,7 @@ namespace MembershipManager.View.Utils
 
             );
 
-    
+
 
             if (List.Items.Count == 1)
             {
@@ -97,9 +85,13 @@ namespace MembershipManager.View.Utils
             {
                 if (p.GetCustomAttribute<Displayed>() is Displayed displayedAttribute)
                 {
+                    //Get TextFormat attribute if exists
+                    string? format = p.GetCustomAttribute<TextFormat>()?.Format;
+
                     GridViewColumn column = new GridViewColumn();
                     column.DisplayMemberBinding = new Binding(p.Name);
-                    
+                    if (format is not null) column.DisplayMemberBinding.StringFormat = format;
+
                     GridViewColumnHeader header = new GridViewColumnHeader();
                     header.Click += List_Click;
                     header.Content = displayedAttribute.HeaderName;
@@ -109,7 +101,7 @@ namespace MembershipManager.View.Utils
                 }
             }
             List.View = gv;
-      
+
         }
 
         private void InitializeFilter()
@@ -130,7 +122,7 @@ namespace MembershipManager.View.Utils
                     else
                     {
                         ComboBoxFilters.Items.Add(item);
-                    }                    
+                    }
                 }
             }
         }
@@ -153,6 +145,12 @@ namespace MembershipManager.View.Utils
                 List.ItemsSource = List.ItemsSource.Cast<object>().OrderBy(x => property.GetValue(x));
             }
             Ascending = !Ascending;
+        }
+
+        public void UpdateList(IEnumerable list)
+        {
+            _items = list;
+            FilterList();
         }
 
     }

@@ -7,6 +7,14 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="AccountDetailWindows" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <sys:Double x:Key="ButtonWidth">150</sys:Double>
+        <Style x:Key="Monetary" TargetType="Label">
+            <Setter Property="ContentStringFormat" Value="{}{0:N2}"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -16,58 +24,64 @@
         </Grid.RowDefinitions>
         <Label Style="{StaticResource LabelTitle}">Account Detail</Label>
         <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <GroupBox Header="Information du membre">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                <Label>Membre :</Label>
-                <Label Grid.Column="1"
+                        <Label>Nom:</Label>
+                        <Label Grid.Column="1"
                        Content="{Binding Member , FallbackValue='Nom du membre'}"/>
-                <Label Grid.Row="1" >N° AVS :</Label>
-                <Label Grid.Row="1" Grid.Column="1" 
+                        <Label Grid.Row="1" >N° AVS :</Label>
+                        <Label Grid.Row="1" Grid.Column="1" 
                        DataContext="{Binding Member}" 
                        Content="{Binding NoAvs , FallbackValue='Numéro AVS'}"/>
-            </Grid>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Column="1" Header="Information du compte">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label>Solde</Label>
+                        <Label x:Name="LabelBalance" Style="{StaticResource Monetary}"  Grid.Column="1" Content="{Binding Balance, FallbackValue=0.00 }"></Label>
+                    </Grid>
+                </GroupBox>
 
-            <Grid Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label>Solde du compte</Label>
-                <Label Grid.Column="1" Content="{Binding Balance}"></Label>
             </Grid>
+            <WrapPanel Grid.Row="1">
+                <Button x:Name="ButtonAddPaiement" Width="{StaticResource ButtonWidth}" Content="Ajouter un paiement" Click="ButtonAddPaiement_Click"/>
+                <Button x:Name="ButtonAddConsuption" Width="{StaticResource ButtonWidth}" Content="Ajouter une consommation" Click="ButtonAddConsuption_Click"/>
+            </WrapPanel>
+
+
+
 
         </Grid>
-        <DataGrid Grid.Row="2" x:Name="transactionsDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Transactions}">
+        <DataGrid Grid.Row="2" x:Name="TransactionsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False" MouseDoubleClick="TransactionsDataGrid_MouseDoubleClick">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
+                <DataGridTextColumn Header="Date" Binding="{Binding Date , StringFormat='dd.MM.yyyy'}" />
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
                 <DataGridTemplateColumn Header="Amount">
-                    <DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellTemplate x:Uid="Monetary">
                         <DataTemplate>
-                            <TextBlock Text="{Binding ComputedAmount}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Amount}" Value="{x:Static sys:Int32.MinValue}">
-                                                <Setter Property="Foreground" Value="Red"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                            <Label Style="{StaticResource Monetary}" Content ="{Binding ComputedAmount}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

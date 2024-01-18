@@ -232,41 +232,6 @@ FROM person p
 WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant à payer
 AND b.issue_date IS NOT NULL;
 
-CREATE TABLE member_log (
-    log_id SERIAL PRIMARY KEY,
-    no_avs char(13) NOT NULL,
-    action_type VARCHAR(50) NOT NULL, -- 'INSERT' pour inscription, 'DELETE' pour suppression
-    action_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (no_avs) REFERENCES person(no_avs)
-);
-
-CREATE OR REPLACE FUNCTION log_member_insert()
-RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO member_log (no_avs, action_type)
-    VALUES (NEW.no_avs, 'INSERT');
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE TRIGGER member_after_insert
-AFTER INSERT ON member
-FOR EACH ROW EXECUTE FUNCTION log_member_insert();
-
-CREATE OR REPLACE FUNCTION log_member_delete()
-RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO member_log (no_avs, action_type)
-    VALUES (OLD.no_avs, 'DELETE');
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER member_after_delete
-AFTER DELETE ON member
-FOR EACH ROW EXECUTE FUNCTION log_member_delete();
-
 -- Création de la fonction pour insérer un memberAccount
 CREATE OR REPLACE FUNCTION create_member_account()
 RETURNS TRIGGER AS $$
@@ -296,3 +261,34 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER member_before_insert
 BEFORE INSERT ON member
 FOR EACH ROW EXECUTE FUNCTION set_subscription_date();
+
+-- Fonction pour gérer la suppression de membre
+CREATE OR REPLACE FUNCTION delete_member_cascade()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    DELETE FROM consumption WHERE account_id = OLD.no_avs;
+    DELETE FROM paiement WHERE account_id = OLD.no_avs;
+    DELETE FROM memberaccount WHERE id = OLD.no_avs;
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION delete_person_after_member()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM person WHERE no_avs = OLD.no_avs;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Trigger invoqué avant la suppression d'un membre
+CREATE TRIGGER member_before_delete
+BEFORE DELETE ON member
+FOR EACH ROW EXECUTE FUNCTION delete_member_cascade();
+
+CREATE TRIGGER member_after_delete
+AFTER DELETE ON member
+FOR EACH ROW EXECUTE FUNCTION delete_person_after_member();

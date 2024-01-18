@@ -1,14 +1,7 @@
-﻿using MembershipManager.DataModel.People;
-using MembershipManager.Engine;
-using Npgsql;
+﻿using MembershipManager.Engine;
 using NpgsqlTypes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Xml.Linq;
 
 namespace MembershipManager.DataModel.Company
 {
@@ -30,7 +23,7 @@ namespace MembershipManager.DataModel.Company
 
         public void Insert()
         {
-            
+
         }
 
         public static ISql? Select(params object[] pk)
@@ -86,7 +79,12 @@ namespace MembershipManager.DataModel.Company
             {
                 return s.Name == Name;
             }
-            return false; 
+            return false;
+        }
+
+        public static void Delete(params object[] pk)
+        {
+            throw new NotImplementedException();
         }
     }
 }

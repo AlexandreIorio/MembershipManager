@@ -1,9 +1,7 @@
 ﻿using MembershipManager.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Npgsql;
+using System.Security.Principal;
+using System.Transactions;
 
 namespace MembershipManager.DataModel.Financial
 {
@@ -27,6 +25,11 @@ namespace MembershipManager.DataModel.Financial
             return ma == null ? throw new KeyNotFoundException() : (ISql)ma;
         }
 
+        public static void Delete(params object[] pk)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Insert()
         {
             throw new NotImplementedException();
@@ -41,5 +44,10 @@ namespace MembershipManager.DataModel.Financial
         {
             throw new NotImplementedException();
         }
+
+        public double Balance => _transactions?.Sum(t => t.ComputedAmount) ?? 0;
+
+        [IgnoreSql]
+        private List<ITransaction> _transactions => ITransaction.Views(new NpgsqlParameter("@id", NoAvs))?.Cast<ITransaction>().ToList();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using NpgsqlTypes;
-using System.Linq;
 
 namespace MembershipManager.DataModel
 {
@@ -30,7 +29,7 @@ namespace MembershipManager.DataModel
         public Canton? Canton { get; private set; }
 
         [Filtered("Tous", true)]
-        public string? FullName { get=> ToString(); } 
+        public string? FullName { get => ToString(); }
 
         public City() { }
 
@@ -41,10 +40,10 @@ namespace MembershipManager.DataModel
 
         public static ISql? Select(params object[] pk)
         {
-            return Cities.FirstOrDefault(c => c.Id == (int)pk[0]); 
+            return Cities.FirstOrDefault(c => c.Id == (int)pk[0]);
         }
 
-        
+
         public override string ToString()
         {
             return $"{NPA} {Name}";
@@ -63,6 +62,11 @@ namespace MembershipManager.DataModel
         public int CompareTo(object? obj)
         {
             return ToString().CompareTo(obj?.ToString());
+        }
+
+        public static void Delete(params object[] pk)
+        {
+            throw new NotImplementedException();
         }
 
         public static List<City> Cities { get; set; } = new List<City>();

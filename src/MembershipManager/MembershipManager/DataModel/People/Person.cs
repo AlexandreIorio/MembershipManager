@@ -2,7 +2,6 @@
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using NpgsqlTypes;
-using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
@@ -134,6 +133,11 @@ namespace MembershipManager.DataModel.People
                                     INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";
 
             return DbManager.Db.Views<PersonView>(cmd).Cast<SqlViewable>().ToList();
+        }
+
+        public static void Delete(params object[] pk)
+        {
+            throw new NotImplementedException();
         }
     }
 }

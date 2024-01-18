@@ -1,15 +1,9 @@
 ﻿using MembershipManager.DataModel.Financial;
-using MembershipManager.DataModel.People;
 using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Navigation;
 
 namespace MembershipManager.DataModel.Buyable
 {
@@ -81,7 +75,7 @@ namespace MembershipManager.DataModel.Buyable
                 message.AppendLine("Le prix du produit est obligatoire");
                 valid = false;
             }
-           
+
             if (!valid)
             {
                 MessageBox.Show(message.ToString(),
@@ -113,6 +107,11 @@ namespace MembershipManager.DataModel.Buyable
             cmd.CommandText = SqlQuery.ToString();
 
             return DbManager.Db.Views<ConsumptionView>(cmd).Cast<SqlViewable>().ToList();
+        }
+
+        public static void Delete(params object[] pk)
+        {
+            throw new NotImplementedException();
         }
     }
 }

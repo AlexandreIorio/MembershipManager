@@ -1,51 +1,51 @@
-﻿using MembershipManager.View.Financial;
+﻿using MembershipManager.Engine;
+using MembershipManager.View.Financial;
 using MembershipManager.View.People.Member;
-using MembershipManager.View.People.Person;
+using MembershipManager.View.Utils;
 using MembershipManager.View.Utils.ListSelectionForm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace MembershipManager.DataModel.People
 {
     public class MemberView : PersonView
     {
+        [TextFormat("{0:d}")]
         [Displayed("Date d'inscription")]
         public DateTime subscription_date { get; set; }
 
         [Displayed("Structure")]
         public string? structure_name { get; set; }
 
-        #region Events
         public static void EditMember(string? noAvs)
         {
-            if (noAvs is null) throw new ArgumentNullException(nameof(noAvs));
+            ArgumentNullException.ThrowIfNull(noAvs);
             Member? member = (Member?)Member.Select(noAvs);
             if (member is null) return;
-            MemberDetailWindows memberDetailWindow = new MemberDetailWindows(member);
+            MemberDetailWindows memberDetailWindow = new(member);
             memberDetailWindow.ShowDialog();
         }
 
         public static void NewMember()
         {
-            MemberDetailWindows memberDetailWindow = new MemberDetailWindows(new Member());
+            MemberDetailWindows memberDetailWindow = new(new Member());
             memberDetailWindow.ShowDialog();
         }
 
-        public static ContextMenu ContextMenu()
+        public static ContextMenu ContextMenu(ListSelection viewer)
         {
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem edit = new MenuItem();
-            edit.Header = "Modifier";
+            ContextMenu contextMenu = new();
+            MenuItem edit = new()
+            {
+                Header = "Modifier"
+            };
             edit.Click += (sender, e) =>
             {
                 MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);
                 if (member is null) return;
 
-                MemberView.EditMember(member.no_avs);
+                EditMember(member.no_avs);
+                viewer.UpdateList(Member.Views().Cast<MemberView>());
             };
             contextMenu.Items.Add(edit);
 
@@ -53,10 +53,13 @@ namespace MembershipManager.DataModel.People
             delete.Header = "Supprimer";
             delete.Click += (sender, e) =>
             {
-                string? noAvs = (sender as MemberView)?.no_avs;
-                if (noAvs is null) return;
-                //Member.Delete(noAvs);
+                MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);
+                if (member is null) return;
+                if (!CanDeleteMember(member.no_avs)) return;
+                ISql.Delete(typeof(Member), member.no_avs);
+                viewer.UpdateList(Member.Views().Cast<MemberView>());
             };
+
             contextMenu.Items.Add(delete);
 
             MenuItem account = new MenuItem();
@@ -64,6 +67,7 @@ namespace MembershipManager.DataModel.People
             account.Click += (sender, e) =>
             {
                 MemberView? memberView = GetContextMenuSelectedObject((MenuItem)sender);
+                if (memberView is null) return;
                 Member? member = (Member?)Member.Select(memberView?.no_avs);
 
                 if (member is null) return;
@@ -80,21 +84,29 @@ namespace MembershipManager.DataModel.People
         {
             // Get element from menu item
             if (menuItem == null) return null;
-            ContextMenu? contextMenu = menuItem.Parent as ContextMenu;
-            if (contextMenu == null) return null;
+            if (menuItem.Parent is not ContextMenu contextMenu) return null;
 
-            ListView? list = contextMenu.PlacementTarget as ListView;
-            if (list == null) return null;
+            if (contextMenu.PlacementTarget is not ListView list) return null;
 
-            MemberView? member = list.SelectedItem as MemberView;
-            if (member == null) return null;
+            if (list.SelectedItem is not MemberView member) return null;
 
             if (member.no_avs is null) return null;
             return member;
         }
 
-        #endregion
+        private static bool CanDeleteMember(string? noAvs)
+        {
+            ArgumentNullException.ThrowIfNull(noAvs);
+            Member? member = (Member?)Member.Select(noAvs);
+            if (member is null) return false;
+            if (member.Account?.Balance != 0)
+            {
+                MessageBox.Show("Impossible de supprimer un membre avec un solde différent de 0");
+                return false;
+            }
+
+            return true;
+        }
     }
-
-
 }
+
