@@ -12,6 +12,7 @@ namespace MembershipManager.DataModel.Buyable
 {
     class ProductView : SqlViewable, Ilistable
     {
+        public int? id { get; set; }
 
         [Filtered("Code")]
         [Displayed("Code")]
@@ -24,6 +25,7 @@ namespace MembershipManager.DataModel.Buyable
         public int? Amount { get; set; }
 
         [IgnoreSql]
+        [TextFormat("{0:N2}")]
         [Filtered("Prix")]
         [Displayed("Prix")]
         public double ComputedAmount { get => (Amount ?? 0) / 100.0; }

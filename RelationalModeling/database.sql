@@ -91,15 +91,16 @@ CREATE TABLE memberaccount (
 
 CREATE TABLE product
 (
-code varchar(50),
-amount int, --cents
-name varchar(50),
+    id SERIAL,
+    code varchar(50),
+    amount int, --cents
+    name varchar(50),
 
-PRIMARY KEY(code)
+PRIMARY KEY(id)
 );
 
 CREATE TABLE consumption(
-    id int,
+    id SERIAL,
     name varchar(50),
     account_id varchar(13) NOT NULL,
     code varchar(50) NOT NULL,
@@ -206,17 +207,6 @@ issue_date date,
 
 PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES paiement(id)
-);
-
-
-CREATE TABLE consumable
-(
-code varchar(50) NOT NULL,
-franchise_id int NOT NULL,
-
-PRIMARY KEY (code),
-FOREIGN KEY(code) REFERENCES product(code),
-FOREIGN KEY (franchise_id) REFERENCES franchise(id)
 );
 
 -- IV --

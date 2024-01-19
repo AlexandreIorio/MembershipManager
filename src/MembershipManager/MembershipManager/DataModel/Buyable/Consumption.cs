@@ -8,17 +8,33 @@ using System.Windows;
 namespace MembershipManager.DataModel.Buyable
 {
     [DbTableName("consumption")]
-    class Consumption : Product, ISql, Ilistable
+    public class Consumption : Product, ISql, Ilistable
     {
 
         [DbAttribute("date")]
-        public DateTime? Date { get; set; }
+        public DateTime? Date { get; set; } = DateTime.Now;
 
         [DbRelation("account_id")]
         public MemberAccount? Account { get; set; }
 
-        public Consumption(Product product) : base()
-        {}
+        public Consumption() : base()
+        {
+
+        }
+
+        public Consumption(Product product, MemberAccount memberAccount) : base(product)
+        {
+            Account = memberAccount;
+        }
+
+        public void SetProduct(Product product)
+        {
+            if (product is null) return;
+            Code = product.Code;
+            Name = product.Name;
+            Amount = product.Amount;
+
+        }
 
         public new void Update()
         {

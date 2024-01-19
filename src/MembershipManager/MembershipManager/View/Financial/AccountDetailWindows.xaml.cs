@@ -58,9 +58,14 @@ namespace MembershipManager.View.Financial
                 paiementDetailWindows.ShowDialog();
                 RefreshTransactions();
             }
-            else if (TransactionsDataGrid.SelectedItem is ConsumptionView consumption)
+            else if (TransactionsDataGrid.SelectedItem is ConsumptionView consumptionView)
             {
-                MessageBox.Show("Consumption selected");
+                if (consumptionView is null) return;
+                Consumption? consumption = Consumption.Select(consumptionView.Id ?? throw new NullReferenceException("The id of consumption can't be null")) as Consumption;
+                if (consumption is null) return;
+                ConsumptionDetailWindows consumptionDetailWindows = new ConsumptionDetailWindows(consumption);
+                consumptionDetailWindows.ShowDialog();
+                RefreshTransactions();
             }
 
         }
@@ -74,8 +79,10 @@ namespace MembershipManager.View.Financial
 
         private void ButtonAddConsuption_Click(object sender, RoutedEventArgs e)
         {
-            ConsumableDetailWindows consumableDetailWindows = new ConsumableDetailWindows();
-            consumableDetailWindows.ShowDialog();
+            Consumption consumption = new Consumption(new Product(), Account);
+            ConsumptionDetailWindows consumptionDetailWindows = new ConsumptionDetailWindows(consumption);
+            consumptionDetailWindows.ShowDialog();
+            RefreshTransactions();
         }
     }
 }

@@ -31,6 +31,7 @@ namespace MembershipManager.View.Buyable
             Product = product;
             InitializeComponent();
             this.DataContext = Product;
+            TextBoxAmount.Text = ComputedAmount.ToString();
         }
 
         private void ButtonMember_Click(object sender, RoutedEventArgs e)
@@ -78,6 +79,14 @@ namespace MembershipManager.View.Buyable
                 TextBoxAmount.Clear();
                 TextBoxAmount.Focus();
             }
+        }
+
+        public void UpdateProduct(Product product)
+        {
+            Product = product;
+            TextBoxCode.Text = Product.Code;
+            TextBoxName.Text = Product.Name;
+            TextBoxAmount.Text = ComputedAmount.ToString();
         }
     }
 }

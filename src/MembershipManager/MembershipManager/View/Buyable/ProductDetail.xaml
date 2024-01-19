@@ -27,7 +27,7 @@
             <Label Grid.Row="0">Code</Label>
             <TextBox x:Name="TextBoxCode" Grid.Row="0" Grid.Column="1" Text="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Grid.Row="1">Nom du produit</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox x:Name="TextBoxName" Grid.Row="1" Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Grid.Row="2">Prix</Label>
             <TextBox x:Name="TextBoxAmount" Grid.Row="2" Grid.Column="1" Width="80" HorizontalAlignment="Left" TextAlignment="Right" TextChanged="TextBoxAmount_TextChanged"/>
 
