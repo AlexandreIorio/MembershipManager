@@ -84,8 +84,8 @@ namespace MembershipManager.Engine
             int i = 0;
             foreach (PropertyInfo p in type.GetProperties())
             {
-                DbPrimaryKey? dbPrimaryKey = p.GetCustomAttribute<DbPrimaryKey>();
                 if (i == pk.Length) break;
+                DbPrimaryKey? dbPrimaryKey = p.GetCustomAttribute<DbPrimaryKey>();
                 if (dbPrimaryKey is null) continue;
                 NpgsqlParameter param = new NpgsqlParameter($"@value{i}", dbPrimaryKey.PkType, dbPrimaryKey.Size) { Value = pk[i] };
                 cmd.Parameters.Add(param);
@@ -153,6 +153,8 @@ namespace MembershipManager.Engine
             //  get the type of the object
             Type type = typeof(T);
 
+            bool inherit = type.GetCustomAttribute<DbInherit>() is not null;
+
             // Create the commandText
             string tableName = type.GetCustomAttribute<DbTableName>()?.Name ?? throw new MissingMemberException();
             StringBuilder sbAtt = new($"INSERT INTO {tableName} (");
@@ -164,8 +166,8 @@ namespace MembershipManager.Engine
             {
                 IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
 
-                // Ignore properties if from base class and not primary key
-                if (p.DeclaringType != type && !constraints.Any(x => x is DbPrimaryKey))
+                // Ignore properties if from base class if inherit and not primary key
+                if (p.DeclaringType != type && inherit && !constraints.Any(x => x is DbPrimaryKey))
                     continue;
 
                 IEnumerable<DbNameable> attributes = p.GetCustomAttributes<DbNameable>();
@@ -173,7 +175,7 @@ namespace MembershipManager.Engine
                 if (attributes.Count() > 0)
                 {
                     object? value = p.GetValue(obj);
-                    if (value is null) continue;
+                    if (value is null) continue ;
 
                     //Add property name to query
                     sbAtt.Append(attributes.First().Name).Append(", ");
@@ -223,6 +225,8 @@ namespace MembershipManager.Engine
             //  get the type of the object
             Type type = typeof(T);
 
+            bool inherit = type.GetCustomAttribute<DbInherit>() is not null;
+
             // Create the commandText
             string tableName = type.GetCustomAttribute<DbTableName>()?.Name ?? throw new MissingMemberException();
             StringBuilder sbAtt = new($"UPDATE {tableName} SET ");
@@ -234,7 +238,7 @@ namespace MembershipManager.Engine
                 IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
 
                 // Ignore properties if from base class and not primary key
-                if (p.DeclaringType != type || constraints.Any(x => x is DbPrimaryKey))
+                if ((p.DeclaringType != type && inherit) || constraints.Any(x => x is DbPrimaryKey))
                     continue;
 
                 DbNameable? attribute = p.GetCustomAttribute<DbNameable>();

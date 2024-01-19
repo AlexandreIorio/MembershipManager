@@ -72,4 +72,15 @@
         <Setter Property="FontSize" Value="20"/>
     </Style>
 
+    <Style x:Key="Monetary" TargetType="Label">
+        <Setter Property="ContentStringFormat" Value="{}{0:N2}"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+    </Style>
+
+    <Style x:Key="Detail" TargetType="Window">
+        <Setter Property="Width" Value="380"/>
+        <Setter Property="Height" Value="450"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+    </Style>
+
 </ResourceDictionary>

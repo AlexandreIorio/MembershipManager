@@ -104,10 +104,11 @@ namespace MembershipManager.Engine
         {
 
             DbInherit? inheritType = type.GetCustomAttributes<DbInherit>().FirstOrDefault();
+            bool inherit = inheritType is not null;
             object? newObject;
 
             //Check if type inherit from another type
-            if (inheritType is not null)
+            if (inherit)
             {
                 //Get primary keys of object
                 List<string> pks = new();
@@ -135,8 +136,8 @@ namespace MembershipManager.Engine
 
             foreach (var property in type.GetProperties())
             {
-                // Ignore properties if from base class
-                if (property.DeclaringType != type)
+                // Ignore properties if from base class and inherit is true
+                if (property.DeclaringType != type && inherit)
                     continue;
 
 

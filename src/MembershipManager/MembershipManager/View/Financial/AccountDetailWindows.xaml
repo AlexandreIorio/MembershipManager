@@ -9,11 +9,6 @@
         Title="AccountDetailWindows" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <sys:Double x:Key="ButtonWidth">150</sys:Double>
-        <Style x:Key="Monetary" TargetType="Label">
-            <Setter Property="ContentStringFormat" Value="{}{0:N2}"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-        </Style>
-        
     </Window.Resources>
 
     <Grid>
@@ -74,7 +69,7 @@
 
 
         </Grid>
-        <DataGrid Grid.Row="2" x:Name="TransactionsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False" MouseDoubleClick="TransactionsDataGrid_MouseDoubleClick">
+        <DataGrid Grid.Row="2" x:Name="TransactionsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False" MouseDoubleClick="TransactionsDataGrid_MouseDoubleClick" KeyUp="TransactionsDataGrid_KeyUp">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Binding="{Binding Date , StringFormat='dd.MM.yyyy'}" />
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />

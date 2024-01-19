@@ -8,50 +8,54 @@ using System.Windows;
 namespace MembershipManager.DataModel.Buyable
 {
     [DbTableName("consumption")]
-    class Consumption : ISql, Ilistable
+    public class Consumption : Product, ISql, Ilistable
     {
-        [DbPrimaryKey(NpgsqlTypes.NpgsqlDbType.Integer)]
-        [DbAttribute("id")]
-        public int? Id { get; set; }
 
         [DbAttribute("date")]
-        public DateTime? Date { get; set; }
-
-        [DbAttribute("name")]
-        public string? Name { get; }
-
-        [DbAttribute("code")]
-        public string? Code { get; }
-
-        [DbAttribute("amount")]
-        public int? Amount { get; }
+        public DateTime? Date { get; set; } = DateTime.Now;
 
         [DbRelation("account_id")]
         public MemberAccount? Account { get; set; }
 
-        public Consumption(Product product)
+        public Consumption() : base()
         {
-            this.Code = product.Code;
-            this.Name = product.Name;
-            this.Amount = product.Amount;
+
         }
 
-        public void Insert()
+        public Consumption(Product product, MemberAccount memberAccount) : base(product)
         {
-            throw new NotImplementedException();
+            Account = memberAccount;
         }
 
-        public void Update()
+        public void SetProduct(Product product)
         {
-            throw new NotImplementedException();
+            if (product is null) return;
+            Code = product.Code;
+            Name = product.Name;
+            Amount = product.Amount;
+
         }
 
-        public static ISql? Select(params object[] pk)
+        public new void Update()
         {
-            throw new NotImplementedException();
+            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Consumption>(this));
         }
 
-        public bool Validate()
+        public new void Insert()
+        {
+            if (Validate()) DbManager.Db?.Send(ISql.InsertQuery<Consumption>(this));
+        }
+
+        public new static ISql? Select(params object[] pk)
+        {
+            if (pk.Length != 1) throw new ArgumentException();
+            Consumption? c = ISql.Get<Consumption>(pk[0]);
+            if (c == null) throw new KeyNotFoundException();
+
+            return c;
+        }
+
+        public new bool Validate()
         {
             StringBuilder message = new StringBuilder();
             bool valid = true;
@@ -109,9 +113,9 @@ namespace MembershipManager.DataModel.Buyable
             return DbManager.Db.Views<ConsumptionView>(cmd).Cast<SqlViewable>().ToList();
         }
 
-        public static void Delete(params object[] pk)
+        public new static void Delete(params object[] pk)
         {
-            throw new NotImplementedException();
+            ISql.Erase<Consumption>(pk);
         }
     }
 }
