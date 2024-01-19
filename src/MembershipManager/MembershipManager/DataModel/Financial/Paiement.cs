@@ -25,6 +25,8 @@ namespace MembershipManager.DataModel.Financial
         [DbAttribute("amount")]
         public int? Amount { get; set; }
 
+        [DbAttribute("payed")]
+        public bool Payed { get; set; } = false;
 
         public Paiement() { }
         public Paiement(Paiement paiement)

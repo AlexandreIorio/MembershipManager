@@ -103,12 +103,14 @@ CREATE TABLE consumption(
     id SERIAL,
     name varchar(50),
     account_id varchar(13) NOT NULL,
+    bill_id int,
     code varchar(50) NOT NULL,
     amount int, --cents
     date date,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (account_id) REFERENCES memberAccount(id)
+    FOREIGN KEY (account_id) REFERENCES memberAccount(id),
+    FOREIGN KEY (bill_id) REFERENCES bill(id)
 );
 
 CREATE TABLE users(
@@ -185,6 +187,7 @@ CREATE TABLE paiement
 id SERIAL,
 account_id varchar(13) NOT NULL,
 amount int NOT NULL,
+payed boolean,
 date date NOT NULL,
 
 PRIMARY KEY (id),
@@ -204,7 +207,8 @@ CREATE TABLE bill
 (
 id int,
 issue_date date,
-payed boolean,
+payed_date date,
+
 
 PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES paiement(id)
