@@ -1,0 +1,29 @@
+﻿<Window x:Class="MembershipManager.View.Buyable.ConsumableDetailWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MembershipManager.View.Buyable"
+        mc:Ignorable="d"
+        Title="ConsumableDetailWindows" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Détail de la transaction" Style="{StaticResource LabelTitle}"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Frame  x:Name="FrameDetail"/>
+            <Frame Grid.Column="1" x:Name="FrameList"/>
+        </Grid>
+        <WrapPanel Grid.Row="2">
+            <Button x:Name="ButtonSave" Content="Enregistrer" IsDefault="True" Click="ButtonSave_Click"/>
+            <Button x:Name="ButtonCancel"  Content="Annuler" IsCancel="True"/>
+        </WrapPanel>
+    </Grid>
+</Window>

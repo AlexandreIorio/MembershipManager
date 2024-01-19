@@ -21,4 +21,10 @@
     <Folder Include="View\Utils\UserControls\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="View\Utils\ListSelectionForm\ListSelectionPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
