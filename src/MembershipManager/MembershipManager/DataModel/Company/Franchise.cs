@@ -8,6 +8,8 @@ namespace MembershipManager.DataModel.Company
     [DbTableName("franchise")]
     public class Franchise : ISql
     {
+        public static Franchise? CurrentFranchise { get; set; } = (Franchise)Select(1); //TODO: Remove this value when the login is implemented
+
         [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
         public int Id { get; set; }

@@ -33,7 +33,7 @@ FOREIGN KEY (city_id) REFERENCES city(id)
 );
 
 CREATE TABLE franchise (
-    id int,
+    id SERIAL,
     structure_name varchar(50) NOT NULL,
     city_id int NOT NULL,
     address varchar(50),
@@ -209,6 +209,15 @@ PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES paiement(id)
 );
 
+CREATE TABLE settings
+(
+    id int,
+    payment_terms int,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (id) REFERENCES franchise(id)
+);
+
 -- IV --
 
 CREATE VIEW OutstandingBills AS
@@ -221,6 +230,16 @@ FROM person p
 WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant à payer
 AND b.issue_date IS NOT NULL;
 
+-- Création de la fonction pour insérer un settings
+CREATE OR REPLACE FUNCTION create_settings()
+    RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO settings (id, payment_terms)
+    VALUES (NEW.id, 30);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Création de la fonction pour insérer un memberAccount
 CREATE OR REPLACE FUNCTION create_member_account()
 RETURNS TRIGGER AS $$
@@ -230,6 +249,11 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Création du déclencheur pour appeler la fonction lors de l'insertion d'une nouvelle franchise
+CREATE TRIGGER franchise_after_create
+    AFTER INSERT ON franchise
+    FOR EACH ROW EXECUTE FUNCTION create_settings();
 
 -- Création du déclencheur pour appeler la fonction lors de l'insertion dans la table member
 CREATE TRIGGER member_after_create
