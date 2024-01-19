@@ -202,8 +202,9 @@ FOREIGN KEY (id) REFERENCES paiement(id)
 
 CREATE TABLE bill
 (
-    id int,
+id int,
 issue_date date,
+payed boolean,
 
 PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES paiement(id)
