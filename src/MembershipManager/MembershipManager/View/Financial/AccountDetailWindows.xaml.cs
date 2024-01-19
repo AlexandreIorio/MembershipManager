@@ -1,6 +1,7 @@
 ﻿using MembershipManager.DataModel.Buyable;
 using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
+using MembershipManager.View.Buyable;
 using Npgsql;
 using System.Windows;
 using System.Windows.Input;
@@ -24,21 +25,7 @@ namespace MembershipManager.View.Financial
             }
         }
 
-        public double Balance
-        {
-            get
-            {
-                double balance = 0;
-                if (Transactions != null)
-                {
-                    foreach (ITransaction t in Transactions)
-                    {
-                        balance += t.ComputedAmount;
-                    }
-                }
-                return balance;
-            }
-        }
+        public double Balance => Account?.Balance ?? 0;
 
         public AccountDetailWindows(Member member)
         {
@@ -87,7 +74,8 @@ namespace MembershipManager.View.Financial
 
         private void ButtonAddConsuption_Click(object sender, RoutedEventArgs e)
         {
-
+            ConsumableDetailWindows consumableDetailWindows = new ConsumableDetailWindows();
+            consumableDetailWindows.ShowDialog();
         }
     }
 }

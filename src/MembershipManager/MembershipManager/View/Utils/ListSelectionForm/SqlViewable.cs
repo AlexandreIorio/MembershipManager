@@ -1,4 +1,6 @@
-﻿namespace MembershipManager.View.Utils.ListSelectionForm
+﻿using Npgsql;
+
+namespace MembershipManager.View.Utils.ListSelectionForm
 {
     public abstract class SqlViewable
     {

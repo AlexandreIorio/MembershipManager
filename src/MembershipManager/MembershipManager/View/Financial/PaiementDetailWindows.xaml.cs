@@ -18,6 +18,7 @@ namespace MembershipManager.View.Financial
         {
             InitializeComponent();
             _paiement = new PaiementDetail(p);
+            _paiement.TextBoxAmount.Focus();
             MainFrame.Navigate(_paiement);
             _IsEditMode = p.Id is not null;
         }

@@ -93,7 +93,6 @@ CREATE TABLE product
 (
 code varchar(50),
 amount int, --cents
-
 name varchar(50),
 
 PRIMARY KEY(code)
