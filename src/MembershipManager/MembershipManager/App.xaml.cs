@@ -1,5 +1,7 @@
 ﻿using MembershipManager.DataModel;
+using MembershipManager.DataModel.Company;
 using MembershipManager.Engine;
+using MembershipManager.Resources;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
@@ -23,6 +25,7 @@ namespace MembershipManager
         {
             InitialisationActions.Add(new Tuple<Action, string>(() => { Canton.Cantons = ISql.GetAll<Canton>(); }, "Chargement des cantons"));
             InitialisationActions.Add(new Tuple<Action, string>(() => { City.Cities = ISql.GetAll<City>(); }, "Chargement des villes"));
+            InitialisationActions.Add(new Tuple<Action, string>(() => { Settings.Values = (Settings)Settings.Select(Franchise.CurrentFranchise.Id);  }, "Chargement des settings"));
         }
         protected override async void OnStartup(StartupEventArgs e)
         {
