@@ -14,7 +14,7 @@ namespace MembershipManager.DataModel.Company
         [DbAttribute("id")]
         public int Id { get; set; }
 
-        [DbAttribute("strucutre_name")]
+        [DbAttribute("structure_name")]
         public string? StructureName { get; set; }
 
         [DbAttribute("address")]
@@ -64,13 +64,6 @@ namespace MembershipManager.DataModel.Company
 
         public void Update()
         {
-
-            //NpgsqlCommand cmd = new NpgsqlCommand();
-            //cmd.CommandText = $"UPDATE franchise SET {ISql.InsertQuery(typeof(Franchise))} WHERE 'id' = @where";
-            //ISql.ComputeCommandeWithValues(cmd, this);
-            //NpgsqlParameter param = new NpgsqlParameter($"@where", Id);
-            //cmd.Parameters.Add(param);
-            //DbManager.Db?.Send(cmd);
 
         }
 

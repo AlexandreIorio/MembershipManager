@@ -4,12 +4,14 @@ using MembershipManager.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MembershipManager.Resources
 {
-    [DbTableName("setting")]
+    [DbTableName("settings")]
     public class Settings : ISql
     {
         public static Settings Values { get; internal set; }
@@ -29,7 +31,7 @@ namespace MembershipManager.Resources
 
         public static ISql? Select(params object[] pk)
         {
-            Settings? s = ISql.Get<Settings>();
+            Settings? s = ISql.Get<Settings>(pk);
             return s;
         }
 
@@ -40,13 +42,31 @@ namespace MembershipManager.Resources
 
         public void Update()
         {
-            throw new NotImplementedException();
+            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Settings>(this));
         }
 
         public bool Validate()
         {
-            throw new NotImplementedException();
+            StringBuilder message = new StringBuilder();
+            bool valid = true;
+            if (PaymentTerms is null)
+            {
+                message.AppendLine("Le délai de paiement est obligatoire");
+                valid = false;
+            }
+            if (Id is null)
+            {
+                message.AppendLine("L'id est obligatoire");
+                valid = false;
+            }
+
+            if (!valid)
+            {
+                MessageBox.Show(message.ToString(), "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return valid;
+
         }
-        #endregion
+
     }
 }
