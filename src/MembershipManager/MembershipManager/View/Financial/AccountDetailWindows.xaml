@@ -69,7 +69,7 @@
 
 
         </Grid>
-        <DataGrid Grid.Row="2" x:Name="TransactionsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False" MouseDoubleClick="TransactionsDataGrid_MouseDoubleClick">
+        <DataGrid Grid.Row="2" x:Name="TransactionsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False" MouseDoubleClick="TransactionsDataGrid_MouseDoubleClick" KeyUp="TransactionsDataGrid_KeyUp">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Binding="{Binding Date , StringFormat='dd.MM.yyyy'}" />
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />

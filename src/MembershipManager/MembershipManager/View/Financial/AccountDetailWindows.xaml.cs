@@ -3,6 +3,7 @@ using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
 using MembershipManager.View.Buyable;
 using Npgsql;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -83,6 +84,33 @@ namespace MembershipManager.View.Financial
             ConsumptionDetailWindows consumptionDetailWindows = new ConsumptionDetailWindows(consumption);
             consumptionDetailWindows.ShowDialog();
             RefreshTransactions();
+        }
+
+        private void TransactionsDataGrid_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                if (TransactionsDataGrid.SelectedItems.Count == 0) return;
+
+                foreach (ITransaction transaction in TransactionsDataGrid.SelectedItems)
+                {
+                    if (transaction is PaiementView paiementView)
+                    {
+                        if (paiementView is null) return;
+                        Paiement? paiement = Paiement.Select(paiementView.id ?? throw new NullReferenceException("The id of paiement can't be null")) as Paiement;
+                        if (paiement is null) return;
+                        Paiement.Delete(paiement.Id);
+                    }
+                    else if (transaction is ConsumptionView consumptionView)
+                    {
+                        if (consumptionView is null) return;
+                        Consumption? consumption = Consumption.Select(consumptionView.Id ?? throw new NullReferenceException("The id of consumption can't be null")) as Consumption;
+                        if (consumption is null) return;
+                        Consumption.Delete(consumption.Id);
+                    }
+                }
+                RefreshTransactions();
+            }
         }
     }
 }

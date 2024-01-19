@@ -116,7 +116,7 @@ namespace MembershipManager.DataModel.Financial
 
         public static void Delete(params object[] pk)
         {
-            throw new NotImplementedException();
+            ISql.Erase<Paiement>(pk);
         }
     }
 }

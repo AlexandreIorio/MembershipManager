@@ -35,6 +35,7 @@ namespace MembershipManager.View.Buyable
                 if (_listSelection.List.SelectedItem is null) return;
                 ButtonSave_Click(sender, e);
             };
+
             FrameList.Navigate(_listSelection);
 
             Consumption = consumption;
