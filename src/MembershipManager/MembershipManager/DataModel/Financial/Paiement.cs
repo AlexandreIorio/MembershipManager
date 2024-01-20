@@ -26,10 +26,10 @@ namespace MembershipManager.DataModel.Financial
         public int? Amount { get; set; }
 
         [DbAttribute("payed")]
-        public bool Payed { get; set; } = false;    
+        public bool Payed { get; set; } = false;
 
         public Paiement() { }
-       
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public static ISql? Select(params object[] pk)
@@ -102,7 +102,7 @@ namespace MembershipManager.DataModel.Financial
             {
                 SqlQuery.Append(" WHERE paiement.account_id = @id AND Payed = @payed");
                 cmd.Parameters.AddRange(sqlParam);
-            } 
+            }
             else if (sqlParam.Length == 1 && sqlParam[0].ParameterName.Equals("@id"))
             {
                 SqlQuery.Append(" WHERE paiement.account_id = @id");
@@ -113,8 +113,8 @@ namespace MembershipManager.DataModel.Financial
                 SqlQuery.Append(" WHERE Payed = @payed");
                 cmd.Parameters.Add(sqlParam[0]);
             }
-           
-            
+
+
 
             cmd.CommandText = SqlQuery.ToString();
 

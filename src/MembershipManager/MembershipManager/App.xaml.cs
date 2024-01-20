@@ -25,7 +25,7 @@ namespace MembershipManager
         {
             InitialisationActions.Add(new Tuple<Action, string>(() => { Canton.Cantons = ISql.GetAll<Canton>(); }, "Chargement des cantons"));
             InitialisationActions.Add(new Tuple<Action, string>(() => { City.Cities = ISql.GetAll<City>(); }, "Chargement des villes"));
-            InitialisationActions.Add(new Tuple<Action, string>(() => { Settings.Values = (Settings)Settings.Select(Franchise.CurrentFranchise.Id);  }, "Chargement des settings"));
+            InitialisationActions.Add(new Tuple<Action, string>(() => { Settings.Values = (Settings)Settings.Select(Franchise.CurrentFranchise.Id); }, "Chargement des settings"));
         }
         protected override async void OnStartup(StartupEventArgs e)
         {

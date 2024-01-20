@@ -1,6 +1,5 @@
 ﻿using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
-using MembershipManager.Resources;
 using MembershipManager.View.Utils;
 using System.Windows;
 using System.Windows.Controls;

@@ -128,12 +128,12 @@ namespace MembershipManager.DataModel.Financial
                 cmd.CommandText = @"SELECT insert_paiement_and_bill(@amount, @account_id, @date, @payed, @issue_date, @payed_date, @payed_amount);";
 
                 cmd.Parameters.AddWithValue("@amount", Amount);
-                cmd.Parameters.AddWithValue("@account_id",NpgsqlTypes.NpgsqlDbType.Varchar,13, Account.NoAvs);
+                cmd.Parameters.AddWithValue("@account_id", NpgsqlTypes.NpgsqlDbType.Varchar, 13, Account.NoAvs);
                 cmd.Parameters.AddWithValue("@date", NpgsqlTypes.NpgsqlDbType.Date, Date);
                 cmd.Parameters.AddWithValue("@payed", Payed);
 
                 cmd.Parameters.AddWithValue("@issue_date", NpgsqlTypes.NpgsqlDbType.Date, IssueDate);
-                cmd.Parameters.AddWithValue("@payed_date", NpgsqlTypes.NpgsqlDbType.Date,PayedDate is null ? DBNull.Value : PayedDate);
+                cmd.Parameters.AddWithValue("@payed_date", NpgsqlTypes.NpgsqlDbType.Date, PayedDate is null ? DBNull.Value : PayedDate);
                 cmd.Parameters.AddWithValue("@payed_amount", NpgsqlTypes.NpgsqlDbType.Integer, PayedAmount is null ? DBNull.Value : PayedAmount);
 
                 Id = (int?)DbManager.Db?.InsertReturnigIds(cmd)[0][0];

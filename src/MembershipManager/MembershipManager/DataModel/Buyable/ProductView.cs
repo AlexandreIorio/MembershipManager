@@ -1,12 +1,6 @@
-﻿using MembershipManager.DataModel.People;
-using MembershipManager.Engine;
+﻿using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MembershipManager.DataModel.Buyable
 {

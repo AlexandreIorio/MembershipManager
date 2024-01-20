@@ -1,11 +1,5 @@
 ﻿using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MembershipManager.DataModel.Financial
 {
