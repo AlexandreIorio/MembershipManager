@@ -133,12 +133,29 @@ namespace MembershipManager.View.Financial
 
         private void ButtonBuyEntry_Click(object sender, RoutedEventArgs e)
         {
+            if (EntryTypeComboBox.SelectedItem is null)
+            {
+                MessageBox.Show("Veuillez sélectionner un type d'entrée", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             EntryView entry = (EntryView)EntryTypeComboBox.SelectedItem;
-            Account.AddEntry(entry);
-            Consumption consumption = new(entry.ToProduct(), Account);
-            consumption.Insert();
-            RefreshTransactions();
+
+            MessageBoxResult result = ValidateEntry(entry);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                Account.AddEntry(entry);
+                Consumption consumption = new(entry.ToProduct(), Account);
+                consumption.Insert();
+                RefreshTransactions();
+            }
+        }
+
+        private MessageBoxResult ValidateEntry(EntryView entry)
+        {
+            MessageBoxResult result = MessageBox.Show($"Voulez-vous acheter {entry.ComputedName} pour {entry.ComputedAmount} CHF ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return result;
         }
     }
 }
