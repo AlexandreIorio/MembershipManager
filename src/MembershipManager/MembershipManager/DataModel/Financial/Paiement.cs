@@ -26,17 +26,10 @@ namespace MembershipManager.DataModel.Financial
         public int? Amount { get; set; }
 
         [DbAttribute("payed")]
-        public bool Payed { get; set; } = false;
+        public bool Payed { get; set; } = false;    
 
         public Paiement() { }
-        public Paiement(Paiement paiement)
-        {
-            this.Id = paiement.Id;
-            this.Amount = paiement.Amount;
-            this.Date = paiement.Date;
-            this.Account = paiement.Account;
-        }
-
+       
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public static ISql? Select(params object[] pk)
@@ -94,22 +87,34 @@ namespace MembershipManager.DataModel.Financial
 
         public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            if (sqlParam.Length > 1) throw new ArgumentException();
+            if (sqlParam.Length > 2) throw new ArgumentException();
 
             NpgsqlCommand cmd = new NpgsqlCommand();
 
-            StringBuilder SqlQuery = new StringBuilder(@"SELECT paiement.id, paiement.account_id, amount, date, p.first_name, p.last_name
+            StringBuilder SqlQuery = new StringBuilder(@"SELECT paiement.id, paiement.payed, paiement.account_id, amount, date, p.first_name, p.last_name
                                     FROM paiement
                                     INNER JOIN  memberaccount ON paiement.account_id = memberaccount.id
                                     INNER JOIN member AS m ON memberaccount.id = m.no_avs
                                     INNER JOIN person AS p ON m.no_avs = p.no_avs");
 
 
-            if (sqlParam.Length == 1)
+            if (sqlParam.Length == 2)
+            {
+                SqlQuery.Append(" WHERE paiement.account_id = @id AND Payed = @payed");
+                cmd.Parameters.AddRange(sqlParam);
+            } 
+            else if (sqlParam.Length == 1 && sqlParam[0].ParameterName.Equals("@id"))
             {
                 SqlQuery.Append(" WHERE paiement.account_id = @id");
                 cmd.Parameters.Add(sqlParam[0]);
             }
+            else if (sqlParam.Length == 1 && sqlParam[0].ParameterName.Equals("@payed"))
+            {
+                SqlQuery.Append(" WHERE Payed = @payed");
+                cmd.Parameters.Add(sqlParam[0]);
+            }
+           
+            
 
             cmd.CommandText = SqlQuery.ToString();
 

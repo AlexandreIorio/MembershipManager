@@ -17,6 +17,13 @@ namespace MembershipManager.DataModel.Financial
         [DbAttribute("payed_date")]
         public DateTime? PayedDate { get; set; }
 
+        [DbAttribute("payed_amount")]
+        public int? PayedAmount { get; set; }
+
+        public Bill() : base()
+        {
+        }
+
         /// <summary>
         /// This method is used to generate a bill for a member and assign consumptions to it
         /// </summary>
@@ -65,7 +72,7 @@ namespace MembershipManager.DataModel.Financial
             for (int i = 0; i < consumptionIds.Count(); i++)
             {
                 if (consumptionIds[i] is null) continue;
-                sb.Append($"UPDATE consumption SET bill_id = @bill_id WHERE id = @id{i}");
+                sb.Append($"UPDATE consumption SET bill_id = @bill_id WHERE id = @id{i};");
                 cmd.Parameters.AddWithValue($"@id{i}", consumptionIds[i]);
             }
 
@@ -80,7 +87,6 @@ namespace MembershipManager.DataModel.Financial
             Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand();
             cmd.CommandText = "SELECT * FROM consumption WHERE account_id = @account_id";
             cmd.Parameters.AddWithValue("@account_id", Account.NoAvs);
-            cmd.Prepare();
             return DbManager.Db.Recieve<Consumption>(cmd);
         }
 
@@ -106,6 +112,8 @@ namespace MembershipManager.DataModel.Financial
 
         public new static ISql? Select(params object[] pk)
         {
+
+            if (pk[0] is DBNull) return null;
             if (pk.Length != 1) throw new ArgumentException();
             Paiement? p = ISql.Get<Paiement>(pk[0]);
             return p == null ? throw new KeyNotFoundException() : (ISql)p;
@@ -116,14 +124,17 @@ namespace MembershipManager.DataModel.Financial
             if (Validate())
             {
                 Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand();
-                cmd.CommandText = "INSERT INTO bill (amount, account_id, date, issue_date, payed_date, payed) VALUES (@amount, @account_id, @date, @issue_date, @payed_date, @payed) RETURNING id";
+                cmd.CommandText = @"INSERT INTO paiement (amount, account_id, date, payed) VALUES (@amount, @account_id, @date, @payed);
+                                    INSERT INTO bill (issue_date, payed_date, payed_amount) VALUES (@issue_date, @payed_date, @payed_amount) RETURNING id;";
                 cmd.Parameters.AddWithValue("@amount", Amount);
                 cmd.Parameters.AddWithValue("@account_id", Account.NoAvs);
                 cmd.Parameters.AddWithValue("@date", Date);
-                cmd.Parameters.AddWithValue("@issue_date", IssueDate);
-                cmd.Parameters.AddWithValue("@payed_date", PayedDate);
                 cmd.Parameters.AddWithValue("@payed", Payed);
-                cmd.Prepare();
+
+                cmd.Parameters.AddWithValue("@issue_date", IssueDate);
+                cmd.Parameters.AddWithValue("@payed_date", PayedDate is null ? DBNull.Value : PayedDate);
+                cmd.Parameters.AddWithValue("@payed_amount", PayedAmount is null ? DBNull.Value : PayedDate);  
+
                 Id = (int?)DbManager.Db?.InsertReturnigIds(cmd)[0][0];
             }
         }

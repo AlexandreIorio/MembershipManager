@@ -50,12 +50,18 @@
                 </GroupBox>
                 <GroupBox Grid.Column="1" Header="Information du compte">
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Label>Solde</Label>
-                        <Label x:Name="LabelBalance" Style="{StaticResource Monetary}"  Grid.Column="1" Content="{Binding Balance, FallbackValue=0.00 }"></Label>
+                        <Label x:Name="LabelBalance" Margin="5" Style="{StaticResource Monetary}"  Grid.Column="2" Content="{Binding Balance, FallbackValue=0.00 }"></Label>
+                        <Label Grid.Row="1">En suspens</Label>
+                        <Label Grid.Row="1" Grid.Column="1" Margin="5" Style="{StaticResource Monetary}" Content="{Binding PendingAmount, FallbackValue=0.00}"/>
                     </Grid>
                 </GroupBox>
 
@@ -63,6 +69,7 @@
             <WrapPanel Grid.Row="1">
                 <Button x:Name="ButtonAddPaiement" Width="{StaticResource ButtonWidth}" Content="Ajouter un paiement" Click="ButtonAddPaiement_Click"/>
                 <Button x:Name="ButtonAddConsuption" Width="{StaticResource ButtonWidth}" Content="Ajouter une consommation" Click="ButtonAddConsuption_Click"/>
+                <Button x:Name="ButtonGenerateBill" Width="{StaticResource ButtonWidth}" Content="Facturation" Click="ButtonGenerateBill_Click"/>
             </WrapPanel>
 
 

@@ -24,6 +24,8 @@ namespace MembershipManager.DataModel.Financial
         [Displayed("Montant")]
         public int? Amount { get; set; }
 
+        public bool? Payed { get; set; }
+
         [IgnoreSql]
         [Filtered("Tout", true)]
         public string? FullName { get => $"{first_name} {last_name}"; }

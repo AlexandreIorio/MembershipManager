@@ -1,5 +1,6 @@
 ﻿using MembershipManager.Engine;
 using Npgsql;
+using System.Data;
 using System.Security.Principal;
 using System.Transactions;
 
@@ -45,9 +46,30 @@ namespace MembershipManager.DataModel.Financial
             throw new NotImplementedException();
         }
 
-        public double Balance => _transactions?.Sum(t => t.ComputedAmount) ?? 0;
+        public double Balance => _finishedTransactions?.Sum(t => t.ComputedAmount) ?? 0;
+        public double PendingAmount => _pendingTransactions?.Sum(t => t.ComputedAmount) ?? 0;
 
-        [IgnoreSql]
-        private List<ITransaction> _transactions => ITransaction.Views(new NpgsqlParameter("@id", NoAvs))?.Cast<ITransaction>().ToList();
+  
+        private List<ITransaction> _finishedTransactions
+        {
+            get
+            {
+                NpgsqlParameter param = new NpgsqlParameter("@id", NoAvs);
+                NpgsqlParameter param2 = new NpgsqlParameter("@payed", true);
+                param2.DbType = DbType.Boolean;
+                return ITransaction.Views(param, param2)?.Cast<ITransaction>().ToList();
+            }
+        }
+ 
+        private List<PaiementView> _pendingTransactions
+        {
+            get
+            {
+                NpgsqlParameter param = new NpgsqlParameter("@id", NoAvs);
+                NpgsqlParameter param2 = new("@payed", false);
+                param2.DbType = DbType.Boolean;
+                return Paiement.Views(param, param2)?.Cast<PaiementView>().ToList();
+            }
+        }
     }
 }

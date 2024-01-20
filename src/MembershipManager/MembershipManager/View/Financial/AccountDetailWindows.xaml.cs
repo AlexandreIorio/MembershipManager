@@ -3,6 +3,7 @@ using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
 using MembershipManager.View.Buyable;
 using Npgsql;
+using System.Data;
 using System.Transactions;
 using System.Windows;
 using System.Windows.Input;
@@ -27,12 +28,14 @@ namespace MembershipManager.View.Financial
         }
 
         public double Balance => Account?.Balance ?? 0;
+        public double PendingAmount => Account?.PendingAmount ?? 0;
 
         public AccountDetailWindows(Member member)
         {
             InitializeComponent();
             Member = member ?? throw new NullReferenceException("Member can't be null ");
             Account = MemberAccount.Select(Member.NoAvs) as MemberAccount ?? throw new NullReferenceException("Member account can't be null");
+            double test = Account?.PendingAmount ?? 0;
             RefreshTransactions();
             DataContext = this;
         }
@@ -40,7 +43,9 @@ namespace MembershipManager.View.Financial
         private void RefreshTransactions()
         {
             NpgsqlParameter param = new NpgsqlParameter("@id", Account?.NoAvs);
-            Transactions = ITransaction.Views(param)?.Cast<ITransaction>().ToList();
+            NpgsqlParameter param2 = new NpgsqlParameter("@payed",true);
+            param2.DbType = DbType.Boolean;
+            Transactions = ITransaction.Views(param, param2)?.Cast<ITransaction>().ToList();
             TransactionsDataGrid.ItemsSource = Transactions;
             LabelBalance.Content = Balance;
         }
@@ -111,6 +116,14 @@ namespace MembershipManager.View.Financial
                 }
                 RefreshTransactions();
             }
+        }
+
+        private void ButtonGenerateBill_Click(object sender, RoutedEventArgs e)
+        {
+            Bill bill= new Bill();
+            bill.Account = Account;
+            bill.Generate();
+            RefreshTransactions();
         }
     }
 }
