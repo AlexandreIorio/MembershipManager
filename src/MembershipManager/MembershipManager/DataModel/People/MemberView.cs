@@ -76,6 +76,19 @@ namespace MembershipManager.DataModel.People
             };
             contextMenu.Items.Add(account);
 
+            //MenuItem checkEntry = new();
+            //account.Header = "Contrôle entrée";
+            //account.Click += (sender, e) =>
+            //{
+            //    MemberView? memberView = GetContextMenuSelectedObject((MenuItem)sender);
+            //    if (memberView is null) return;
+            //    Member? member = (Member?)Member.Select(memberView?.no_avs);
+
+            //    if (member is null) return;
+            //    member.Account.Update();
+                
+            //};
+
 
             return contextMenu;
         }
