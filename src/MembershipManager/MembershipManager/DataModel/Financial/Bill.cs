@@ -46,6 +46,10 @@ namespace MembershipManager.DataModel.Financial
                 Date = DateTime.Now;
                 Insert();
                 AssignConsumptions();
+                MessageBox.Show("Facture générée",
+                                         "Information",
+                                         MessageBoxButton.OK,
+                                         MessageBoxImage.Information);
             }
             else
             {
