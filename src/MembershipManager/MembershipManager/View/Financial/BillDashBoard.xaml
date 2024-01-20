@@ -12,6 +12,46 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Header="Informations">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="1*"/>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label>Nom:</Label>
+                    <Label Grid.Column="1" Content="{Binding Member , FallbackValue='-'}"/>
+                    <Label Grid.Row="1" >N° AVS :</Label>
+                    <Label Grid.Row="1" Grid.Column="1"  DataContext="{Binding Member}"  Content="{Binding NoAvs , FallbackValue='-'}"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="1" Header="Tri">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                        
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                            <Label> Trier par membre</Label>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="2" Header="Contrôle"></GroupBox>
+        </Grid>
         <Label Style="{StaticResource LabelTitle}">Factures</Label>
         <DataGrid Grid.Row="2" x:Name="BillsDataGrid" Style="{StaticResource StyleDataGrid }" ItemsSource="{Binding BillsView, Mode=OneWay}" IsReadOnly="True" AutoGenerateColumns="False" MouseUp="BillsDataGrid_MouseUp" CanUserSortColumns="True">
             <DataGrid.Columns>
