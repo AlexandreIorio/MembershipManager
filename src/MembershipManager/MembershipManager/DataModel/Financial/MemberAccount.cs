@@ -1,8 +1,6 @@
 ﻿using MembershipManager.Engine;
 using Npgsql;
 using System.Data;
-using System.Security.Principal;
-using System.Transactions;
 
 namespace MembershipManager.DataModel.Financial
 {
@@ -49,7 +47,7 @@ namespace MembershipManager.DataModel.Financial
         public double Balance => _finishedTransactions?.Sum(t => t.ComputedAmount) ?? 0;
         public double PendingAmount => _pendingTransactions?.Sum(t => t.ComputedAmount) ?? 0;
 
-  
+
         private List<ITransaction> _finishedTransactions
         {
             get
@@ -60,7 +58,7 @@ namespace MembershipManager.DataModel.Financial
                 return ITransaction.Views(param, param2)?.Cast<ITransaction>().ToList();
             }
         }
- 
+
         private List<PaiementView> _pendingTransactions
         {
             get

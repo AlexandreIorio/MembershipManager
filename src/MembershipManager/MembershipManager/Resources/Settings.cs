@@ -1,12 +1,5 @@
-﻿using MembershipManager.DataModel;
-using MembershipManager.DataModel.Financial;
-using MembershipManager.Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using MembershipManager.Engine;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace MembershipManager.Resources
@@ -22,7 +15,7 @@ namespace MembershipManager.Resources
         public int? Id { get; set; }
 
         [DbAttribute("payment_terms")]
-        public int? PaymentTerms { get;set; }
+        public int? PaymentTerms { get; set; }
 
         [DbAttribute("payment_cash")]
         public bool? PaymentCash { get; set; }

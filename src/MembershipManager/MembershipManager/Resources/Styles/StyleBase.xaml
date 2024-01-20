@@ -6,6 +6,7 @@
 
     <!--Local resources-->
     <Thickness x:Key="DefaultMargin">5</Thickness>
+    <Thickness x:Key="DefaultDataGridRowMargin">8,0,8,0</Thickness>
 
 
     <!--Default styles-->
@@ -13,7 +14,7 @@
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
     </Style>
-
+    
     <Style TargetType="Label">
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
     </Style>
@@ -45,22 +46,19 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
-    <Style TargetType="DataGridCell">
-
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="Transparent" />
-
-    </Style>
-
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
-    <Style TargetType="DataGridRow"
->
+    <Style TargetType="DataGridRow">
         <Setter Property="BorderThickness" Value="0,0,0,0"/>
         <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
 
+    <Style TargetType="DataGridCell">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="{StaticResource DefaultDataGridRowMargin}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
     <Style x:Key="StyleDataGrid" TargetType="DataGrid">
@@ -80,11 +78,23 @@
         <Setter Property="ContentStringFormat" Value="{}{0:N2}"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
-
+    
     <Style x:Key="Detail" TargetType="Window">
         <Setter Property="Width" Value="380"/>
         <Setter Property="Height" Value="450"/>
         <Setter Property="ResizeMode" Value="NoResize"/>
     </Style>
 
+    <Style x:Key="StyleDataGridDetail" TargetType="DataGrid">
+        <Setter Property="Margin" Value="20,0,0,0"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="GridLinesVisibility" Value="None"/>
+        <Setter Property="RowBackground" Value="Transparent"/>
+        <Setter Property="HeadersVisibility" Value="None"/>
+    </Style>
+
+    <Style x:Key="StyleDataGridDetailText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
 </ResourceDictionary>

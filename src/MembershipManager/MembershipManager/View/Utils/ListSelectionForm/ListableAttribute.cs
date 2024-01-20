@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace MembershipManager.View.Utils.ListSelectionForm
+﻿namespace MembershipManager.View.Utils.ListSelectionForm
 {
 
     ///These attributes are used to define the behaviour of the list selection form

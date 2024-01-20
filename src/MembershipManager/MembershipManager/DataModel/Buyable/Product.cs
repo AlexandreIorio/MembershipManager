@@ -1,7 +1,4 @@
-﻿using MembershipManager.DataModel.People;
-using MembershipManager.Engine;
-using MembershipManager.View.Utils.ListSelectionForm;
-using Npgsql;
+﻿using MembershipManager.Engine;
 using System.Text;
 using System.Windows;
 
@@ -61,12 +58,12 @@ namespace MembershipManager.DataModel.Buyable
                 message.AppendLine("Le nom du produit est obligatoire");
                 valid = false;
             }
-            
+
             if (Amount is null)
             {
                 message.AppendLine("Le prix du produit est obligatoire");
                 valid = false;
-            }   
+            }
 
 
             if (!valid)

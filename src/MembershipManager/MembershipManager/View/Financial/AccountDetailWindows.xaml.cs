@@ -4,7 +4,6 @@ using MembershipManager.DataModel.People;
 using MembershipManager.View.Buyable;
 using Npgsql;
 using System.Data;
-using System.Transactions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -43,7 +42,7 @@ namespace MembershipManager.View.Financial
         private void RefreshTransactions()
         {
             NpgsqlParameter param = new NpgsqlParameter("@id", Account?.NoAvs);
-            NpgsqlParameter param2 = new NpgsqlParameter("@payed",true);
+            NpgsqlParameter param2 = new NpgsqlParameter("@payed", true);
             param2.DbType = DbType.Boolean;
             Transactions = ITransaction.Views(param, param2)?.Cast<ITransaction>().ToList();
             TransactionsDataGrid.ItemsSource = Transactions;
@@ -121,7 +120,7 @@ namespace MembershipManager.View.Financial
 
         private void ButtonGenerateBill_Click(object sender, RoutedEventArgs e)
         {
-            Bill bill= new Bill();
+            Bill bill = new Bill();
             bill.Account = Account;
             bill.Generate();
             RefreshTransactions();

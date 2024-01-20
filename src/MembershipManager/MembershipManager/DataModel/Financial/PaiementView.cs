@@ -11,7 +11,6 @@ namespace MembershipManager.DataModel.Financial
         [Sorted]
         [Filtered("Date")]
         [Displayed("Date")]
-
         public DateTime? Date { get; set; }
         [Filtered("Prénom")]
         [Displayed("Prénom")]
