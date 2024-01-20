@@ -3,7 +3,6 @@ using MembershipManager.DataModel.Financial;
 using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
-using System.ComponentModel;
 using System.Text;
 using System.Windows;
 
@@ -25,8 +24,6 @@ namespace MembershipManager.DataModel.People
 
         [DbAttribute("subscription_date")]
         public DateTime SubscriptionDate { get; set; }
-
-        public new event PropertyChangedEventHandler? PropertyChanged;
 
         public Member() : base()
         {

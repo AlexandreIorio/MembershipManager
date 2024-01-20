@@ -2,14 +2,13 @@ using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using NpgsqlTypes;
-using System.ComponentModel;
 using System.Text;
 using System.Windows;
 
 namespace MembershipManager.DataModel.Financial
 {
     [DbTableName("paiement")]
-    public class Paiement : ISql, INotifyPropertyChanged, Ilistable
+    public class Paiement : ISql, Ilistable
     {
 
         [DbPrimaryKey(NpgsqlDbType.Integer)]
@@ -38,8 +37,6 @@ namespace MembershipManager.DataModel.Financial
             Amount = paiement.Amount;
             Payed = paiement.Payed;
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         public static ISql? Select(params object[] pk)
         {

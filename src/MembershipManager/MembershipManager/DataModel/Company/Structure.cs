@@ -5,27 +5,39 @@ using System.Windows;
 
 namespace MembershipManager.DataModel.Company
 {
+    /// <summary>
+    /// Class which represent a structure. A structure can hold multiple franchise.
+    /// </summary>
     [DbTableName("structure")]
     public class Structure : ISql
     {
+        /// <summary>
+        /// The name of the structure
+        /// <summary/>
         [DbPrimaryKey(NpgsqlDbType.Varchar, 50)]
         [DbAttribute("name")]
         public string? Name { get; set; }
 
+        /// <summary>
+        /// Complete Head office address.
+        /// </summary>
         [DbAttribute("head_office_address")]
         public string? HeadOfficeAddress { get; set; }
 
+        /// <summary>
+        /// City where the structure is located.
+        /// </summary>
         [DbRelation("city_id")]
         public City? City { get; set; }
 
+        /// <summary>
+        /// basic constructor
+        /// </summary>
         public Structure() { }
 
-
-        public void Insert()
-        {
-
-        }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// <summary/>
         public static ISql? Select(params object[] pk)
         {
 
@@ -37,6 +49,9 @@ namespace MembershipManager.DataModel.Company
 
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// <summary/>
         bool ISql.Validate()
         {
             StringBuilder message = new();
@@ -63,28 +78,21 @@ namespace MembershipManager.DataModel.Company
             return valid;
         }
 
-        public void Update()
+        #region not implemented yet
+        public void Insert()
         {
-            //NpgsqlCommand cmd = new NpgsqlCommand();
-            //cmd.CommandText = $"UPDATE structure SET {ISql.InsertQuery(typeof(Structure))} WHERE 'name' = @where";
-            //ISql.ComputeCommandeWithValues(cmd, this);
-            //NpgsqlParameter param = new NpgsqlParameter($"@where", Name);
-            //cmd.Parameters.Add(param);
-            //DbManager.Db?.Send(cmd);
+            throw new NotImplementedException();
         }
 
-        public override bool Equals(object? obj)
+        public void Update()
         {
-            if (obj is Structure s)
-            {
-                return s.Name == Name;
-            }
-            return false;
+            throw new NotImplementedException();
         }
 
         public static void Delete(params object[] pk)
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

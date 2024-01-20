@@ -8,22 +8,22 @@ namespace MembershipManager.Engine
     {
         #region Abstract Methods
         /// <summary>
-        /// Abstract method to insert a new row in the database
+        /// method to insert a new row in the database
         /// </summary>
         public void Insert();
 
         /// <summary>
-        /// Abstract method to update a row in the database
+        /// method to update a row in the database
         /// </summary> 
         public void Update();
 
         /// <summary>
-        /// Abstract method to delete a row in the database
+        /// method to delete a row in the database
         /// </summary>
         public abstract static void Delete(params object[] pk);
 
         /// <summary>
-        /// Abstract method to select a row in the database
+        /// method to select a row in the database
         /// </summary> 
         /// <param name="pk"/> is the primary keys of the row to select</param>
         public abstract static ISql? Select(params object[] pk);

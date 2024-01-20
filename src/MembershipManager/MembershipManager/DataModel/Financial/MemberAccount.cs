@@ -1,7 +1,6 @@
 ﻿using MembershipManager.DataModel.Buyable;
 using MembershipManager.Engine;
 using Npgsql;
-using System.ComponentModel;
 using System.Data;
 
 namespace MembershipManager.DataModel.Financial
@@ -18,8 +17,6 @@ namespace MembershipManager.DataModel.Financial
 
         [DbAttribute("subscription_issue")]
         public DateTime? SubscriptionIssue { get; set; }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         public static ISql? Select(params object[] pk)
         {

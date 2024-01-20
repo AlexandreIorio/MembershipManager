@@ -2,7 +2,6 @@
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using NpgsqlTypes;
-using System.ComponentModel;
 using System.Text;
 using System.Windows;
 
@@ -14,7 +13,7 @@ namespace MembershipManager.DataModel.People
     /// </summary>
 
     [DbTableName("person")]
-    public class Person : ISql, INotifyPropertyChanged, Ilistable
+    public class Person : ISql, Ilistable
     {
 
         [DbPrimaryKey(NpgsqlDbType.Char, 13)]
@@ -54,8 +53,6 @@ namespace MembershipManager.DataModel.People
             this.Mobile = person.Mobile;
             this.Email = person.Email;
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         public static ISql? Select(params object[] pk)
         {

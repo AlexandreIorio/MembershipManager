@@ -5,37 +5,60 @@ using System.Windows;
 
 namespace MembershipManager.DataModel.Company
 {
+    /// <summary>
+    /// Class which represent a franchise. A franchise is hold by a Structure.
+    /// </summary>
     [DbTableName("franchise")]
     public class Franchise : ISql
     {
+        /// <summary>
+        /// Static field to hold the current franchise. This field is used to know which franchise is currently used.
+        /// </summary>
         public static Franchise? CurrentFranchise { get; set; } = (Franchise)Select(1); //TODO: Remove this value when the login is implemented
 
+        /// <summary>
+        /// The id of the franchise.
+        /// </summary>
         [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
         public int Id { get; set; }
 
+        /// <summary>
+        /// The name of the franchise.
+        /// </summary>
         [DbAttribute("structure_name")]
         public string? StructureName { get; set; }
 
+        /// <summary>
+        /// The address of the franchise.
+        /// </summary>
         [DbAttribute("address")]
         public string? Address { get; set; }
 
+        /// <summary>
+        /// The city of the franchise.
+        /// </summary>
         [DbRelation("city_id")]
         City? City { get; set; }
 
+        /// <summary>
+        /// basic constructor
+        /// </summary>
         public Franchise() { }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// <summary/>
         public static ISql? Select(params object[] pk)
         {
-
             if (pk.Length != 1) throw new ArgumentException();
             Franchise? f = ISql.Get<Franchise>(pk[0]);
-            if (f == null) throw new KeyNotFoundException();
-
-            return f;
-
+            return f == null ? throw new KeyNotFoundException() : (ISql)f;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// <summary/>
         bool ISql.Validate()
         {
             StringBuilder message = new();
@@ -62,16 +85,25 @@ namespace MembershipManager.DataModel.Company
             return valid;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// <summary/>
         public void Update()
         {
 
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// <summary/>
         public void Insert()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// <summary/>
         public static void Delete(params object[] pk)
         {
             throw new NotImplementedException();

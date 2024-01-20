@@ -1,7 +1,6 @@
 using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
 using MembershipManager.View.Utils;
-using System.ComponentModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +11,7 @@ namespace MembershipManager.View.Financial
     /// <summary>
     /// Logique d'interaction pour BillDashBoard.xaml
     /// </summary>
-    public partial class BillDashBoard : Window, INotifyPropertyChanged
+    public partial class BillDashBoard : Window
     {
         public List<BillView> Bills { get; private set; }
         private List<BillView> _sortedBills;
@@ -20,9 +19,6 @@ namespace MembershipManager.View.Financial
         private BillView? LastSelection;
 
         public Member Member { get; private set; }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
 
         public MemberAccount? Account
         {
