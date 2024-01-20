@@ -1,6 +1,7 @@
 using MembershipManager.DataModel.Buyable;
 using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
+using static MembershipManager.DataModel.Financial.Bill;
 
 namespace MembershipManager.DataModel.Financial
 {
@@ -16,6 +17,9 @@ namespace MembershipManager.DataModel.Financial
 
         [Displayed("Montant payé")]
         public int? payed_amount { get; set; }
+        [IgnoreSql]
+        public string[] StatusList { get => Bill.BillStatusNames; }
+        
 
         [IgnoreSql]
         public string Number
@@ -34,9 +38,9 @@ namespace MembershipManager.DataModel.Financial
         {
             get
             {
-                if ((bool)Payed) return "Payé";
-                else if (((DateTime)issue_date).Date < DateTime.Now.Date) return "Expirée";
-                else return "En attente";
+                if ((bool)Payed) return StatusList[0];
+                else if (((DateTime)issue_date).Date < DateTime.Now.Date) return StatusList[2];
+                else return StatusList[1];
             }
         }
 
@@ -54,5 +58,17 @@ namespace MembershipManager.DataModel.Financial
 
         [IgnoreSql]
         public new string? Description => $"Facture du: {Date?.ToString("dd.MM.yyyy")}";
+
+        public BillStatus GetStatus()
+        {
+            if (Payed == true) return BillStatus.Payed;
+            if (issue_date < DateTime.Now) return BillStatus.Expired;
+            return BillStatus.Pending;
+        }
+
+        public string GetStatusName()
+        {
+           return BillStatusNames[(int)GetStatus()];
+        }
     }
 }
