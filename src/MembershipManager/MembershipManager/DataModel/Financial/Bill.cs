@@ -13,8 +13,9 @@ namespace MembershipManager.DataModel.Financial
     [DbInherit(typeof(Paiement))]
     public class Bill : Paiement, ISql
     {
+
         [DbAttribute("issue_date")]
-        public DateTime IssueDate { get => ((DateTime)Date).AddDays((double)Settings.Values.PaymentTerms); }
+        public DateTime IssueDate { get; set; }
 
         [DbAttribute("payed_date")]
         public DateTime? PayedDate { get; set; }
@@ -23,6 +24,10 @@ namespace MembershipManager.DataModel.Financial
         public int? PayedAmount { get; set; }
 
         public Bill() : base()
+        {
+        }
+
+        public Bill(Paiement paiement) : base(paiement)
         {
         }
 
@@ -116,7 +121,7 @@ namespace MembershipManager.DataModel.Financial
 
             if (pk[0] is DBNull) return null;
             if (pk.Length != 1) throw new ArgumentException();
-            Paiement? p = ISql.Get<Paiement>(pk[0]);
+            Paiement? p = ISql.Get<Bill>(pk[0]);
             return p == null ? throw new KeyNotFoundException() : (ISql)p;
         }
 
@@ -128,12 +133,12 @@ namespace MembershipManager.DataModel.Financial
                 cmd.CommandText = @"SELECT insert_paiement_and_bill(@amount, @account_id, @date, @payed, @issue_date, @payed_date, @payed_amount);";
 
                 cmd.Parameters.AddWithValue("@amount", Amount);
-                cmd.Parameters.AddWithValue("@account_id",NpgsqlTypes.NpgsqlDbType.Varchar,13, Account.NoAvs);
+                cmd.Parameters.AddWithValue("@account_id", NpgsqlTypes.NpgsqlDbType.Varchar, 13, Account.NoAvs);
                 cmd.Parameters.AddWithValue("@date", NpgsqlTypes.NpgsqlDbType.Date, Date);
                 cmd.Parameters.AddWithValue("@payed", Payed);
 
                 cmd.Parameters.AddWithValue("@issue_date", NpgsqlTypes.NpgsqlDbType.Date, IssueDate);
-                cmd.Parameters.AddWithValue("@payed_date", NpgsqlTypes.NpgsqlDbType.Date,PayedDate is null ? DBNull.Value : PayedDate);
+                cmd.Parameters.AddWithValue("@payed_date", NpgsqlTypes.NpgsqlDbType.Date, PayedDate is null ? DBNull.Value : PayedDate);
                 cmd.Parameters.AddWithValue("@payed_amount", NpgsqlTypes.NpgsqlDbType.Integer, PayedAmount is null ? DBNull.Value : PayedAmount);
 
                 Id = (int?)DbManager.Db?.InsertReturnigIds(cmd)[0][0];
@@ -210,6 +215,27 @@ namespace MembershipManager.DataModel.Financial
             cmd.CommandText = SqlQuery.ToString();
 
             return DbManager.Db.Views<BillView>(cmd).Cast<SqlViewable>().ToList();
+        }
+
+        public void ChangeStatus()
+        {
+            if (Payed == true)
+            {
+                MessageBoxResult result = MessageBox.Show("La facture est déjà payée, voulez-vous changer son status", "Information", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Payed = false;
+                    PayedDate = null;
+                    PayedAmount = null;
+                    Update();
+
+                }
+                return;
+            }
+            Payed = true;
+            PayedDate = DateTime.Now;
+            PayedAmount = Amount;
+            Update();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MembershipManager.Engine;
+﻿using MembershipManager.DataModel.Buyable;
+using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace MembershipManager.DataModel.Financial
 {
@@ -31,5 +33,33 @@ namespace MembershipManager.DataModel.Financial
                 return $"{((DateTime)Date).Year}{id}";
             }
         }
+        [IgnoreSql]
+        public double ? ComputedPayedAmount => Math.Round(((payed_amount ?? 0) / 100.0), 2);
+
+        [IgnoreSql]
+        public string Status
+        {
+            get
+            {
+                if ((bool)Payed) return "Payé";
+                else if (((DateTime)issue_date).Date < DateTime.Now.Date) return "Expirée";
+                else return "En attente";
+            }
+        }
+
+        [IgnoreSql]
+        public static List<ConsumptionView>? Consumptions { get; set; } = Consumption.Views()?.Cast<ConsumptionView>().ToList();
+        
+        [IgnoreSql]
+        public List<ConsumptionView>? ConsumptionsDetail
+        {
+            get
+            {;
+                return Consumptions?.Where(c => c.Bill_id == id).ToList();
+            }
+        }
+
+        [IgnoreSql]
+        public new string? Description => $"Facture du: {Date?.ToString("dd.MM.yyyy")}";
     }
 }

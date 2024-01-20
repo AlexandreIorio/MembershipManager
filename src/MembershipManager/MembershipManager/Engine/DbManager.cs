@@ -137,11 +137,11 @@ namespace MembershipManager.Engine
             if (inherit)
             {
                 //Get primary keys of object
-                List<string> pks = new();
+                List<object> pks = new();
                 foreach (string pkName in ISql.GetPrimaryKeyNames(inheritType.InheritType))
                 {
                     if (pkName is null) continue;
-                    string? pk = reader[pkName].ToString();
+                    object? pk = reader[pkName];
                     if (pk is null) continue;
                     pks.Add(pk);
                 }
