@@ -92,7 +92,7 @@ namespace MembershipManager.DataModel.Financial
             Update();
         }
 
-        public bool ConsumeEntry()
+        public bool TryConsumeEntry()
         {
             if (SubscriptionIssue > DateTime.Now)
             {
