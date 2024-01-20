@@ -36,7 +36,7 @@
                     <Button x:Name="ButtonPlan" Content="Plan" Click="ButtonPlan_Click"/>
                 </WrapPanel>
 
-                <Button Grid.Column="1" x:Name="ValidateEntry" Content="Validate Entry" HorizontalAlignment="Right" Click="ButtonValidateEntry_Click" BorderBrush="AliceBlue" Background="RosyBrown"/>
+                <Button Grid.Column="1" x:Name="ValidateEntry" Content="Valider entrée" HorizontalAlignment="Right" Click="ButtonValidateEntry_Click" BorderBrush="AliceBlue" Background="RosyBrown"/>
             </Grid>
         </GroupBox>
 

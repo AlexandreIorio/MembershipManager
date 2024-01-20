@@ -13,6 +13,7 @@ namespace MembershipManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int _previousTextLength = 0;
         private ListSelectionPage _listSelection;
 
         public MainWindow()
@@ -32,6 +33,16 @@ namespace MembershipManager
                 if (member is null) return;
                 AccountDetailWindows accountDetailWindow = new AccountDetailWindows(member);
                 accountDetailWindow.ShowDialog();
+            };
+
+            _listSelection.TextBoxSearch.TextChanged += (sender, e) =>
+            {
+                int currentTextLenght = _listSelection.TextBoxSearch.Text.Length;
+
+                if (_listSelection.List.SelectedItems.Count == 1 && currentTextLenght > _previousTextLength)
+                    ValidateEntry.Focus();
+
+                _previousTextLength = currentTextLenght;
             };
         }
 
@@ -94,6 +105,7 @@ namespace MembershipManager
             else
                 MessageBox.Show($"Entrée impossible pour {memberSelected.FirstName} {memberSelected.LastName} !", "KO", MessageBoxButton.OK, MessageBoxImage.Error);
 
+            _listSelection.TextBoxSearch.Focus();
         }
     }
 }

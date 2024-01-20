@@ -31,7 +31,7 @@ namespace MembershipManager.DataModel.Buyable
         public double ComputedAmount { get => Amount / 100.0; }
 
         [IgnoreSql]
-        public string ComputedName { get => $"{Quantity} {_unit}"; }
+        public string ComputedName { get => $"{Quantity} {_unit} {ComputedAmount} CHF"; }
 
         [IgnoreSql]
         private string _unit { get => is_subscription == true ? "mois" : "entrées"; }
