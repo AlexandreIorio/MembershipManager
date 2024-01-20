@@ -1,8 +1,12 @@
 using MembershipManager.DataModel.Buyable;
 using MembershipManager.DataModel.Financial;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace MembershipManager.View.Financial
@@ -10,11 +14,13 @@ namespace MembershipManager.View.Financial
     /// <summary>
     /// Logique d'interaction pour BillDashBoard.xaml
     /// </summary>
-    public partial class BillDashBoard : Window
+    public partial class BillDashBoard : Window, INotifyPropertyChanged
     {
-        public List<BillView>? Bills { get; set; }
+        public ICollectionView BillsView { get; private set; }
         private BillView? SelectedBillView { get { return (BillView?)BillsDataGrid.SelectedItem; } }
         private BillView? LastSelection;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public MemberAccount? Account
         {
@@ -33,8 +39,10 @@ namespace MembershipManager.View.Financial
 
         private void RefreshTransactions()
         {
-            Bills = Bill.Views()?.Cast<BillView>().ToList();
-            BillsDataGrid.ItemsSource = Bills;
+
+            ObservableCollection<BillView> bills = new ObservableCollection<BillView>(Bill.Views()?.Cast<BillView>().ToList());
+            BillsView = CollectionViewSource.GetDefaultView(bills);
+            BillsDataGrid.ItemsSource = BillsView;
         }
 
         private void BillsDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
@@ -59,6 +67,7 @@ namespace MembershipManager.View.Financial
             if (bill is null) return;
 
             bill.ChangeStatus();
+            RefreshTransactions();
         }
 
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)

@@ -13,7 +13,7 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Label Style="{StaticResource LabelTitle}">Factures</Label>
-        <DataGrid Grid.Row="2" x:Name="BillsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False" MouseUp="BillsDataGrid_MouseUp">
+        <DataGrid Grid.Row="2" x:Name="BillsDataGrid" Style="{StaticResource StyleDataGrid }" ItemsSource="{Binding BillsView, Mode=OneWay}" IsReadOnly="True" AutoGenerateColumns="False" MouseUp="BillsDataGrid_MouseUp" CanUserSortColumns="True">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Date">
                     <DataGridTemplateColumn.CellTemplate>

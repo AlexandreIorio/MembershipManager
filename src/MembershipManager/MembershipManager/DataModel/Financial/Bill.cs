@@ -121,8 +121,8 @@ namespace MembershipManager.DataModel.Financial
 
             if (pk[0] is DBNull) return null;
             if (pk.Length != 1) throw new ArgumentException();
-            Paiement? p = ISql.Get<Bill>(pk[0]);
-            return p == null ? throw new KeyNotFoundException() : (ISql)p;
+            Bill? bill = ISql.Get<Bill>(pk[0]);
+            return bill == null ? throw new KeyNotFoundException() : (ISql)bill;
         }
 
         public new void Insert()
@@ -147,7 +147,7 @@ namespace MembershipManager.DataModel.Financial
 
         public new void Update()
         {
-            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Paiement>(this));
+            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Bill>(this));
         }
 
         public new bool Validate()
@@ -227,6 +227,7 @@ namespace MembershipManager.DataModel.Financial
                     Payed = false;
                     PayedDate = null;
                     PayedAmount = null;
+                    base.Update();
                     Update();
 
                 }
@@ -235,6 +236,7 @@ namespace MembershipManager.DataModel.Financial
             Payed = true;
             PayedDate = DateTime.Now;
             PayedAmount = Amount;
+            base.Update();
             Update();
         }
     }

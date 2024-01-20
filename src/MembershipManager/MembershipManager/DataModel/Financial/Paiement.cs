@@ -32,6 +32,7 @@ namespace MembershipManager.DataModel.Financial
 
         public Paiement(Paiement paiement)
         {
+            Id = paiement.Id;
             Account = paiement.Account;
             Date = paiement.Date;
             Amount = paiement.Amount;
