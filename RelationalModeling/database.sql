@@ -43,8 +43,6 @@ FOREIGN KEY (structure_name) REFERENCES structure(name),
 FOREIGN KEY (city_id) REFERENCES city(id)
 );
 
-
-
 CREATE TABLE person (
 no_avs char(13),
 first_name varchar(50) NOT NULL,
@@ -57,17 +55,6 @@ email varchar(50),
 
 PRIMARY KEY (no_avs),
 FOREIGN KEY (city_id) REFERENCES city(id)
-);
-
-CREATE TABLE Employe (
-    no_avs char(13),
-    franchise_id int NOT NULL,
-    salary int, --cents
-    rate int, --percents
-
-    PRIMARY KEY (no_avs),
-    FOREIGN KEY (no_avs) references person(no_avs),
-    FOREIGN KEY (franchise_id) references franchise(id)
 );
 
 CREATE TABLE member(
@@ -97,6 +84,16 @@ CREATE TABLE product
     name varchar(50),
 
 PRIMARY KEY(id)
+);
+
+CREATE TABLE entry
+(
+    id SERIAL,
+    quantity int,
+    amount int, --cents
+    is_subscription bool,
+
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE paiement
@@ -137,106 +134,19 @@ CREATE TABLE consumption(
     FOREIGN KEY (bill_id) REFERENCES bill(id)
 );
 
-CREATE TABLE users(
-    id int,
-    username varchar(50),
-    password_hash varchar(50),
-    salt varchar(50),
-    no_avs char(13) NOT NULL UNIQUE,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (no_avs) REFERENCES employe(no_avs)
-);
-
-CREATE TABLE role(
-    id int,
-    name varchar(50),
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE user_role(
-    user_id int,
-    role_id int,
-
-    PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (role_id) REFERENCES role(id)
-);
-
-
-CREATE TABLE permission(
-    id int,
-    name varchar(50),
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE role_permission(
-    role_id int,
-    permission_id int,
-
-    PRIMARY KEY (role_id, permission_id),
-    FOREIGN KEY (role_id) REFERENCES role(id),
-    FOREIGN KEY (permission_id) REFERENCES permission(id)
-);
-
-
-
-CREATE TABLE documents(
-id int,
-content text,
-franchise_id int NOT NULL,
-
-PRIMARY KEY (id),
-FOREIGN KEY (franchise_id) REFERENCES franchise(id)
-);
-
-CREATE TABLE template(
-id int,
-
-PRIMARY KEY (id),
-FOREIGN KEY (id) REFERENCES documents(id)
-);
-
-CREATE TABLE computed_document(
-id int,
-no_avs char(13) NOT NULL,
-
-PRIMARY KEY (id),
-FOREIGN KEY (id) REFERENCES documents(id),
-FOREIGN KEY (no_avs) REFERENCES person(no_avs)
-);
-
-
-
-CREATE TABLE cashier
-(
-id int,
-
-PRIMARY KEY (id),
-FOREIGN KEY (id) REFERENCES paiement(id)
-);
-
 CREATE TABLE settings
 (
     id int,
     payment_terms int,
     payment_cash bool, -- default value for payement type
+    entry_price int, --cents
+
 
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES franchise(id)
 );
 
 -- IV --
-
-CREATE VIEW OutstandingBills AS
-SELECT p.no_avs, p.last_name, p.first_name, b.id AS bill_id, b.issue_date, pa.amount
-FROM person p
-	JOIN member m ON p.no_avs = m.no_avs
-	JOIN memberaccount ma ON m.no_avs = ma.id
-	JOIN paiement pa ON ma.id = pa.account_id
-	JOIN bill b ON pa.id = b.id
-WHERE pa.amount > 0 -- Ceci suppose que le montant indique le montant restant à payer
-AND b.issue_date IS NOT NULL;
 
 -- Création de la fonction pour insérer un settings
 CREATE OR REPLACE FUNCTION create_settings()
@@ -287,7 +197,6 @@ FOR EACH ROW EXECUTE FUNCTION set_subscription_date();
 CREATE OR REPLACE FUNCTION delete_member_cascade()
 RETURNS TRIGGER AS $$
 BEGIN
-
     DELETE FROM consumption WHERE account_id = OLD.no_avs;
     DELETE FROM paiement WHERE account_id = OLD.no_avs;
     DELETE FROM memberaccount WHERE id = OLD.no_avs;
@@ -313,7 +222,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
 -- Fonction d'insertion d'une facture
 CREATE OR REPLACE FUNCTION insert_paiement_and_bill(
     _amount INT,
@@ -337,7 +245,6 @@ BEGIN
     RETURN generated_id;
 END;
 $$ LANGUAGE plpgsql;
-
 
 -- Trigger invoqué avant la suppression d'un membre
 CREATE TRIGGER member_before_delete

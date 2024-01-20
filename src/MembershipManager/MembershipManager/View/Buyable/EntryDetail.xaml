@@ -1,0 +1,30 @@
+﻿<Page x:Class="MembershipManager.View.Buyable.EntryDetail"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d" 
+      Title="EntryDetail">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{StaticResource ColLabelWidth}"/>
+            <ColumnDefinition Width="{StaticResource ColTextboxWidth}"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0">Type</Label>
+        <WrapPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
+            <RadioButton GroupName="Type" Content="Abonnement" IsChecked="{Binding IsSubscription, Mode=TwoWay}"/>
+            <RadioButton GroupName="Type" Content="Entrée"/>
+        </WrapPanel>
+        <Label Grid.Row="1">Quantité</Label>
+        <TextBox x:Name="TextBoxQuantity" Grid.Row="1" Grid.Column="1" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="2">Prix</Label>
+        <TextBox x:Name="TextBoxAmount" Grid.Row="1" Grid.Column="1" Text="{Binding ComputedAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+    </Grid>
+</Page>

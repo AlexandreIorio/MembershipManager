@@ -47,11 +47,34 @@ namespace MembershipManager
 
         }
 
-        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        private void ButtonPlan_Click(object sender, RoutedEventArgs e)
         {
-            ListSelection listSelection = new ListSelection(Paiement.Views().Cast<PaiementView>());
+            ListSelection listSelection = new ListSelection(EntryView.Views().Cast<EntryView>());
+
+            listSelection.List.MouseDoubleClick += (sender, e) =>
+            {
+                EntryView selectItem = (EntryView)listSelection.List.SelectedItem;
+                if (selectItem is null) return;
+                EntryView.EditEntry(selectItem.Id);
+                listSelection.UpdateList(EntryView.Views().Cast<EntryView>());
+            };
+
+            Button button = new Button() { Content = "Nouveau plan" };
+            button.Click += (sender, e) =>
+            {
+                EntryDetailWindow entryDetailWindow = new(new Entry());
+                entryDetailWindow.ShowDialog();
+                listSelection.List.ItemsSource = EntryView.Views().Cast<EntryView>();
+            };
+            listSelection.StackPanelButtons.Children.Insert(1, button);
+
             listSelection.Width = 800;
             listSelection.ShowDialog();
+        }
+
+        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void ButtonProduct_Click(object sender, RoutedEventArgs e)
