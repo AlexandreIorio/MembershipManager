@@ -130,7 +130,6 @@ namespace MembershipManager.View.Financial
             {
                 Width = 400
             };
-            listSelection.List.ContextMenu = MemberView.ContextMenu(listSelection);
             listSelection.List.MouseDoubleClick += (sender, e) =>
             {
                 listSelection.DialogResult = true;

@@ -37,9 +37,9 @@ namespace MembershipManager
 
             _listSelection.TextBoxSearch.TextChanged += (sender, e) =>
             {
-                int currentTextLenght = _listSelection.TextBoxSearch.Text.Length;
+              int currentTextLenght = _listSelection.TextBoxSearch.Text.Length;
 
-                if (_listSelection.List.SelectedItems.Count == 1 && currentTextLenght > _previousTextLength)
+                if (_listSelection.List.Items.Count == 1 && currentTextLenght > _previousTextLength)
                     ValidateEntry.Focus();
 
                 _previousTextLength = currentTextLenght;
