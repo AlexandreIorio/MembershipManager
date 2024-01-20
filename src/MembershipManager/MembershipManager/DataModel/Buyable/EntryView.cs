@@ -8,27 +8,33 @@ using System.CodeDom;
 
 namespace MembershipManager.DataModel.Buyable
 {
-    internal class EntryView : SqlViewable, Ilistable
+    public class EntryView : SqlViewable, Ilistable
     {
         public int? Id { get; set; }
 
         [Displayed("Quantité")]
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
 
-        public bool? is_subscription { get; set; }
+        public bool is_subscription { get; set; }
 
         [IgnoreSql]
         [Filtered("Abonnement")]
         [Displayed("Type")]
         public string? IsSubscriptionName => is_subscription == true ? "Abonnement" : "Entrée";
 
-        public int? Amount { get; set; }
+        public int Amount { get; set; }
 
         [IgnoreSql]
         [TextFormat("{0:N2}")]
         [Filtered("Prix")]
         [Displayed("Prix")]
-        public double ComputedAmount { get => (Amount ?? 0) / 100.0; }
+        public double ComputedAmount { get => Amount / 100.0; }
+
+        [IgnoreSql]
+        public string ComputedName { get => $"{Quantity} {_unit}"; }
+
+        [IgnoreSql]
+        private string _unit { get => is_subscription == true ? "mois" : "entrées"; }
 
         public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
@@ -51,6 +57,16 @@ namespace MembershipManager.DataModel.Buyable
         {
             EntryDetailWindow entryDetailWindow = new(new Entry());
             entryDetailWindow.ShowDialog();
+        }
+
+        public Product ToProduct()
+        {
+            return new Product()
+            {
+                Code = IsSubscriptionName,
+                Name = ComputedName,
+                Amount = Amount
+            };
         }
     }
 }

@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Détail du produit" Style="{StaticResource LabelTitle}"/>
-        <Frame Grid.Row="1" x:Name="MainFrame" Source="PersonDetail.xaml"/>
+        <Frame Grid.Row="1" x:Name="MainFrame"/>
         <WrapPanel Grid.Row="2">
             <Button x:Name="ButtonSave" Content="Enregistrer" IsDefault="True" Click="ButtonSave_Click"/>
             <Button x:Name="ButtonCancel"  Content="Annuler" IsCancel="True"/>

@@ -162,8 +162,8 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION create_member_account()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO memberaccount (id)
-    VALUES (NEW.no_avs);
+    INSERT INTO memberaccount (id, available_entry, subscription_issue)
+    VALUES (NEW.no_avs, 0, NOW());
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
