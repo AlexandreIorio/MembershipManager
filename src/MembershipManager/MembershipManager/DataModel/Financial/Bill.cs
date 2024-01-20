@@ -31,16 +31,18 @@ namespace MembershipManager.DataModel.Financial
         public void Generate()
         {
             if (Account is null) throw new NullReferenceException("Account is null");
-            if (Account.Balance < 0)
+
+            double billeableAmount = Account.Balance + Account.PendingAmount;
+            if (billeableAmount < 0)
             {
-                Amount = (int)(-Account.Balance * 100);
+                Amount = (int)(-billeableAmount * 100);
                 Date = DateTime.Now;
                 Insert();
                 AssignConsumptions();
             }
             else
             {
-                MessageBox.Show("Le solde du compte est positif, aucun paiement n'est nécessaire",
+                MessageBox.Show("Aucun montant facturable",
                                        "Information",
                                         System.Windows.MessageBoxButton.OK,
                                         System.Windows.MessageBoxImage.Information);

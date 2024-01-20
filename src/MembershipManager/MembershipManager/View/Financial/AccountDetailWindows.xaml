@@ -61,7 +61,7 @@
                         <Label>Solde</Label>
                         <Label x:Name="LabelBalance" Margin="5" Style="{StaticResource Monetary}"  Grid.Column="2" Content="{Binding Balance, FallbackValue=0.00 }"></Label>
                         <Label Grid.Row="1">En suspens</Label>
-                        <Label Grid.Row="1" Grid.Column="1" Margin="5" Style="{StaticResource Monetary}" Content="{Binding PendingAmount, FallbackValue=0.00}"/>
+                        <Label x:Name="LabelPending" Grid.Row="1" Grid.Column="1" Margin="5" Style="{StaticResource Monetary}" Content="{Binding PendingAmount, FallbackValue=0.00}"/>
                     </Grid>
                 </GroupBox>
 

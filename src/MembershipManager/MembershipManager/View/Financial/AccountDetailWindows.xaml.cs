@@ -48,6 +48,7 @@ namespace MembershipManager.View.Financial
             Transactions = ITransaction.Views(param, param2)?.Cast<ITransaction>().ToList();
             TransactionsDataGrid.ItemsSource = Transactions;
             LabelBalance.Content = Balance;
+            LabelPending.Content = PendingAmount;
         }
 
 
