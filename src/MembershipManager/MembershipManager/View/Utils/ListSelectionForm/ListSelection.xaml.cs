@@ -1,9 +1,6 @@
-﻿using MembershipManager.View.Utils.ListSelectionForm;
-using System.Collections;
-using System.Reflection;
+﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace MembershipManager.View.Utils
 {

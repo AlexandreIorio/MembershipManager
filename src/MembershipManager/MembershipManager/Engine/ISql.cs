@@ -175,7 +175,7 @@ namespace MembershipManager.Engine
                 if (attributes.Count() > 0)
                 {
                     object? value = p.GetValue(obj);
-                    if (value is null) continue ;
+                    if (value is null) continue;
 
                     //Add property name to query
                     sbAtt.Append(attributes.First().Name).Append(", ");

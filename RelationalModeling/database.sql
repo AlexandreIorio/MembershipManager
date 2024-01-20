@@ -43,8 +43,6 @@ FOREIGN KEY (structure_name) REFERENCES structure(name),
 FOREIGN KEY (city_id) REFERENCES city(id)
 );
 
-
-
 CREATE TABLE person (
 no_avs char(13),
 first_name varchar(50) NOT NULL,
@@ -163,7 +161,6 @@ CREATE TABLE user_role(
     FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
-
 CREATE TABLE permission(
     id int,
     name varchar(50),
@@ -178,8 +175,6 @@ CREATE TABLE role_permission(
     FOREIGN KEY (role_id) REFERENCES role(id),
     FOREIGN KEY (permission_id) REFERENCES permission(id)
 );
-
-
 
 CREATE TABLE documents(
 id int,
@@ -205,8 +200,6 @@ PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES documents(id),
 FOREIGN KEY (no_avs) REFERENCES person(no_avs)
 );
-
-
 
 CREATE TABLE cashier
 (
@@ -289,7 +282,6 @@ FOR EACH ROW EXECUTE FUNCTION set_subscription_date();
 CREATE OR REPLACE FUNCTION delete_member_cascade()
 RETURNS TRIGGER AS $$
 BEGIN
-
     DELETE FROM consumption WHERE account_id = OLD.no_avs;
     DELETE FROM paiement WHERE account_id = OLD.no_avs;
     DELETE FROM memberaccount WHERE id = OLD.no_avs;
@@ -315,7 +307,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
 -- Fonction d'insertion d'une facture
 CREATE OR REPLACE FUNCTION insert_paiement_and_bill(
     _amount INT,
@@ -339,7 +330,6 @@ BEGIN
     RETURN generated_id;
 END;
 $$ LANGUAGE plpgsql;
-
 
 -- Trigger invoqué avant la suppression d'un membre
 CREATE TRIGGER member_before_delete

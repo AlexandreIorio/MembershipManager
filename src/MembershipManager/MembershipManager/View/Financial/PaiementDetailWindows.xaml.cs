@@ -1,7 +1,5 @@
 ﻿using MembershipManager.DataModel.Financial;
-using System.Security.Cryptography;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace MembershipManager.View.Financial
 {

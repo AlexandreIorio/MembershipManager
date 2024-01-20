@@ -58,14 +58,14 @@ namespace MembershipManager
         {
             ListSelection listSelection = new ListSelection(ProductView.Views().Cast<ProductView>());
             listSelection.Width = 800;
-            Button button = new Button() { Content="Nouveau produit"};
+            Button button = new Button() { Content = "Nouveau produit" };
             button.Click += (sender, e) =>
             {
                 ProductDetailWindows productDetailWindows = new(new Product());
                 productDetailWindows.ShowDialog();
                 listSelection.List.ItemsSource = ProductView.Views().Cast<ProductView>();
             };
-            listSelection.StackPanelButtons.Children.Insert(1, button) ;
+            listSelection.StackPanelButtons.Children.Insert(1, button);
             listSelection.ShowDialog();
         }
 
