@@ -1,4 +1,4 @@
-﻿using MembershipManager.Engine;
+using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using NpgsqlTypes;
@@ -29,6 +29,15 @@ namespace MembershipManager.DataModel.Financial
         public bool Payed { get; set; } = false;
 
         public Paiement() { }
+
+        public Paiement(Paiement paiement)
+        {
+            Id = paiement.Id;
+            Account = paiement.Account;
+            Date = paiement.Date;
+            Amount = paiement.Amount;
+            Payed = paiement.Payed;
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

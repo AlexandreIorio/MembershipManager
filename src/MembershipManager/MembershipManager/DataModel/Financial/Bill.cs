@@ -13,8 +13,9 @@ namespace MembershipManager.DataModel.Financial
     [DbInherit(typeof(Paiement))]
     public class Bill : Paiement, ISql
     {
+
         [DbAttribute("issue_date")]
-        public DateTime IssueDate { get => ((DateTime)Date).AddDays((double)Settings.Values.PaymentTerms); }
+        public DateTime IssueDate { get; set; }
 
         [DbAttribute("payed_date")]
         public DateTime? PayedDate { get; set; }
@@ -23,6 +24,10 @@ namespace MembershipManager.DataModel.Financial
         public int? PayedAmount { get; set; }
 
         public Bill() : base()
+        {
+        }
+
+        public Bill(Paiement paiement) : base(paiement)
         {
         }
 
@@ -116,8 +121,8 @@ namespace MembershipManager.DataModel.Financial
 
             if (pk[0] is DBNull) return null;
             if (pk.Length != 1) throw new ArgumentException();
-            Paiement? p = ISql.Get<Paiement>(pk[0]);
-            return p == null ? throw new KeyNotFoundException() : (ISql)p;
+            Bill? bill = ISql.Get<Bill>(pk[0]);
+            return bill == null ? throw new KeyNotFoundException() : (ISql)bill;
         }
 
         public new void Insert()
@@ -142,7 +147,7 @@ namespace MembershipManager.DataModel.Financial
 
         public new void Update()
         {
-            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Paiement>(this));
+            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Bill>(this));
         }
 
         public new bool Validate()
@@ -210,6 +215,29 @@ namespace MembershipManager.DataModel.Financial
             cmd.CommandText = SqlQuery.ToString();
 
             return DbManager.Db.Views<BillView>(cmd).Cast<SqlViewable>().ToList();
+        }
+
+        public void ChangeStatus()
+        {
+            if (Payed == true)
+            {
+                MessageBoxResult result = MessageBox.Show("La facture est déjà payée, voulez-vous changer son status", "Information", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Payed = false;
+                    PayedDate = null;
+                    PayedAmount = null;
+                    base.Update();
+                    Update();
+
+                }
+                return;
+            }
+            Payed = true;
+            PayedDate = DateTime.Now;
+            PayedAmount = Amount;
+            base.Update();
+            Update();
         }
     }
 }

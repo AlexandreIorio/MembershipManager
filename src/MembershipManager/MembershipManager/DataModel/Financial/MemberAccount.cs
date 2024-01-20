@@ -1,5 +1,7 @@
-﻿using MembershipManager.Engine;
+﻿using MembershipManager.DataModel.Buyable;
+using MembershipManager.Engine;
 using Npgsql;
+using System.ComponentModel;
 using System.Data;
 
 namespace MembershipManager.DataModel.Financial
@@ -16,6 +18,8 @@ namespace MembershipManager.DataModel.Financial
 
         [DbAttribute("subscription_issue")]
         public DateTime? SubscriptionIssue { get; set; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public static ISql? Select(params object[] pk)
         {
@@ -36,12 +40,12 @@ namespace MembershipManager.DataModel.Financial
 
         public void Update()
         {
-            throw new NotImplementedException();
+            if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<MemberAccount>(this));
         }
 
         public bool Validate()
         {
-            throw new NotImplementedException();
+            return NoAvs != null;
         }
 
         public double Balance => _finishedTransactions?.Sum(t => t.ComputedAmount) ?? 0;
@@ -68,6 +72,40 @@ namespace MembershipManager.DataModel.Financial
                 param2.DbType = DbType.Boolean;
                 return Paiement.Views(param, param2)?.Cast<PaiementView>().ToList();
             }
+        }
+
+        public void AddEntry(EntryView entry)
+        {
+            if (entry is null) return;
+            if (entry.is_subscription)
+            {
+                if (SubscriptionIssue < DateTime.Now)
+                    SubscriptionIssue = DateTime.Now.AddMonths(entry.Quantity);
+                else
+                    SubscriptionIssue = SubscriptionIssue?.AddMonths(entry.Quantity);
+            }
+            else
+            {
+                AvailableEntry += entry.Quantity;
+            }
+
+            Update();
+        }
+
+        public bool ConsumeEntry()
+        {
+            if (SubscriptionIssue > DateTime.Now)
+            {
+                return true;
+            }
+            else if (AvailableEntry > 0)
+            {
+                AvailableEntry--;
+                Update();
+                return true;
+            }
+
+            return false;
         }
     }
 }

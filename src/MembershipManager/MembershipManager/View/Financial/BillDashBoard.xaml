@@ -13,18 +13,107 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Label Style="{StaticResource LabelTitle}">Factures</Label>
-        <DataGrid Grid.Row="2" x:Name="BillsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="2" x:Name="BillsDataGrid" Style="{StaticResource StyleDataGrid }" ItemsSource="{Binding BillsView, Mode=OneWay}" IsReadOnly="True" AutoGenerateColumns="False" MouseUp="BillsDataGrid_MouseUp" CanUserSortColumns="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date , StringFormat='dd.MM.yyyy'}" />
-                <DataGridTextColumn Header="Numero" Binding="{Binding Number}" />
-                <DataGridTemplateColumn Header="Amount">
-                    <DataGridTemplateColumn.CellTemplate x:Uid="Monetary">
+                <DataGridTemplateColumn Header="Date">
+                    <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Label Style="{StaticResource Monetary}" Content ="{Binding ComputedAmount}" />
+                            <TextBlock Text ="{Binding Date , StringFormat='dd.MM.yyyy'}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Numero de facture">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text ="{Binding Number}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Destinataire">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text ="{Binding FullName}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Montant">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Right" Text ="{Binding ComputedAmount, StringFormat={}{0:N2}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Montant Payé">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Right" Text ="{Binding ComputedPayedAmount, StringFormat={}{0:N2}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Status">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text ="{Binding Status}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Date d'echéance">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text ="{Binding issue_date, StringFormat='dd.MM.yyyy'}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Date de paiement">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text ="{Binding payed_date , StringFormat='dd.MM.yyyy'}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <DataGrid ItemsSource="{Binding ConsumptionsDetail}" AutoGenerateColumns="False" Style="{StaticResource StyleDataGridDetail}">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Date">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Style="{StaticResource StyleDataGridDetailText}" Text ="{Binding Date , StringFormat='dd.MM.yyyy'}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Code">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Style="{StaticResource StyleDataGridDetailText}" Text ="{Binding Code}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Nom">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Style="{StaticResource StyleDataGridDetailText}" Text ="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Montant">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Style="{StaticResource StyleDataGridDetailText}" HorizontalAlignment="Right" Text ="{Binding ComputedAmount, StringFormat={}{0:N2}}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <WrapPanel>
+                            <Button x:Name="ButtonPay" Content="Payée" Click="ButtonPay_Click"/>
+                            <Button x:Name="ButtonDelete" Content="Supprimer la facture" Click="ButtonDelete_Click" />
+                        </WrapPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
         </DataGrid>
 
     </Grid>

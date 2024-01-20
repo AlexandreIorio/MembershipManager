@@ -25,12 +25,14 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <GroupBox Header="Information du membre">
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
@@ -40,12 +42,13 @@
                         </Grid.RowDefinitions>
 
                         <Label>Nom:</Label>
-                        <Label Grid.Column="1"
-                       Content="{Binding Member , FallbackValue='Nom du membre'}"/>
+                        <Label Grid.Column="1" Content="{Binding Member , FallbackValue='Nom du membre'}"/>
                         <Label Grid.Row="1" >N° AVS :</Label>
-                        <Label Grid.Row="1" Grid.Column="1" 
-                       DataContext="{Binding Member}" 
-                       Content="{Binding NoAvs , FallbackValue='Numéro AVS'}"/>
+                        <Label Grid.Row="1" Grid.Column="1"  DataContext="{Binding Member}"  Content="{Binding NoAvs , FallbackValue='Numéro AVS'}"/>
+                        <Label Grid.Column="2">Abonné jusqu'au :</Label>
+                        <Label Grid.Column="3"  x:Name="LabelSubscribe"/>
+                        <Label Grid.Row="1" Grid.Column="2" >N° entrée :</Label>
+                        <Label Grid.Row="1" Grid.Column="3" x:Name="LabelEntry"/>
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Column="1" Header="Information du compte">
@@ -70,6 +73,8 @@
                 <Button x:Name="ButtonAddPaiement" Width="{StaticResource ButtonWidth}" Content="Ajouter un paiement" Click="ButtonAddPaiement_Click"/>
                 <Button x:Name="ButtonAddConsuption" Width="{StaticResource ButtonWidth}" Content="Ajouter une consommation" Click="ButtonAddConsuption_Click"/>
                 <Button x:Name="ButtonGenerateBill" Width="{StaticResource ButtonWidth}" Content="Facturation" Click="ButtonGenerateBill_Click"/>
+                <Button x:Name="ButtonBuyEntry" Width="{StaticResource ButtonWidth}" Content="Acheter des entrées" Click="ButtonBuyEntry_Click"/>
+                <ComboBox x:Name="EntryTypeComboBox" Width="100" Margin="5"/>
             </WrapPanel>
 
 

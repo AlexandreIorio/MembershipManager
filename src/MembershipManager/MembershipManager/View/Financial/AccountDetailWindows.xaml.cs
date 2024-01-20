@@ -5,6 +5,7 @@ using MembershipManager.View.Buyable;
 using Npgsql;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MembershipManager.View.Financial
@@ -34,7 +35,9 @@ namespace MembershipManager.View.Financial
             InitializeComponent();
             Member = member ?? throw new NullReferenceException("Member can't be null ");
             Account = MemberAccount.Select(Member.NoAvs) as MemberAccount ?? throw new NullReferenceException("Member account can't be null");
-            double test = Account?.PendingAmount ?? 0;
+            EntryTypeComboBox.ItemsSource = EntryView.Views().Cast<EntryView>();
+            EntryTypeComboBox.DisplayMemberPath = "ComputedName";
+            EntryTypeComboBox.SelectedValuePath = "Id";
             RefreshTransactions();
             DataContext = this;
         }
@@ -48,6 +51,8 @@ namespace MembershipManager.View.Financial
             TransactionsDataGrid.ItemsSource = Transactions;
             LabelBalance.Content = Balance;
             LabelPending.Content = PendingAmount;
+            LabelSubscribe.Content = Account.SubscriptionIssue?.ToShortDateString();
+            LabelEntry.Content = Account.AvailableEntry;
         }
 
 
@@ -123,6 +128,16 @@ namespace MembershipManager.View.Financial
             Bill bill = new Bill();
             bill.Account = Account;
             bill.Generate();
+            RefreshTransactions();
+        }
+
+        private void ButtonBuyEntry_Click(object sender, RoutedEventArgs e)
+        {
+
+            EntryView entry = (EntryView)EntryTypeComboBox.SelectedItem;
+            Account.AddEntry(entry);
+            Consumption consumption = new(entry.ToProduct(), Account);
+            consumption.Insert();
             RefreshTransactions();
         }
     }
