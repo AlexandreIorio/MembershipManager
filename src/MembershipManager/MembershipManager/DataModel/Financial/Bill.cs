@@ -13,9 +13,30 @@ namespace MembershipManager.DataModel.Financial
     [DbInherit(typeof(Paiement))]
     public class Bill : Paiement, ISql
     {
+        public enum BillStatus
+        {
+            Payed,
+            Pending,
+            Expired
+        }
+
+        public static string[] BillStatusNames { get => new string[] { "Payée", "Attente", "Expirée" }; }
 
         [DbAttribute("issue_date")]
-        public DateTime IssueDate { get; set; }
+        public DateTime? IssueDate
+        {
+            get
+            {
+                return Date?.AddDays(Settings.Values.PaymentTerms ?? 30);
+            }
+            set
+            {
+                _issueDate = value;
+            }
+
+        }
+
+        private DateTime? _issueDate;
 
         [DbAttribute("payed_date")]
         public DateTime? PayedDate { get; set; }
@@ -138,10 +159,10 @@ namespace MembershipManager.DataModel.Financial
 
                 cmd.Parameters.AddWithValue("@amount", Amount);
                 cmd.Parameters.AddWithValue("@account_id", NpgsqlTypes.NpgsqlDbType.Varchar, 13, Account.NoAvs);
-                cmd.Parameters.AddWithValue("@date", NpgsqlTypes.NpgsqlDbType.Date, Date);
+                cmd.Parameters.AddWithValue("@date", NpgsqlTypes.NpgsqlDbType.Date, Date is null ? DBNull.Value : Date);
                 cmd.Parameters.AddWithValue("@payed", Payed);
 
-                cmd.Parameters.AddWithValue("@issue_date", NpgsqlTypes.NpgsqlDbType.Date, IssueDate);
+                cmd.Parameters.AddWithValue("@issue_date", NpgsqlTypes.NpgsqlDbType.Date, IssueDate is null ? DBNull.Value : IssueDate);
                 cmd.Parameters.AddWithValue("@payed_date", NpgsqlTypes.NpgsqlDbType.Date, PayedDate is null ? DBNull.Value : PayedDate);
                 cmd.Parameters.AddWithValue("@payed_amount", NpgsqlTypes.NpgsqlDbType.Integer, PayedAmount is null ? DBNull.Value : PayedAmount);
 

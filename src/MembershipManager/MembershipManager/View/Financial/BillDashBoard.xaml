@@ -9,7 +9,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
@@ -33,21 +33,30 @@
                     <Label>Nom:</Label>
                     <Label Grid.Column="1" Content="{Binding Member , FallbackValue='-'}"/>
                     <Label Grid.Row="1" >N° AVS :</Label>
-                    <Label Grid.Row="1" Grid.Column="1"  DataContext="{Binding Member}"  Content="{Binding NoAvs , FallbackValue='-'}"/>
+                    <Label Grid.Row="1" Grid.Column="1"  DataContext="{Binding Member.NoAvs}"  Content="{Binding NoAvs , FallbackValue='-'}"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Column="1" Header="Tri">
-                <Grid>
+            <GroupBox Grid.Column="1" Header="Tri" Height="auto">
+                <Grid Height="Auto">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                        
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                            <Label> Trier par membre</Label>
+                    <CheckBox x:Name="CheckBoxMember" Content="par membres" Unchecked="CheckBox_Unchecked"/>
+                    <Button Grid.Column="1" x:Name="ButtonMember" Content="{Binding Member, Mode=TwoWay, FallbackValue='Sélectionner'}" IsEnabled="{Binding ElementName=CheckBoxMember, Path=IsChecked}" Click="ButtonMember_Click"/>
+                    <CheckBox Grid.Row="1" x:Name="CheckBoxStatus" Content="par status" Unchecked="CheckBox_Unchecked"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" x:Name="ComboBoxStatus" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}" IsEnabled="{Binding ElementName=CheckBoxStatus, Path=IsChecked}" SelectionChanged="FilterValue_Changed"/>
+                    <CheckBox Grid.Row="2" x:Name="CheckBoxDate" Content="par date" Unchecked="CheckBox_Unchecked"/>
+                    <DatePicker Grid.Row="3" Grid.Column="0" x:Name="DatePickerDateFrom" SelectedDate="{Binding BeginDate, Mode=TwoWay}" IsEnabled="{Binding ElementName=CheckBoxDate, Path=IsChecked}" SelectedDateChanged="FilterValue_Changed"/>
+                    <DatePicker Grid.Row="3" Grid.Column="1" x:Name="DatePickerDateTo" SelectedDate="{Binding EndDate, Mode=TwoWay}" IsEnabled="{Binding ElementName=CheckBoxDate, Path=IsChecked}" SelectedDateChanged="FilterValue_Changed"/>
+
                 </Grid>
             </GroupBox>
             <GroupBox Grid.Column="2" Header="Contrôle"></GroupBox>
