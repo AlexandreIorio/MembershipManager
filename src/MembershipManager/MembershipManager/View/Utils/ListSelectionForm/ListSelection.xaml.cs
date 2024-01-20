@@ -11,10 +11,6 @@ namespace MembershipManager.View.Utils
     {
         public Button ButtonCancel { get => BtnCancel; }
         public Button ButtonSelect { get => BtnSelect; }
-        private Type _type { get; set; }
-        private IEnumerable _items { get; set; }
-
-        private bool Ascending = false;
 
         public ListView List { get => _listSelectionPage.List; }
 

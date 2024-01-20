@@ -32,7 +32,7 @@ namespace MembershipManager.DataModel.Buyable
             Amount = entry.Amount;
         }
 
-        public new void Insert()
+        public void Insert()
         {
             if (Validate()) DbManager.Db?.Send(ISql.InsertQuery<Entry>(this));
         }

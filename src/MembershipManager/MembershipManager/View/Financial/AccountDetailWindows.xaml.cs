@@ -157,7 +157,7 @@ namespace MembershipManager.View.Financial
 
         private MessageBoxResult ValidateEntry(EntryView entry)
         {
-            MessageBoxResult result = MessageBox.Show($"Voulez-vous acheter {entry.ComputedName} pour {entry.ComputedAmount} CHF ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult result = MessageBox.Show($"Voulez-vous acheter {entry.ComputedName} ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             return result;
         }
     }
