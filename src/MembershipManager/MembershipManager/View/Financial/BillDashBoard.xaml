@@ -16,7 +16,7 @@
         <DataGrid Grid.Row="2" x:Name="BillsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Binding="{Binding Date , StringFormat='dd.MM.yyyy'}" />
-                <DataGridTextColumn Header="Description" Binding="{Binding Number}" />
+                <DataGridTextColumn Header="Numero" Binding="{Binding Number}" />
                 <DataGridTemplateColumn Header="Amount">
                     <DataGridTemplateColumn.CellTemplate x:Uid="Monetary">
                         <DataTemplate>

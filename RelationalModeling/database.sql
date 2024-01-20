@@ -221,6 +221,8 @@ CREATE TABLE settings
     id int,
     payment_terms int,
     payment_cash bool, -- default value for payement type
+    entry_price int, --cents
+
 
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES franchise(id)
