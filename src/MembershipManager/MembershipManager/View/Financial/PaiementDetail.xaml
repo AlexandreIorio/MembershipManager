@@ -18,11 +18,6 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0">Membre</Label>
             <Button Grid.Column="1" Grid.Row="0" x:Name="ButtonMember" Content="Sélectionner" Click="ButtonMember_Click"/>
@@ -30,7 +25,6 @@
             <DatePicker Grid.Column="1" Grid.Row="1" Text="{Binding Date, Mode=TwoWay}"/>
             <Label Grid.Row="2">Montant</Label>
             <TextBox Grid.Column="1" x:Name="TextBoxAmount"  Grid.Row="2" TextChanged="TextBoxAmount_TextChanged"/>
-
         </Grid>
 
     </StackPanel>

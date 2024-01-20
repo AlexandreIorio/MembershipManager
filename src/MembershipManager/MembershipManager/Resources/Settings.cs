@@ -24,6 +24,9 @@ namespace MembershipManager.Resources
         [DbAttribute("payment_terms")]
         public int? PaymentTerms { get;set; }
 
+        [DbAttribute("payment_cash")]
+        public bool? PaymentCash { get; set; }
+
         public static void Delete(params object[] pk)
         {
             throw new NotImplementedException();

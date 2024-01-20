@@ -1,5 +1,6 @@
 ﻿using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
+using MembershipManager.Resources;
 using MembershipManager.View.Utils;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +26,7 @@ namespace MembershipManager.View.Financial
                 ButtonMember.IsEnabled = false;
                 ButtonMember.Content = Member.ToString();
             }
+
             Paiement = paiement;
             TextBoxAmount.Text = ComputedAmount.ToString();
             this.DataContext = Paiement;

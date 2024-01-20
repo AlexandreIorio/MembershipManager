@@ -2,6 +2,7 @@
 using MembershipManager.Engine;
 using MembershipManager.Resources;
 using Npgsql;
+using System.Data;
 using System.Text;
 using System.Windows;
 
@@ -47,9 +48,6 @@ namespace MembershipManager.DataModel.Financial
                                         System.Windows.MessageBoxButton.OK,
                                         System.Windows.MessageBoxImage.Information);
             }
-
-            
-
         }
 
         private void AssignConsumptions()
@@ -126,16 +124,16 @@ namespace MembershipManager.DataModel.Financial
             if (Validate())
             {
                 Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand();
-                cmd.CommandText = @"INSERT INTO paiement (amount, account_id, date, payed) VALUES (@amount, @account_id, @date, @payed);
-                                    INSERT INTO bill (issue_date, payed_date, payed_amount) VALUES (@issue_date, @payed_date, @payed_amount) RETURNING id;";
+                cmd.CommandText = @"SELECT insert_paiement_and_bill(@amount, @account_id, @date, @payed, @issue_date, @payed_date, @payed_amount);";
+
                 cmd.Parameters.AddWithValue("@amount", Amount);
-                cmd.Parameters.AddWithValue("@account_id", Account.NoAvs);
-                cmd.Parameters.AddWithValue("@date", Date);
+                cmd.Parameters.AddWithValue("@account_id",NpgsqlTypes.NpgsqlDbType.Varchar,13, Account.NoAvs);
+                cmd.Parameters.AddWithValue("@date", NpgsqlTypes.NpgsqlDbType.Date, Date);
                 cmd.Parameters.AddWithValue("@payed", Payed);
 
-                cmd.Parameters.AddWithValue("@issue_date", IssueDate);
-                cmd.Parameters.AddWithValue("@payed_date", PayedDate is null ? DBNull.Value : PayedDate);
-                cmd.Parameters.AddWithValue("@payed_amount", PayedAmount is null ? DBNull.Value : PayedDate);  
+                cmd.Parameters.AddWithValue("@issue_date", NpgsqlTypes.NpgsqlDbType.Date, IssueDate);
+                cmd.Parameters.AddWithValue("@payed_date", NpgsqlTypes.NpgsqlDbType.Date,PayedDate is null ? DBNull.Value : PayedDate);
+                cmd.Parameters.AddWithValue("@payed_amount", NpgsqlTypes.NpgsqlDbType.Integer, PayedAmount is null ? DBNull.Value : PayedAmount);
 
                 Id = (int?)DbManager.Db?.InsertReturnigIds(cmd)[0][0];
             }
