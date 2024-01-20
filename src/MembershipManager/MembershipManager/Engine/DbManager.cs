@@ -26,6 +26,31 @@ namespace MembershipManager.Engine
             CloseConnection(cmd.Connection);
         }
 
+        public List<List<object>> InsertReturnigIds(NpgsqlCommand cmd)
+        {
+            cmd.Connection = new NpgsqlConnection(GetConnectionString());
+            CheckDbValidity(cmd);
+            OpenConnection(cmd.Connection);
+
+            List<List<object>> results = new();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    List<object> Ids = new();
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        Ids.Add(reader[i]);
+                    }
+                    results.Add(Ids);
+                }
+            }
+            
+            CloseConnection(cmd.Connection);
+            return results;
+        }
+
         /// <summary>
         /// This method converts a tuple into an object and uses the property names to retrieve the values in the tuple.
         /// A property can be ignored by adding the attribute IgnoreSql
@@ -50,6 +75,7 @@ namespace MembershipManager.Engine
                     {
                         if (p.GetCustomAttribute<IgnoreSql>() != null) continue;
                         var valueRead = reader[p.Name];
+                        if (valueRead is DBNull) valueRead = null;
                         p.SetValue(obj, valueRead);
                     }
                     results.Add(obj);

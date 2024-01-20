@@ -1,0 +1,31 @@
+﻿<Window x:Class="MembershipManager.View.Financial.BillDashBoard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MembershipManager.View.Financial"
+        mc:Ignorable="d"
+        Title="BillDashBoard" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Label Style="{StaticResource LabelTitle}">Factures</Label>
+        <DataGrid Grid.Row="2" x:Name="BillsDataGrid" Style="{StaticResource StyleDataGrid }" IsReadOnly="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date , StringFormat='dd.MM.yyyy'}" />
+                <DataGridTextColumn Header="Description" Binding="{Binding Number}" />
+                <DataGridTemplateColumn Header="Amount">
+                    <DataGridTemplateColumn.CellTemplate x:Uid="Monetary">
+                        <DataTemplate>
+                            <Label Style="{StaticResource Monetary}" Content ="{Binding ComputedAmount}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>

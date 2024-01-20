@@ -17,6 +17,9 @@ namespace MembershipManager.DataModel.Buyable
         [DbRelation("account_id")]
         public MemberAccount? Account { get; set; }
 
+        [DbRelation("bill_id")]
+        public Bill? Bill { get; set; }
+
         public Consumption() : base()
         {
 

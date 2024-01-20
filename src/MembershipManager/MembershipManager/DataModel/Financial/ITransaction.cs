@@ -18,7 +18,7 @@ namespace MembershipManager.DataModel.Financial
             List<SqlViewable> list = new List<SqlViewable>();
             List<SqlViewable>? paiements = Paiement.Views(sqlParam);
             if (paiements != null) list.AddRange(paiements);
-            List<SqlViewable>? consumption = Consumption.Views(sqlParam);
+            List<SqlViewable>? consumption = Consumption.Views(sqlParam[0]);
             if (consumption != null) list.AddRange(consumption);
 
             return list.Cast<SqlViewable>().ToList();

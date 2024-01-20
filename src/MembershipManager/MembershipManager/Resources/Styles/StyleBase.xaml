@@ -35,6 +35,10 @@
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
     </Style>
 
+    <Style TargetType="RadioButton">
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}"/>
+    </Style>
+
 
     <Style TargetType="MenuItem">
         <Setter Property="HorizontalContentAlignment" Value="Left"/>

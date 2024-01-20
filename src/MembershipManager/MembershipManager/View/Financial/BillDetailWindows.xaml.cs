@@ -8,36 +8,39 @@ namespace MembershipManager.View.Financial
     /// <summary>
     /// Logique d'interaction pour PaiementDetailWindows.xaml
     /// </summary>
-    public partial class PaiementDetailWindows : Window
+    public partial class BillDetailWindows : Window
     {
 
         private bool _IsEditMode = false;
         private PaiementDetail _paiement;
+        private BillDetail _bill;
 
-        public PaiementDetailWindows(MemberAccount account) : this(new Paiement() { Account = account, Date = DateTime.Now }) { }
+        public BillDetailWindows(MemberAccount account) : this(new Bill() { Account = account, Date = DateTime.Now }) { }
 
-        public PaiementDetailWindows(Paiement? p)
+        public BillDetailWindows(Bill? bill)
         {
             InitializeComponent();
-            _paiement = new PaiementDetail(p);
+            _paiement = new PaiementDetail(bill);
+            _bill = new BillDetail(bill);
             _paiement.TextBoxAmount.Focus();
-            MainFrame.Navigate(_paiement);
-            _IsEditMode = p.Id is not null;
+            FramePaiement.Navigate(_paiement);
+            FrameBill.Navigate(_bill);
+            _IsEditMode = bill.Id is not null;
         }
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             Paiement paiement = _paiement.Paiement;
+            Bill bill = _bill.Bill;
             if (paiement is null) throw new ArgumentNullException(nameof(paiement));
 
             if (_IsEditMode)
             {
-                paiement.Update();
+                bill.Update();
             }
             else
             {
-                paiement.Payed = true;
-                paiement.Insert();
+                bill.Insert();
             }
             Close();
         }

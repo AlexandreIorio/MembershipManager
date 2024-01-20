@@ -99,16 +99,42 @@ CREATE TABLE product
 PRIMARY KEY(id)
 );
 
+CREATE TABLE paiement
+(
+    id SERIAL,
+    account_id varchar(13) NOT NULL,
+    amount int NOT NULL,
+    payed bool default false,
+    date date NOT NULL,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (account_id) REFERENCES memberAccount(id)
+
+);
+
+CREATE TABLE bill
+(
+    id int,
+    issue_date date,
+    payed_date date,
+    payed_amount int,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (id) REFERENCES paiement(id)
+);
+
 CREATE TABLE consumption(
     id SERIAL,
     name varchar(50),
     account_id varchar(13) NOT NULL,
+    bill_id int,
     code varchar(50) NOT NULL,
     amount int, --cents
     date date,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (account_id) REFERENCES memberAccount(id)
+    FOREIGN KEY (account_id) REFERENCES memberAccount(id),
+    FOREIGN KEY (bill_id) REFERENCES bill(id)
 );
 
 CREATE TABLE users(
@@ -180,17 +206,7 @@ FOREIGN KEY (id) REFERENCES documents(id),
 FOREIGN KEY (no_avs) REFERENCES person(no_avs)
 );
 
-CREATE TABLE paiement
-(
-id SERIAL,
-account_id varchar(13) NOT NULL,
-amount int NOT NULL,
-date date NOT NULL,
 
-PRIMARY KEY (id),
-FOREIGN KEY (account_id) REFERENCES memberAccount(id)
-
-);
 
 CREATE TABLE cashier
 (
@@ -200,20 +216,11 @@ PRIMARY KEY (id),
 FOREIGN KEY (id) REFERENCES paiement(id)
 );
 
-CREATE TABLE bill
-(
-id int,
-issue_date date,
-payed boolean,
-
-PRIMARY KEY (id),
-FOREIGN KEY (id) REFERENCES paiement(id)
-);
-
 CREATE TABLE settings
 (
     id int,
     payment_terms int,
+    payment_cash bool, -- default value for payement type
 
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES franchise(id)
@@ -235,8 +242,8 @@ AND b.issue_date IS NOT NULL;
 CREATE OR REPLACE FUNCTION create_settings()
     RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO settings (id, payment_terms)
-    VALUES (NEW.id, 30);
+    INSERT INTO settings (id, payment_terms, payment_cash)
+    VALUES (NEW.id, 30, true);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -289,11 +296,45 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Fonction pour gérer la suppression de paiement
+CREATE OR REPLACE FUNCTION delete_paiment_cascade()
+    RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM bill WHERE id = OLD.id;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION delete_person_after_member()
 RETURNS TRIGGER AS $$
 BEGIN
     DELETE FROM person WHERE no_avs = OLD.no_avs;
     RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Fonction d'insertion d'une facture
+CREATE OR REPLACE FUNCTION insert_paiement_and_bill(
+    _amount INT,
+    _account_id varchar(13),
+    _date DATE ,
+    _payed BOOLEAN,
+    _issue_date DATE,
+    _payed_date DATE,
+    _payed_amount INT
+) RETURNS INT AS $$
+DECLARE
+    generated_id INT;
+BEGIN
+    INSERT INTO paiement (amount, account_id, date, payed)
+    VALUES (_amount, _account_id, _date, _payed)
+    RETURNING id INTO generated_id;
+
+    INSERT INTO bill (id, issue_date, payed_date, payed_amount)
+    VALUES (generated_id, _issue_date, _payed_date, _payed_amount);
+
+    RETURN generated_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -306,3 +347,8 @@ FOR EACH ROW EXECUTE FUNCTION delete_member_cascade();
 CREATE TRIGGER member_after_delete
 AFTER DELETE ON member
 FOR EACH ROW EXECUTE FUNCTION delete_person_after_member();
+
+-- Trigger invoqué avant la suppression d'un paiement
+CREATE TRIGGER paiement_before_delete
+BEFORE DELETE ON paiement
+FOR EACH ROW EXECUTE FUNCTION delete_paiment_cascade();

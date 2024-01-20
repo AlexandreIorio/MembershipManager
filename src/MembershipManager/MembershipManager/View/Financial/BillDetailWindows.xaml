@@ -1,0 +1,24 @@
+﻿<Window x:Class="MembershipManager.View.Financial.BillDetailWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MembershipManager.View.Financial"
+        mc:Ignorable="d"
+        Title="BillDetailWindows" WindowStartupLocation="CenterScreen" Style="{StaticResource Detail}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Détail du paiement" Style="{StaticResource LabelTitle}"/>
+        <Frame Grid.Row="1" x:Name="FramePaiement"/>
+        <Frame Grid.Row="2" x:Name="FrameBill"/>
+        <WrapPanel Grid.Row="3">
+            <Button x:Name="ButtonSave" Content="Enregistrer" IsDefault="True" Click="ButtonSave_Click"/>
+            <Button x:Name="ButtonCancel"  Content="Annuler" IsCancel="True"/>
+        </WrapPanel>
+    </Grid>
+</Window>
