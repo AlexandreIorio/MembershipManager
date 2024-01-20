@@ -75,6 +75,7 @@ namespace MembershipManager.Engine
                     {
                         if (p.GetCustomAttribute<IgnoreSql>() != null) continue;
                         var valueRead = reader[p.Name];
+                        if (valueRead is DBNull) valueRead = null;
                         p.SetValue(obj, valueRead);
                     }
                     results.Add(obj);

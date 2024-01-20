@@ -1,6 +1,7 @@
 ﻿using MembershipManager.DataModel.Buyable;
 using MembershipManager.Engine;
 using MembershipManager.Resources;
+using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using System.Data;
 using System.Text;
@@ -177,6 +178,38 @@ namespace MembershipManager.DataModel.Financial
         public static new void Delete(params object[] pk)
         {
             ISql.Erase<Paiement>(pk);
+        }
+
+        public new static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
+        {
+            if (sqlParam.Length > 2) throw new ArgumentException();
+
+            NpgsqlCommand cmd = new NpgsqlCommand();
+
+            StringBuilder SqlQuery = new StringBuilder(@"SELECT bill.id, bill.issue_date, bill.payed_date, bill.payed_amount, paiement.payed, paiement.account_id, amount, date, person.first_name, person.last_name
+                                                        FROM Bill
+                                                            LEFT JOIN paiement ON bill.id = paiement.id
+                                                            LEFT JOIN memberaccount ON paiement.account_id = memberaccount.id
+                                                            LEFT JOIN person ON memberaccount.id = person.no_avs;");
+            if (sqlParam.Length == 2)
+            {
+                SqlQuery.Append(" WHERE paiement.account_id = @id AND Payed = @payed");
+                cmd.Parameters.AddRange(sqlParam);
+            }
+            else if (sqlParam.Length == 1 && sqlParam[0].ParameterName.Equals("@id"))
+            {
+                SqlQuery.Append(" WHERE paiement.account_id = @id");
+                cmd.Parameters.Add(sqlParam[0]);
+            }
+            else if (sqlParam.Length == 1 && sqlParam[0].ParameterName.Equals("@payed"))
+            {
+                SqlQuery.Append(" WHERE Payed = @payed");
+                cmd.Parameters.Add(sqlParam[0]);
+            }
+
+            cmd.CommandText = SqlQuery.ToString();
+
+            return DbManager.Db.Views<BillView>(cmd).Cast<SqlViewable>().ToList();
         }
     }
 }

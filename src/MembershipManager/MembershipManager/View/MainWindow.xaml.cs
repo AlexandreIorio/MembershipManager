@@ -2,6 +2,7 @@
 using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
 using MembershipManager.View.Buyable;
+using MembershipManager.View.Financial;
 using MembershipManager.View.Utils;
 using System.Windows;
 using System.Windows.Controls;
@@ -66,6 +67,12 @@ namespace MembershipManager
             };
             listSelection.StackPanelButtons.Children.Insert(1, button) ;
             listSelection.ShowDialog();
+        }
+
+        private void ButtonBill_Click(object sender, RoutedEventArgs e)
+        {
+            BillDashBoard billDashBoard = new();
+            billDashBoard.ShowDialog();
         }
     }
 }
