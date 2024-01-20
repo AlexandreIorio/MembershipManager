@@ -1,5 +1,6 @@
 using MembershipManager.DataModel.Buyable;
 using MembershipManager.DataModel.Financial;
+using MembershipManager.DataModel.People;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -16,9 +17,11 @@ namespace MembershipManager.View.Financial
     /// </summary>
     public partial class BillDashBoard : Window, INotifyPropertyChanged
     {
-        public ICollectionView BillsView { get; private set; }
+        public List<BillView> Bills { get; private set; }
         private BillView? SelectedBillView { get { return (BillView?)BillsDataGrid.SelectedItem; } }
         private BillView? LastSelection;
+
+        public Member Member { get; private set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -31,7 +34,7 @@ namespace MembershipManager.View.Financial
             }
         }
 
-        public BillDashBoard()
+        public BillDashBoard(Member? member = null)
         {
             InitializeComponent();
             RefreshTransactions();
@@ -40,12 +43,11 @@ namespace MembershipManager.View.Financial
         private void RefreshTransactions()
         {
 
-            ObservableCollection<BillView> bills = new ObservableCollection<BillView>(Bill.Views()?.Cast<BillView>().ToList());
-            BillsView = CollectionViewSource.GetDefaultView(bills);
-            BillsDataGrid.ItemsSource = BillsView;
+            Bills = Bill.Views()?.Cast<BillView>().ToList();
+            BillsDataGrid.ItemsSource = Bills;
         }
 
-        private void BillsDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        private void SortDatasByMember()
         {
 
         }
@@ -72,7 +74,15 @@ namespace MembershipManager.View.Financial
 
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBoxResult result = MessageBox.Show("Voulez-vous vraiment supprimer cette facture?", "Supprimer", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                Paiement? paiement = (Paiement?)Paiement.Select(SelectedBillView?.id);
+                Paiement.Delete(paiement.Id);
+                Bills.Remove(SelectedBillView);
+                BillsDataGrid.ItemsSource = Bills;
+                BillsDataGrid.Items.Refresh();
+            }
         }
     }
 }

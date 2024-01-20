@@ -222,6 +222,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Fonction pour gérer la suppression de paiement
+CREATE OR REPLACE FUNCTION delete_bill_clean_consumption()
+    RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE consumption SET bill_id = NULL WHERE bill_id = OLD.id;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION delete_person_after_member()
+    RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM person WHERE no_avs = OLD.no_avs;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Fonction d'insertion d'une facture
 CREATE OR REPLACE FUNCTION insert_paiement_and_bill(
     _amount INT,
@@ -259,3 +276,8 @@ FOR EACH ROW EXECUTE FUNCTION delete_person_after_member();
 CREATE TRIGGER paiement_before_delete
 BEFORE DELETE ON paiement
 FOR EACH ROW EXECUTE FUNCTION delete_paiment_cascade();
+
+-- Trigger invoqué avant la suppression d'une facture
+CREATE TRIGGER bill_before_delete
+    BEFORE DELETE ON paiement
+    FOR EACH ROW EXECUTE FUNCTION delete_bill_clean_consumption();
