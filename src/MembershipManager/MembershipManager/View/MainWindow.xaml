@@ -16,11 +16,33 @@
             <Setter Property="Margin" Value="10"/>
         </Style>
     </Window.Resources>
-    <WrapPanel>
-        <Button x:Name="ButtonMembership" Content="Membres" Click="ButtonMembership_Click"/>        
-        <Button x:Name="ButtonProduct" Content="Inventaire" Click="ButtonProduct_Click"/>        
-        <Button x:Name="ButtonBill" Content="Factures" Click="ButtonBill_Click"/>        
-        <Button x:Name="ButtonPlan" Content="Plan" Click="ButtonPlan_Click"/>
-        <Button x:Name="ButtonTest" Content="Test" Click="ButtonTest_Click"/>
-    </WrapPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Contrôles">
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+               
+                <WrapPanel Grid.Column="0">
+                    <Button x:Name="ButtonProduct" Content="Inventaire" Click="ButtonProduct_Click"/>
+                    <Button x:Name="ButtonBill" Content="Factures" Click="ButtonBill_Click"/>
+                    <Button x:Name="ButtonPlan" Content="Plan" Click="ButtonPlan_Click"/>
+                </WrapPanel>
+
+                <Button Grid.Column="1" x:Name="ValidateEntry" Content="Validate Entry" HorizontalAlignment="Right" Click="ButtonValidateEntry_Click" BorderBrush="AliceBlue" Background="RosyBrown"/>
+            </Grid>
+        </GroupBox>
+
+        <Label Grid.Row="1" Content="Détail des membre" Style="{StaticResource LabelTitle}"/>
+
+        <Frame x:Name="ListFrame" Grid.Row="2"/>
+
+    </Grid>
 </Window>

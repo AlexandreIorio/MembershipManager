@@ -32,9 +32,34 @@ namespace MembershipManager.DataModel.People
             memberDetailWindow.ShowDialog();
         }
 
-        public static ContextMenu ContextMenu(ListSelection viewer)
+        public static ContextMenu ContextMenu(ListSelectionPage viewer)
         {
             ContextMenu contextMenu = new();
+
+            contextMenu.Items.Add(CreateButtonNewMember(viewer));
+            contextMenu.Items.Add(CreateButtonEditMember(viewer));
+            contextMenu.Items.Add(CreateButtonDeleteMember(viewer));
+
+            return contextMenu;
+        }
+
+        private static MenuItem CreateButtonDeleteMember(ListSelectionPage viewer)
+        {
+            MenuItem delete = new MenuItem();
+            delete.Header = "Supprimer";
+            delete.Click += (sender, e) =>
+            {
+                MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);
+                if (member is null) return;
+                if (!CanDeleteMember(member.no_avs)) return;
+                ISql.Delete(typeof(Member), member.no_avs);
+                viewer.UpdateList(Member.Views().Cast<MemberView>());
+            };
+            return delete;
+        }
+
+        private static MenuItem CreateButtonEditMember(ListSelectionPage viewer)
+        {
             MenuItem edit = new()
             {
                 Header = "Modifier"
@@ -47,50 +72,21 @@ namespace MembershipManager.DataModel.People
                 EditMember(member.no_avs);
                 viewer.UpdateList(Member.Views().Cast<MemberView>());
             };
-            contextMenu.Items.Add(edit);
+            return edit;
+        }
 
-            MenuItem delete = new MenuItem();
-            delete.Header = "Supprimer";
-            delete.Click += (sender, e) =>
+        private static MenuItem CreateButtonNewMember(ListSelectionPage viewer)
+        {
+            MenuItem newItem = new()
             {
-                MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);
-                if (member is null) return;
-                if (!CanDeleteMember(member.no_avs)) return;
-                ISql.Delete(typeof(Member), member.no_avs);
+                Header = "Nouveau membre"
+            };
+            newItem.Click += (sender, e) =>
+            {
+                NewMember();
                 viewer.UpdateList(Member.Views().Cast<MemberView>());
             };
-
-            contextMenu.Items.Add(delete);
-
-            MenuItem account = new MenuItem();
-            account.Header = "Compte";
-            account.Click += (sender, e) =>
-            {
-                MemberView? memberView = GetContextMenuSelectedObject((MenuItem)sender);
-                if (memberView is null) return;
-                Member? member = (Member?)Member.Select(memberView?.no_avs);
-
-                if (member is null) return;
-                AccountDetailWindows accountDetailWindow = new AccountDetailWindows(member);
-                accountDetailWindow.ShowDialog();
-            };
-            contextMenu.Items.Add(account);
-
-            //MenuItem checkEntry = new();
-            //account.Header = "Contrôle entrée";
-            //account.Click += (sender, e) =>
-            //{
-            //    MemberView? memberView = GetContextMenuSelectedObject((MenuItem)sender);
-            //    if (memberView is null) return;
-            //    Member? member = (Member?)Member.Select(memberView?.no_avs);
-
-            //    if (member is null) return;
-            //    member.Account.Update();
-                
-            //};
-
-
-            return contextMenu;
+            return newItem;
         }
 
         private static MemberView? GetContextMenuSelectedObject(MenuItem menuItem)

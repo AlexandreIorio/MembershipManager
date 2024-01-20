@@ -1,5 +1,4 @@
 ﻿using MembershipManager.DataModel.Buyable;
-using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
 using MembershipManager.View.Buyable;
 using MembershipManager.View.Financial;
@@ -14,37 +13,26 @@ namespace MembershipManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ListSelectionPage _listSelection;
+
         public MainWindow()
         {
             InitializeComponent();
-        }
 
-        private void ButtonMembership_Click(object sender, RoutedEventArgs e)
-        {
-            ListSelection listSelection = new(Member.Views().Cast<MemberView>())
+            _listSelection = new(Member.Views().Cast<MemberView>());
+            ListFrame.Navigate(_listSelection);
+
+            _listSelection.List.ContextMenu = MemberView.ContextMenu(_listSelection);
+
+            MouseDoubleClick += (sender, e) =>
             {
-                Width = 800
-            };
-            listSelection.List.ContextMenu = MemberView.ContextMenu(listSelection);
-            listSelection.MouseDoubleClick += (sender, e) =>
-            {
-                string? noAvs = (listSelection.List.SelectedItem as MemberView)?.no_avs;
+                string? noAvs = (_listSelection.List.SelectedItem as MemberView)?.no_avs;
                 if (noAvs is null) return;
-                MemberView.EditMember(noAvs);
-                listSelection.List.ItemsSource = Member.Views().Cast<MemberView>();
+                Member? member = (Member?)Member.Select(noAvs);
+                if (member is null) return;
+                AccountDetailWindows accountDetailWindow = new AccountDetailWindows(member);
+                accountDetailWindow.ShowDialog();
             };
-
-            //Define new button
-            Button button = listSelection.ButtonSelect;
-            button.Content = "Nouveau Membre";
-            button.Click += (sender, e) =>
-            {
-                MemberView.NewMember();
-                listSelection.List.ItemsSource = Member.Views().Cast<MemberView>();
-            };
-
-            listSelection.ShowDialog();
-
         }
 
         private void ButtonPlan_Click(object sender, RoutedEventArgs e)
@@ -72,11 +60,6 @@ namespace MembershipManager
             listSelection.ShowDialog();
         }
 
-        private void ButtonTest_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ButtonProduct_Click(object sender, RoutedEventArgs e)
         {
             ListSelection listSelection = new ListSelection(ProductView.Views().Cast<ProductView>());
@@ -96,6 +79,21 @@ namespace MembershipManager
         {
             BillDashBoard billDashBoard = new();
             billDashBoard.ShowDialog();
+        }
+
+        private void ButtonValidateEntry_Click(object sender, RoutedEventArgs e)
+        {
+            MemberView member = _listSelection.List.SelectedItem as MemberView;
+            if (member is null) return;
+
+            Member? memberSelected = Member.Select(member.no_avs) as Member;
+            if (memberSelected is null) return;
+
+            if (memberSelected.Account.TryConsumeEntry())
+                MessageBox.Show($"Entrée validée pour {memberSelected.FirstName} {memberSelected.LastName} !", "OK", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            else
+                MessageBox.Show($"Entrée impossible pour {memberSelected.FirstName} {memberSelected.LastName} !", "KO", MessageBoxButton.OK, MessageBoxImage.Error);
+
         }
     }
 }

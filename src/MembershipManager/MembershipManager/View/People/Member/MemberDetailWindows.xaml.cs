@@ -11,7 +11,7 @@ namespace MembershipManager.View.People.Member
         private bool _IsEditMode = false;
         private MemberDetail _memberDetail;
         private PersonDetail _personDetail;
-        private MembershipManager.DataModel.People.Member Member { get; set; }
+        private DataModel.People.Member Member { get; set; }
 
         public MemberDetailWindows(MembershipManager.DataModel.People.Member m)
         {
