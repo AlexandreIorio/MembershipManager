@@ -31,13 +31,13 @@ namespace MembershipManager
                 if (noAvs is null) return;
                 Member? member = (Member?)Member.Select(noAvs);
                 if (member is null) return;
-                AccountDetailWindows accountDetailWindow = new AccountDetailWindows(member);
+                AccountDetailWindows accountDetailWindow = new(member);
                 accountDetailWindow.ShowDialog();
             };
 
             _listSelection.TextBoxSearch.TextChanged += (sender, e) =>
             {
-              int currentTextLenght = _listSelection.TextBoxSearch.Text.Length;
+                int currentTextLenght = _listSelection.TextBoxSearch.Text.Length;
 
                 if (_listSelection.List.Items.Count == 1 && currentTextLenght > _previousTextLength)
                     ValidateEntry.Focus();
@@ -48,7 +48,7 @@ namespace MembershipManager
 
         private void ButtonPlan_Click(object sender, RoutedEventArgs e)
         {
-            ListSelection listSelection = new ListSelection(EntryView.Views().Cast<EntryView>());
+            ListSelection listSelection = new(EntryView.Views().Cast<EntryView>());
 
             listSelection.List.MouseDoubleClick += (sender, e) =>
             {
@@ -58,7 +58,7 @@ namespace MembershipManager
                 listSelection.UpdateList(EntryView.Views().Cast<EntryView>());
             };
 
-            Button button = new Button() { Content = "Nouveau plan" };
+            Button button = new() { Content = "Nouveau plan" };
             button.Click += (sender, e) =>
             {
                 EntryDetailWindow entryDetailWindow = new(new Entry());
@@ -73,9 +73,11 @@ namespace MembershipManager
 
         private void ButtonProduct_Click(object sender, RoutedEventArgs e)
         {
-            ListSelection listSelection = new ListSelection(ProductView.Views().Cast<ProductView>());
-            listSelection.Width = 800;
-            Button button = new Button() { Content = "Nouveau produit" };
+            ListSelection listSelection = new(ProductView.Views().Cast<ProductView>())
+            {
+                Width = 800
+            };
+            Button button = new() { Content = "Nouveau produit" };
             button.Click += (sender, e) =>
             {
                 ProductDetailWindows productDetailWindows = new(new Product());

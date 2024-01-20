@@ -32,13 +32,13 @@ namespace MembershipManager.Engine
             CheckDbValidity(cmd);
             OpenConnection(cmd.Connection);
 
-            List<List<object>> results = new();
+            List<List<object>> results = [];
             NpgsqlDataReader reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
                 while (reader.Read())
                 {
-                    List<object> Ids = new();
+                    List<object> Ids = [];
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
                         Ids.Add(reader[i]);
@@ -74,7 +74,7 @@ namespace MembershipManager.Engine
                     foreach (PropertyInfo p in type.GetProperties())
                     {
                         if (p.GetCustomAttribute<IgnoreSql>() != null) continue;
-                        var valueRead = reader[p.Name];
+                        object? valueRead = reader[p.Name];
                         if (valueRead is DBNull) valueRead = null;
                         p.SetValue(obj, valueRead);
                     }
@@ -137,7 +137,7 @@ namespace MembershipManager.Engine
             if (inherit)
             {
                 //Get primary keys of object
-                List<object> pks = new();
+                List<object> pks = [];
                 foreach (string pkName in ISql.GetPrimaryKeyNames(inheritType.InheritType))
                 {
                     if (pkName is null) continue;
@@ -160,7 +160,7 @@ namespace MembershipManager.Engine
 
             if (newObject is null) return null;
 
-            foreach (var property in type.GetProperties())
+            foreach (PropertyInfo property in type.GetProperties())
             {
                 // Ignore properties if from base class and inherit is true
                 if (property.DeclaringType != type && inherit)
@@ -173,7 +173,7 @@ namespace MembershipManager.Engine
                 if (attributes.Any(a => a is DbAttribute))
                 {
                     DbAttribute att = (DbAttribute)attributes.First(a => a is DbAttribute);
-                    var valueRead = reader[att.Name];
+                    object valueRead = reader[att.Name];
                     if (valueRead.GetType() != typeof(DBNull))
                         property.SetValue(newObject, valueRead);
                 }
@@ -182,7 +182,7 @@ namespace MembershipManager.Engine
                 else if (attributes.Any(a => a is DbRelation))
                 {
                     DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
-                    var foreignKey = reader[rel.Name];
+                    object foreignKey = reader[rel.Name];
                     Type relationType = property.PropertyType;
                     object[] args = { foreignKey };
                     ISql? newRelation = ISql.Select(relationType, args);
@@ -215,7 +215,7 @@ namespace MembershipManager.Engine
         public static string GetConnectionString()
         {
 
-            var AppSetting = ConfigurationManager.AppSettings;
+            System.Collections.Specialized.NameValueCollection AppSetting = ConfigurationManager.AppSettings;
             string? host = AppSetting["Host"];
             string? port = AppSetting["Port"];
             string? database = AppSetting["Database"];
@@ -234,7 +234,7 @@ namespace MembershipManager.Engine
         {
             CloseConnection(connection);
             connection.Open();
-            using var command = new NpgsqlCommand("SET search_path TO membershipmanager", connection);
+            using NpgsqlCommand command = new("SET search_path TO membershipmanager", connection);
             command.ExecuteNonQuery();
         }
 

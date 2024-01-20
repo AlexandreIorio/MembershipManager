@@ -15,7 +15,7 @@ namespace MembershipManager.DataModel.Financial
 
         public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            List<SqlViewable> list = new List<SqlViewable>();
+            List<SqlViewable> list = [];
             List<SqlViewable>? paiements = Paiement.Views(sqlParam);
             if (paiements != null) list.AddRange(paiements);
             List<SqlViewable>? consumption = Consumption.Views(sqlParam[0]);

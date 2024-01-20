@@ -45,7 +45,7 @@ namespace MembershipManager.DataModel.Buyable
 
         public bool Validate()
         {
-            StringBuilder message = new StringBuilder();
+            StringBuilder message = new();
             bool valid = true;
             if (string.IsNullOrEmpty(Code))
             {

@@ -27,8 +27,10 @@ namespace MembershipManager.DataModel.Buyable
 
         public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = @"SELECT * FROM Product;";
+            NpgsqlCommand cmd = new()
+            {
+                CommandText = @"SELECT * FROM Product;"
+            };
 
             return DbManager.Db.Views<ProductView>(cmd).Cast<SqlViewable>().ToList();
         }

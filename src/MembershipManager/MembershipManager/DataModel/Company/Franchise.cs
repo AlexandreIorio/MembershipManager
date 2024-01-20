@@ -38,7 +38,7 @@ namespace MembershipManager.DataModel.Company
 
         bool ISql.Validate()
         {
-            StringBuilder message = new StringBuilder();
+            StringBuilder message = new();
             bool valid = true;
             if (string.IsNullOrEmpty(StructureName))
             {

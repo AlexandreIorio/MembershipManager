@@ -1,10 +1,7 @@
-﻿using MembershipManager.DataModel.People;
-using MembershipManager.Engine;
+﻿using MembershipManager.Engine;
 using MembershipManager.View.Buyable;
-using MembershipManager.View.People.Member;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
-using System.CodeDom;
 
 namespace MembershipManager.DataModel.Buyable
 {
@@ -38,8 +35,10 @@ namespace MembershipManager.DataModel.Buyable
 
         public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = @"SELECT * FROM entry;";
+            NpgsqlCommand cmd = new()
+            {
+                CommandText = @"SELECT * FROM entry;"
+            };
 
             return DbManager.Db.Views<EntryView>(cmd).Cast<SqlViewable>().ToList();
         }

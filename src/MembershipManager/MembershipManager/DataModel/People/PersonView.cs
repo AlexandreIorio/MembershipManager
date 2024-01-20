@@ -37,13 +37,13 @@ namespace MembershipManager.DataModel.People
         {
             Person? person = (Person?)Person.Select(noAvs);
             if (person is null) return;
-            PersonDetailWindow personDetailWindow = new PersonDetailWindow(person);
+            PersonDetailWindow personDetailWindow = new(person);
             personDetailWindow.ShowDialog();
         }
 
         public static void NewPerson()
         {
-            PersonDetailWindow personDetailWindow = new PersonDetailWindow();
+            PersonDetailWindow personDetailWindow = new();
             personDetailWindow.ShowDialog();
         }
 

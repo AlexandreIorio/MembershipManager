@@ -86,7 +86,7 @@ namespace MembershipManager.DataModel.Financial
             if (Id is null) throw new NullReferenceException("Id is null");
             List<Consumption> consumptions = GetConsumptions();
 
-            List<int?> consumptionIds = new();
+            List<int?> consumptionIds = [];
             int? amount = Amount;
             if (amount == null) return;
             foreach (Consumption consumption in consumptions)
@@ -97,7 +97,7 @@ namespace MembershipManager.DataModel.Financial
                 amount -= consumption.Amount;
             }
 
-            NpgsqlCommand cmd = new NpgsqlCommand();
+            NpgsqlCommand cmd = new();
             StringBuilder sb = new();
 
             for (int i = 0; i < consumptionIds.Count(); i++)
@@ -115,8 +115,10 @@ namespace MembershipManager.DataModel.Financial
 
         public List<Consumption> GetConsumptions()
         {
-            Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand();
-            cmd.CommandText = "SELECT * FROM consumption WHERE account_id = @account_id";
+            Npgsql.NpgsqlCommand cmd = new()
+            {
+                CommandText = "SELECT * FROM consumption WHERE account_id = @account_id"
+            };
             cmd.Parameters.AddWithValue("@account_id", Account.NoAvs);
             return DbManager.Db.Recieve<Consumption>(cmd);
         }
@@ -154,8 +156,10 @@ namespace MembershipManager.DataModel.Financial
         {
             if (Validate())
             {
-                Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand();
-                cmd.CommandText = @"SELECT insert_paiement_and_bill(@amount, @account_id, @date, @payed, @issue_date, @payed_date, @payed_amount);";
+                Npgsql.NpgsqlCommand cmd = new()
+                {
+                    CommandText = @"SELECT insert_paiement_and_bill(@amount, @account_id, @date, @payed, @issue_date, @payed_date, @payed_amount);"
+                };
 
                 cmd.Parameters.AddWithValue("@amount", Amount);
                 cmd.Parameters.AddWithValue("@account_id", NpgsqlTypes.NpgsqlDbType.Varchar, 13, Account.NoAvs);
@@ -177,7 +181,7 @@ namespace MembershipManager.DataModel.Financial
 
         public new bool Validate()
         {
-            StringBuilder message = new StringBuilder();
+            StringBuilder message = new();
             bool valid = true;
             if (Account is null)
             {
@@ -214,9 +218,9 @@ namespace MembershipManager.DataModel.Financial
         {
             if (sqlParam.Length > 2) throw new ArgumentException();
 
-            NpgsqlCommand cmd = new NpgsqlCommand();
+            NpgsqlCommand cmd = new();
 
-            StringBuilder SqlQuery = new StringBuilder(@"SELECT bill.id, bill.issue_date, bill.payed_date, bill.payed_amount, paiement.payed, paiement.account_id, amount, date, person.first_name, person.last_name
+            StringBuilder SqlQuery = new(@"SELECT bill.id, bill.issue_date, bill.payed_date, bill.payed_amount, paiement.payed, paiement.account_id, amount, date, person.first_name, person.last_name
                                                         FROM Bill
                                                             LEFT JOIN paiement ON bill.id = paiement.id
                                                             LEFT JOIN memberaccount ON paiement.account_id = memberaccount.id

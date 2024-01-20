@@ -1,16 +1,10 @@
-using MembershipManager.DataModel;
-using MembershipManager.DataModel.Buyable;
 using MembershipManager.DataModel.Financial;
 using MembershipManager.DataModel.People;
-using MembershipManager.Engine;
 using MembershipManager.View.Utils;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace MembershipManager.View.Financial
@@ -145,7 +139,7 @@ namespace MembershipManager.View.Financial
                 listSelection.DialogResult = false;
                 listSelection.Close();
             };
-            
+
             listSelection.ShowDialog();
             if (listSelection.DialogResult == true && listSelection.List.SelectedItem is not null)
             {

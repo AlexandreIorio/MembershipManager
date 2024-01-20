@@ -70,7 +70,7 @@ namespace MembershipManager.DataModel.People
 
         public bool Validate()
         {
-            StringBuilder message = new StringBuilder();
+            StringBuilder message = new();
             bool valid = true;
             if (string.IsNullOrEmpty(NoAvs))
             {
@@ -126,11 +126,13 @@ namespace MembershipManager.DataModel.People
 
         public static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = @"SELECT no_avs, first_name, last_name, address, city.name as city_name, canton.name as canton_name
+            NpgsqlCommand cmd = new()
+            {
+                CommandText = @"SELECT no_avs, first_name, last_name, address, city.name as city_name, canton.name as canton_name
                                 FROM person
                                     INNER JOIN city ON city_id = city.id
-                                    INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";
+                                    INNER JOIN canton ON canton_abbreviation = canton.abbreviation;"
+            };
 
             return DbManager.Db.Views<PersonView>(cmd).Cast<SqlViewable>().ToList();
         }

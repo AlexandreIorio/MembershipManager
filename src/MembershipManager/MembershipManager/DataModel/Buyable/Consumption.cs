@@ -60,7 +60,7 @@ namespace MembershipManager.DataModel.Buyable
 
         public new bool Validate()
         {
-            StringBuilder message = new StringBuilder();
+            StringBuilder message = new();
             bool valid = true;
             if (Date is null)
             {
@@ -98,16 +98,16 @@ namespace MembershipManager.DataModel.Buyable
         {
             if (sqlParam.Length > 1) throw new ArgumentException();
 
-            NpgsqlCommand cmd = new NpgsqlCommand();
+            NpgsqlCommand cmd = new();
 
-            StringBuilder SqlQuery = new StringBuilder(@"SELECT * FROM consumption");
+            StringBuilder SqlQuery = new(@"SELECT * FROM consumption");
 
 
             if (sqlParam.Length == 1)
             {
                 SqlQuery.Append(" WHERE account_id = @id");
                 //TODO trouver un moyen de cloner le paramêtre
-                NpgsqlParameter param = new NpgsqlParameter("@id", sqlParam[0].NpgsqlValue);
+                NpgsqlParameter param = new("@id", sqlParam[0].NpgsqlValue);
                 cmd.Parameters.Add(param);
             }
 

@@ -5,7 +5,6 @@ using MembershipManager.View.Buyable;
 using Npgsql;
 using System.Data;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MembershipManager.View.Financial
@@ -44,9 +43,11 @@ namespace MembershipManager.View.Financial
 
         private void RefreshTransactions()
         {
-            NpgsqlParameter param = new NpgsqlParameter("@id", Account?.NoAvs);
-            NpgsqlParameter param2 = new NpgsqlParameter("@payed", true);
-            param2.DbType = DbType.Boolean;
+            NpgsqlParameter param = new("@id", Account?.NoAvs);
+            NpgsqlParameter param2 = new("@payed", true)
+            {
+                DbType = DbType.Boolean
+            };
             Transactions = ITransaction.Views(param, param2)?.Cast<ITransaction>().ToList();
             TransactionsDataGrid.ItemsSource = Transactions;
             LabelBalance.Content = Balance;
@@ -65,7 +66,7 @@ namespace MembershipManager.View.Financial
                 if (paiementView is null) return;
                 Paiement? paiement = Paiement.Select(paiementView.id ?? throw new NullReferenceException("The id of paiement can't be null")) as Paiement;
                 if (paiement is null) return;
-                PaiementDetailWindows paiementDetailWindows = new PaiementDetailWindows(paiement);
+                PaiementDetailWindows paiementDetailWindows = new(paiement);
                 paiementDetailWindows.ShowDialog();
                 RefreshTransactions();
             }
@@ -74,7 +75,7 @@ namespace MembershipManager.View.Financial
                 if (consumptionView is null) return;
                 Consumption? consumption = Consumption.Select(consumptionView.Id ?? throw new NullReferenceException("The id of consumption can't be null")) as Consumption;
                 if (consumption is null) return;
-                ConsumptionDetailWindows consumptionDetailWindows = new ConsumptionDetailWindows(consumption);
+                ConsumptionDetailWindows consumptionDetailWindows = new(consumption);
                 consumptionDetailWindows.ShowDialog();
                 RefreshTransactions();
             }
@@ -83,15 +84,15 @@ namespace MembershipManager.View.Financial
 
         private void ButtonAddPaiement_Click(object sender, RoutedEventArgs e)
         {
-            PaiementDetailWindows paiementDetailWindows = new PaiementDetailWindows(Account);
+            PaiementDetailWindows paiementDetailWindows = new(Account);
             paiementDetailWindows.ShowDialog();
             RefreshTransactions();
         }
 
         private void ButtonAddConsuption_Click(object sender, RoutedEventArgs e)
         {
-            Consumption consumption = new Consumption(new Product(), Account);
-            ConsumptionDetailWindows consumptionDetailWindows = new ConsumptionDetailWindows(consumption);
+            Consumption consumption = new(new Product(), Account);
+            ConsumptionDetailWindows consumptionDetailWindows = new(consumption);
             consumptionDetailWindows.ShowDialog();
             RefreshTransactions();
         }
@@ -125,8 +126,10 @@ namespace MembershipManager.View.Financial
 
         private void ButtonGenerateBill_Click(object sender, RoutedEventArgs e)
         {
-            Bill bill = new Bill();
-            bill.Account = Account;
+            Bill bill = new()
+            {
+                Account = Account
+            };
             bill.Generate();
             RefreshTransactions();
         }

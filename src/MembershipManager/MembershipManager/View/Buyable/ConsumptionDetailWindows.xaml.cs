@@ -69,7 +69,7 @@ namespace MembershipManager.View.Buyable
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            ProductDetailWindows productDetailWindows = new ProductDetailWindows(new Product());
+            ProductDetailWindows productDetailWindows = new(new Product());
             productDetailWindows.ShowDialog();
             _listSelection.UpdateList(ProductView.Views().Cast<ProductView>());
         }

@@ -56,9 +56,11 @@ namespace MembershipManager.DataModel.Financial
         {
             get
             {
-                NpgsqlParameter param = new NpgsqlParameter("@id", NoAvs);
-                NpgsqlParameter param2 = new NpgsqlParameter("@payed", true);
-                param2.DbType = DbType.Boolean;
+                NpgsqlParameter param = new("@id", NoAvs);
+                NpgsqlParameter param2 = new("@payed", true)
+                {
+                    DbType = DbType.Boolean
+                };
                 return ITransaction.Views(param, param2)?.Cast<ITransaction>().ToList();
             }
         }
@@ -67,9 +69,11 @@ namespace MembershipManager.DataModel.Financial
         {
             get
             {
-                NpgsqlParameter param = new NpgsqlParameter("@id", NoAvs);
-                NpgsqlParameter param2 = new("@payed", false);
-                param2.DbType = DbType.Boolean;
+                NpgsqlParameter param = new("@id", NoAvs);
+                NpgsqlParameter param2 = new("@payed", false)
+                {
+                    DbType = DbType.Boolean
+                };
                 return Paiement.Views(param, param2)?.Cast<PaiementView>().ToList();
             }
         }
