@@ -49,6 +49,22 @@ https://github.com/AlexandreIorio/MembershipManager/blob/main/RequirementSpecifi
 
 ## 2. Phase II : Modélisation conceptuelle
 
-Une fois le cahier des charge validé, nous avons établis le schema conceptuel
+Une fois le cahier des charges validé, nous avons établi le schéma conceptuel de base auquel nous avons retiré un parti (en rouge sur le schéma) afin de réaliser un travail d'ampleur raisonnable.
+<img src="../ConceptualModeling/MemberShipManager_ConceptualModelin_base.svg">
+
+Lors de l'implémentation, nous nous sommes concentrés sur la problématique de base mentionnée dans le cahier des charges, à savoir
+
+<quote>
+The previous owner managed the affairs of the fitness establishment without any computer assistance; subscriber management was done using paper documents, most of which are either not retrievable or have been lost. To this day, individuals, who purchased a subscription, show up at the establishment, and the current manager struggles to determine when and how members took out their subscriptions. Furthermore, billing and payment reminders are handled manually using paper cards with hand-written dates to track the invoices due dates. Invoices are manually created in a word processing software without using any mailing process. Currently, there are just over 400 members to manage with limited computer support.
+</quote>
+
+
+
+Voici le schéma conceptuel du ce qui a été réalisé
+
+<img src="../ConceptualModeling/MemberShipManager_ConceptualModelin_implemented.drawio.svg">
+
+
+
 
 
