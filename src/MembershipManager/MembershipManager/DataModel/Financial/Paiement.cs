@@ -2,14 +2,13 @@ using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
 using NpgsqlTypes;
-using System.ComponentModel;
 using System.Text;
 using System.Windows;
 
 namespace MembershipManager.DataModel.Financial
 {
     [DbTableName("paiement")]
-    public class Paiement : ISql, INotifyPropertyChanged, Ilistable
+    public class Paiement : ISql, Ilistable
     {
 
         [DbPrimaryKey(NpgsqlDbType.Integer)]
@@ -39,8 +38,6 @@ namespace MembershipManager.DataModel.Financial
             Payed = paiement.Payed;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public static ISql? Select(params object[] pk)
         {
             if (pk.Length != 1) throw new ArgumentException();
@@ -60,7 +57,7 @@ namespace MembershipManager.DataModel.Financial
 
         public bool Validate()
         {
-            StringBuilder message = new StringBuilder();
+            StringBuilder message = new();
             bool valid = true;
             if (Account is null)
             {
@@ -98,9 +95,9 @@ namespace MembershipManager.DataModel.Financial
         {
             if (sqlParam.Length > 2) throw new ArgumentException();
 
-            NpgsqlCommand cmd = new NpgsqlCommand();
+            NpgsqlCommand cmd = new();
 
-            StringBuilder SqlQuery = new StringBuilder(@"SELECT paiement.id, paiement.payed, paiement.account_id, amount, date, p.first_name, p.last_name
+            StringBuilder SqlQuery = new(@"SELECT paiement.id, paiement.payed, paiement.account_id, amount, date, p.first_name, p.last_name
                                     FROM paiement
                                     INNER JOIN  memberaccount ON paiement.account_id = memberaccount.id
                                     INNER JOIN member AS m ON memberaccount.id = m.no_avs

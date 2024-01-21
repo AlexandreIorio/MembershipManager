@@ -8,22 +8,22 @@ namespace MembershipManager.Engine
     {
         #region Abstract Methods
         /// <summary>
-        /// Abstract method to insert a new row in the database
+        /// method to insert a new row in the database
         /// </summary>
         public void Insert();
 
         /// <summary>
-        /// Abstract method to update a row in the database
+        /// method to update a row in the database
         /// </summary> 
         public void Update();
 
         /// <summary>
-        /// Abstract method to delete a row in the database
+        /// method to delete a row in the database
         /// </summary>
         public abstract static void Delete(params object[] pk);
 
         /// <summary>
-        /// Abstract method to select a row in the database
+        /// method to select a row in the database
         /// </summary> 
         /// <param name="pk"/> is the primary keys of the row to select</param>
         public abstract static ISql? Select(params object[] pk);
@@ -79,15 +79,17 @@ namespace MembershipManager.Engine
             if (tableNameAttribute == null) throw new MissingMemberException();
 
             //create amd compute the command
-            NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM {tableNameAttribute.Name} {ComputeWhereClause(type)}";
+            NpgsqlCommand cmd = new()
+            {
+                CommandText = $"SELECT * FROM {tableNameAttribute.Name} {ComputeWhereClause(type)}"
+            };
             int i = 0;
             foreach (PropertyInfo p in type.GetProperties())
             {
                 if (i == pk.Length) break;
                 DbPrimaryKey? dbPrimaryKey = p.GetCustomAttribute<DbPrimaryKey>();
                 if (dbPrimaryKey is null) continue;
-                NpgsqlParameter param = new NpgsqlParameter($"@value{i}", dbPrimaryKey.PkType, dbPrimaryKey.Size) { Value = pk[i] };
+                NpgsqlParameter param = new($"@value{i}", dbPrimaryKey.PkType, dbPrimaryKey.Size) { Value = pk[i] };
                 cmd.Parameters.Add(param);
                 i++;
             }
@@ -115,7 +117,7 @@ namespace MembershipManager.Engine
                 if (i == pk.Length) break;
                 DbPrimaryKey? dbPrimaryKey = p.GetCustomAttribute<DbPrimaryKey>();
                 if (dbPrimaryKey is null) continue;
-                NpgsqlParameter param = new NpgsqlParameter($"@value{i}", dbPrimaryKey.PkType, dbPrimaryKey.Size) { Value = pk[i] };
+                NpgsqlParameter param = new($"@value{i}", dbPrimaryKey.PkType, dbPrimaryKey.Size) { Value = pk[i] };
                 cmd.Parameters.Add(param);
                 i++;
             }
@@ -137,8 +139,10 @@ namespace MembershipManager.Engine
             if (tableNameAttribute == null) throw new MissingMemberException();
 
             //create the command
-            NpgsqlCommand cmd = new();
-            cmd.CommandText = $"SELECT * FROM {tableNameAttribute.Name}";
+            NpgsqlCommand cmd = new()
+            {
+                CommandText = $"SELECT * FROM {tableNameAttribute.Name}"
+            };
 
             //return the whole list
             return DbManager.Db.Recieve<T>(cmd);
@@ -161,7 +165,7 @@ namespace MembershipManager.Engine
             StringBuilder sbVal = new("(");
             int i = 0;
 
-            NpgsqlCommand cmd = new NpgsqlCommand();
+            NpgsqlCommand cmd = new();
             foreach (PropertyInfo p in type.GetProperties())
             {
                 IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
@@ -186,7 +190,7 @@ namespace MembershipManager.Engine
                     {
                         DbAttribute att = (DbAttribute)attributes.First(a => a is DbAttribute);
 
-                        NpgsqlParameter param = new NpgsqlParameter($"@value{i}", value);
+                        NpgsqlParameter param = new($"@value{i}", value);
                         cmd.Parameters.Add(param);
                     }
 
@@ -195,7 +199,7 @@ namespace MembershipManager.Engine
                         // get the relation attribute of the property
                         DbRelation rel = (DbRelation)attributes.First(a => a is DbRelation);
                         ISql? sqlObject = (ISql?)value ?? throw new Exception("ISql is null");
-                        NpgsqlParameter param = new NpgsqlParameter($"@value{i}", GetDbAttributeByName(sqlObject, rel.Name));
+                        NpgsqlParameter param = new($"@value{i}", GetDbAttributeByName(sqlObject, rel.Name));
                         cmd.Parameters.Add(param);
                     }
 
@@ -232,7 +236,7 @@ namespace MembershipManager.Engine
             StringBuilder sbAtt = new($"UPDATE {tableName} SET ");
             int i = 0;
 
-            NpgsqlCommand cmd = new NpgsqlCommand();
+            NpgsqlCommand cmd = new();
             foreach (PropertyInfo p in type.GetProperties())
             {
                 IEnumerable<DbConstraint> constraints = p.GetCustomAttributes<DbConstraint>();
@@ -253,18 +257,18 @@ namespace MembershipManager.Engine
                     if (attribute is DbAttribute)
                     {
                         object? value = p.GetValue(obj) ?? DBNull.Value;
-                        NpgsqlParameter param = new NpgsqlParameter($"@value{i}", value);
+                        NpgsqlParameter param = new($"@value{i}", value);
                         cmd.Parameters.Add(param);
                     }
 
                     else if (attribute is DbRelation)
                     {
                         // get the relation attribute of the property
-                        var value = p.GetValue(obj);
+                        object? value = p.GetValue(obj);
                         if (value is null) continue;
                         ISql? sql = (ISql?)value ?? throw new Exception("ISql is null");
                         object? val = GetDbAttributeByName(sql, attribute.Name) ?? DBNull.Value;
-                        NpgsqlParameter param = new NpgsqlParameter($"@value{i}", val);
+                        NpgsqlParameter param = new($"@value{i}", val);
                         cmd.Parameters.Add(param);
                     }
 
@@ -281,7 +285,7 @@ namespace MembershipManager.Engine
             for (int j = 0; j < primaryKeysName.Count(); j++)
             {
                 sbAtt.Append($"{primaryKeysName[j]} = @value{i}").Append(" AND ");
-                NpgsqlParameter param = new NpgsqlParameter($"@value{i}", primaryKeysValue[j]);
+                NpgsqlParameter param = new($"@value{i}", primaryKeysValue[j]);
                 cmd.Parameters.Add(param);
                 ++i;
             }
@@ -302,7 +306,7 @@ namespace MembershipManager.Engine
         private static List<object?> GetPrimaryKeyValues(object obj)
         {
             Type type = obj.GetType();
-            List<object?> pkValues = new();
+            List<object?> pkValues = [];
             foreach (PropertyInfo p in type.GetProperties())
             {
                 DbPrimaryKey? attribute = p.GetCustomAttribute<DbPrimaryKey>();
@@ -318,7 +322,7 @@ namespace MembershipManager.Engine
         /// <returns>A list of primary key names</returns>
         public static List<string> GetPrimaryKeyNames(Type type)
         {
-            List<string> dbPrimaryKeys = new List<string>();
+            List<string> dbPrimaryKeys = [];
 
             foreach (PropertyInfo p in type.GetProperties())
             {
@@ -356,7 +360,7 @@ namespace MembershipManager.Engine
         private static string ComputeWhereClause(Type type)
         {
             List<string> dbPrimaryKeys = GetPrimaryKeyNames(type);
-            StringBuilder sb = new StringBuilder("WHERE ");
+            StringBuilder sb = new("WHERE ");
 
             for (int i = 0; i < dbPrimaryKeys.Count; i++)
             {

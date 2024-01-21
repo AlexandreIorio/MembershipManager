@@ -1,7 +1,6 @@
 ﻿using MembershipManager.DataModel.Buyable;
 using MembershipManager.Engine;
 using Npgsql;
-using System.ComponentModel;
 using System.Data;
 
 namespace MembershipManager.DataModel.Financial
@@ -18,8 +17,6 @@ namespace MembershipManager.DataModel.Financial
 
         [DbAttribute("subscription_issue")]
         public DateTime? SubscriptionIssue { get; set; }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         public static ISql? Select(params object[] pk)
         {
@@ -56,9 +53,11 @@ namespace MembershipManager.DataModel.Financial
         {
             get
             {
-                NpgsqlParameter param = new NpgsqlParameter("@id", NoAvs);
-                NpgsqlParameter param2 = new NpgsqlParameter("@payed", true);
-                param2.DbType = DbType.Boolean;
+                NpgsqlParameter param = new("@id", NoAvs);
+                NpgsqlParameter param2 = new("@payed", true)
+                {
+                    DbType = DbType.Boolean
+                };
                 return ITransaction.Views(param, param2)?.Cast<ITransaction>().ToList();
             }
         }
@@ -67,9 +66,11 @@ namespace MembershipManager.DataModel.Financial
         {
             get
             {
-                NpgsqlParameter param = new NpgsqlParameter("@id", NoAvs);
-                NpgsqlParameter param2 = new("@payed", false);
-                param2.DbType = DbType.Boolean;
+                NpgsqlParameter param = new("@id", NoAvs);
+                NpgsqlParameter param2 = new("@payed", false)
+                {
+                    DbType = DbType.Boolean
+                };
                 return Paiement.Views(param, param2)?.Cast<PaiementView>().ToList();
             }
         }

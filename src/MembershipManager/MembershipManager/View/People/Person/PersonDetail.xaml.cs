@@ -26,7 +26,7 @@ namespace MembershipManager.View.People.Person
 
         private void ButtonCity_Click(object sender, RoutedEventArgs e)
         {
-            ListSelection listSelection = new ListSelection(City.Cities);
+            ListSelection listSelection = new(City.Cities);
 
             listSelection.List.MouseDoubleClick += (sender, e) =>
             {

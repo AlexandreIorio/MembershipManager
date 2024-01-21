@@ -43,7 +43,7 @@ namespace MembershipManager.Resources
 
         public bool Validate()
         {
-            StringBuilder message = new StringBuilder();
+            StringBuilder message = new();
             bool valid = true;
             if (PaymentTerms is null)
             {

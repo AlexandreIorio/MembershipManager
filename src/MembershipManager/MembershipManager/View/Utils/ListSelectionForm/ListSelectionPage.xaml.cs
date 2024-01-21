@@ -78,7 +78,7 @@ namespace MembershipManager.View.Utils
 
         private void InitializeList()
         {
-            GridView gv = new GridView();
+            GridView gv = new();
             foreach (PropertyInfo p in _type.GetProperties())
             {
                 if (p.GetCustomAttribute<Displayed>() is Displayed displayedAttribute)
@@ -86,11 +86,13 @@ namespace MembershipManager.View.Utils
                     //Get TextFormat attribute if exists
                     string? format = p.GetCustomAttribute<TextFormat>()?.Format;
 
-                    GridViewColumn column = new GridViewColumn();
-                    column.DisplayMemberBinding = new Binding(p.Name);
+                    GridViewColumn column = new()
+                    {
+                        DisplayMemberBinding = new Binding(p.Name)
+                    };
                     if (format is not null) column.DisplayMemberBinding.StringFormat = format;
 
-                    GridViewColumnHeader header = new GridViewColumnHeader();
+                    GridViewColumnHeader header = new();
                     header.Click += List_Click;
                     header.Content = displayedAttribute.HeaderName;
                     header.Tag = p;
@@ -109,9 +111,11 @@ namespace MembershipManager.View.Utils
             {
                 if (p.GetCustomAttribute<Filtered>() is Filtered filtered)
                 {
-                    item = new ComboBoxItem();
-                    item.Content = filtered.FriendlyName;
-                    item.Tag = p.Name;
+                    item = new ComboBoxItem
+                    {
+                        Content = filtered.FriendlyName,
+                        Tag = p.Name
+                    };
                     if (filtered.IsDefault)
                     {
                         ComboBoxFilters.Items.Insert(0, item);

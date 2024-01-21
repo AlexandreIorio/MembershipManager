@@ -29,7 +29,7 @@ namespace MembershipManager.View.Buyable
                 return;
             }
 
-            ListSelection listSelection = new ListSelection(products);
+            ListSelection listSelection = new(products);
 
             listSelection.List.MouseDoubleClick += (sender, e) =>
             {

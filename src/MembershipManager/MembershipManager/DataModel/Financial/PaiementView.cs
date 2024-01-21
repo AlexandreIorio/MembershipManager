@@ -34,7 +34,7 @@ namespace MembershipManager.DataModel.Financial
 
 
         [IgnoreSql]
-        public double ComputedAmount => Math.Round(((Amount ?? 0) / 100.0), 2);
+        public double ComputedAmount => Math.Round((Amount ?? 0) / 100.0, 2);
 
         public string? Account_id { get; set; }
     }

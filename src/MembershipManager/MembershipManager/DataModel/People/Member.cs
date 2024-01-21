@@ -3,7 +3,6 @@ using MembershipManager.DataModel.Financial;
 using MembershipManager.Engine;
 using MembershipManager.View.Utils.ListSelectionForm;
 using Npgsql;
-using System.ComponentModel;
 using System.Text;
 using System.Windows;
 
@@ -25,8 +24,6 @@ namespace MembershipManager.DataModel.People
 
         [DbAttribute("subscription_date")]
         public DateTime SubscriptionDate { get; set; }
-
-        public new event PropertyChangedEventHandler? PropertyChanged;
 
         public Member() : base()
         {
@@ -58,7 +55,7 @@ namespace MembershipManager.DataModel.People
 
         public new bool Validate()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             bool valid = true;
             if (!base.Validate()) valid = false;
             if (Structure == null)
@@ -92,13 +89,15 @@ namespace MembershipManager.DataModel.People
         public new static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
 
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.CommandText = @"SELECT member.no_avs, first_name, last_name, address, subscription_date, structure.name as structure_name, city.name as city_name, canton.name as canton_name
+            NpgsqlCommand cmd = new()
+            {
+                CommandText = @"SELECT member.no_avs, first_name, last_name, address, subscription_date, structure.name as structure_name, city.name as city_name, canton.name as canton_name
                                     FROM member
                                         INNER JOIN structure ON structure_name = structure.name
                                         INNER JOIN person ON member.no_avs = person.no_avs 
                                         INNER JOIN city ON person.city_id = city.id
-                                        INNER JOIN canton ON canton_abbreviation = canton.abbreviation;";
+                                        INNER JOIN canton ON canton_abbreviation = canton.abbreviation;"
+            };
 
             return DbManager.Db.Views<MemberView>(cmd).Cast<SqlViewable>().ToList();
 

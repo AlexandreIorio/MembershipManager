@@ -41,7 +41,7 @@ namespace MembershipManager.View.Financial
                 return;
             }
 
-            ListSelection listSelection = new ListSelection(members);
+            ListSelection listSelection = new(members);
 
             listSelection.List.MouseDoubleClick += (sender, e) =>
             {

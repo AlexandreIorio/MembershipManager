@@ -19,7 +19,7 @@ namespace MembershipManager
 #else
         private const int splashScreenDelay = 3000;
 #endif
-        private List<Tuple<Action, string>> InitialisationActions = new List<Tuple<Action, string>>();
+        private List<Tuple<Action, string>> InitialisationActions = [];
 
         public App()
         {
@@ -31,11 +31,11 @@ namespace MembershipManager
         {
 
             InitializeCultures();
-            MainWindow mainWindow = new MainWindow();
-            SplashScreen splashScreen = new SplashScreen();
+            MainWindow mainWindow = new();
+            SplashScreen splashScreen = new();
             splashScreen.Show();
 
-            Stopwatch timer = new Stopwatch();
+            Stopwatch timer = new();
             timer.Start();
 
             int minActionTime = splashScreenDelay / (InitialisationActions.Count + 1);
@@ -62,7 +62,7 @@ namespace MembershipManager
                     }
                 }
                 splashScreen.Dispatcher.Invoke(() => splashScreen.progressBar.Value = 100);
-                Thread.Sleep((int)minActionTime);
+                Thread.Sleep(minActionTime);
                 return true;
             });
 
@@ -72,7 +72,7 @@ namespace MembershipManager
 
         private static void InitializeCultures()
         {
-            CultureInfo cultureInfo = new CultureInfo("fr-CH");
+            CultureInfo cultureInfo = new("fr-CH");
             cultureInfo.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
             cultureInfo.DateTimeFormat.LongDatePattern = "dddd, d MMMM yyyy";
             cultureInfo.DateTimeFormat.ShortTimePattern = "HH:mm";

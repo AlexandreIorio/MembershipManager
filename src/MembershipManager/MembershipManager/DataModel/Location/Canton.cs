@@ -52,6 +52,6 @@ namespace MembershipManager.DataModel
             throw new NotImplementedException();
         }
 
-        public static List<Canton> Cantons { get; set; } = new List<Canton>();
+        public static List<Canton> Cantons { get; set; } = [];
     }
 }

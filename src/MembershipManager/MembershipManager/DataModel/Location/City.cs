@@ -69,7 +69,7 @@ namespace MembershipManager.DataModel
             throw new NotImplementedException();
         }
 
-        public static List<City> Cities { get; set; } = new List<City>();
+        public static List<City> Cities { get; set; } = [];
 
     }
 }

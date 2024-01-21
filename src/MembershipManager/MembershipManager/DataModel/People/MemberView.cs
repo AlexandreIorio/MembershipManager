@@ -1,5 +1,4 @@
 ﻿using MembershipManager.Engine;
-using MembershipManager.View.Financial;
 using MembershipManager.View.People.Member;
 using MembershipManager.View.Utils;
 using MembershipManager.View.Utils.ListSelectionForm;
@@ -45,8 +44,10 @@ namespace MembershipManager.DataModel.People
 
         private static MenuItem CreateButtonDeleteMember(ListSelectionPage viewer)
         {
-            MenuItem delete = new MenuItem();
-            delete.Header = "Supprimer";
+            MenuItem delete = new()
+            {
+                Header = "Supprimer"
+            };
             delete.Click += (sender, e) =>
             {
                 MemberView? member = GetContextMenuSelectedObject((MenuItem)sender);

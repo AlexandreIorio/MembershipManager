@@ -19,7 +19,7 @@ namespace MembershipManager.DataModel.Financial
         public int? payed_amount { get; set; }
         [IgnoreSql]
         public string[] StatusList { get => Bill.BillStatusNames; }
-        
+
 
         [IgnoreSql]
         public string Number
@@ -31,7 +31,7 @@ namespace MembershipManager.DataModel.Financial
             }
         }
         [IgnoreSql]
-        public double ? ComputedPayedAmount => Math.Round(((payed_amount ?? 0) / 100.0), 2);
+        public double? ComputedPayedAmount => Math.Round((payed_amount ?? 0) / 100.0, 2);
 
         [IgnoreSql]
         public string Status
@@ -46,12 +46,13 @@ namespace MembershipManager.DataModel.Financial
 
         [IgnoreSql]
         public static List<ConsumptionView>? Consumptions { get; set; } = Consumption.Views()?.Cast<ConsumptionView>().ToList();
-        
+
         [IgnoreSql]
         public List<ConsumptionView>? ConsumptionsDetail
         {
             get
-            {;
+            {
+                ;
                 return Consumptions?.Where(c => c.Bill_id == id).ToList();
             }
         }
@@ -68,7 +69,7 @@ namespace MembershipManager.DataModel.Financial
 
         public string GetStatusName()
         {
-           return BillStatusNames[(int)GetStatus()];
+            return BillStatusNames[(int)GetStatus()];
         }
     }
 }
