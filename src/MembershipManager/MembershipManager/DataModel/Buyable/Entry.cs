@@ -28,6 +28,10 @@ namespace MembershipManager.DataModel.Buyable
         /// </summary>
         [DbAttribute("amount")]
         public int? Amount { get; set; }
+
+        /// <summary>
+        /// The amount of the entry, in francs.
+        /// </summary>
         public double ComputedAmount { get => (Amount ?? 0) / 100.0; set => Amount = (int?)(value * 100); }
 
         /// <summary>

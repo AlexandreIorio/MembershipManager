@@ -87,8 +87,8 @@ namespace MembershipManager.DataModel.Financial
         public bool Generate()
         {
             if (Account is null) throw new NullReferenceException("Account is null");
-            if (Account.Balance is null || Account.Balance > 0) return;
-            if (Account.PendingAmount is null) return;
+            if (Account.Balance is null || Account.Balance > 0) return false;
+            if (Account.PendingAmount is null) return false;
 
             double? billeableAmount = Account.Balance + Account.PendingAmount;
             if (billeableAmount < 0)
