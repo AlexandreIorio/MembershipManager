@@ -22,7 +22,7 @@ Welcome to the MembershipManagemer project! This repository houses our database 
     - [Features](#features)
   - [Deployment](#deployment)
     - [1. Install Database](#1-install-database)
-    - [2. Build Database](#2-build-database)
+    - [2. Create + populate database](#2-create--populate-database)
     - [3. Install .NET 8.0 Runtime](#3-install-net-80-runtime)
     - [4. Download Latest Release](#4-download-latest-release)
     - [5. Edit Configuration File](#5-edit-configuration-file)
@@ -141,18 +141,18 @@ This is not mandatory as the database is automaticly created when you run the so
 But if you want to populate the databse to make some test, execute theses script from datagrip or others tools to query the db.
 
 It's important to follow this order :
-  database.sql
-  canton.sql
-  city.sql
-  structure.sql
-  franchise.sql
-  product.sql
-  entry.sql
-  person.sql
-  member.sql
-  paiement.sql
-  bill.sql
-  consumption.sql
+- database.sql
+- canton.sql
+- city.sql
+- structure.sql
+- franchise.sql
+- product.sql
+- entry.sql
+- person.sql
+- member.sql
+- paiement.sql
+- bill.sql
+- consumption.sql
 
 ### 3. Install .NET 8.0 Runtime
 
