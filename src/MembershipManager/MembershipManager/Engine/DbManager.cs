@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System.Configuration;
 using System.Reflection;
+using System.Windows;
 
 
 namespace MembershipManager.Engine
@@ -251,9 +252,15 @@ namespace MembershipManager.Engine
         /// <param name="connection"></param>
         private static void OpenConnection(NpgsqlConnection connection)
         {
-            
-            CloseConnection(connection);
-            connection.Open();
+            try
+            {
+                CloseConnection(connection);
+                connection.Open();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         /// <summary>
