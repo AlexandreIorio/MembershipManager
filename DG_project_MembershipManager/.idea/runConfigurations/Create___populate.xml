@@ -1,17 +1,17 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Create + populate" type="DatabaseScript">
     <script-file value="$PROJECT_DIR$/../RelationalModeling/database.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/canton.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/city.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/structure.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/franchise.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/product.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/entry.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/person.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/member.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/paiement.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/bill.sql" />
-    <script-file value="$PROJECT_DIR$/../RelationalModeling/consumption.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/canton.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/city.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/structure.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/franchise.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/product.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/entry.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/person.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/member.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/paiement.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/bill.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/populate/consumption.sql" />
     <script-mode>FILE</script-mode>
     <data-source id="1928af57-2752-41e9-bf44-3161bbd8e9bc" namespace="database/&quot;bdr&quot;/schema/&quot;membershipmanager&quot;" />
     <method v="2" />
