@@ -20,9 +20,9 @@ namespace MembershipManager.Engine
         public void Send(NpgsqlCommand cmd)
         {
             cmd.Connection = new NpgsqlConnection(GetConnectionString());
-            cmd.Prepare();
             CheckDbValidity(cmd);
             OpenConnection(cmd.Connection);
+            cmd.Prepare();
             cmd.ExecuteNonQuery();
             CloseConnection(cmd.Connection);
         }

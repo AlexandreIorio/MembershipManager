@@ -109,5 +109,10 @@ namespace MembershipManager
 
             _listSelection.TextBoxSearch.Focus();
         }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            _listSelection.TextBoxSearch.Focus();
+        }
     }
 }

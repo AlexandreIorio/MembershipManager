@@ -19,3 +19,5 @@ README.pdf
 
 App.config
 /src/MembershipManager/MembershipManager/App.config
+
+src/MembershipManager/MembershipManager/Properties/PublishProfiles/FolderProfile.pubxml
