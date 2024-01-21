@@ -29,6 +29,7 @@ namespace MembershipManager.DataModel.Company
         /// </summary>
         [DbRelation("city_id")]
         public City? City { get; set; }
+        public static Structure CurrentStructure { get; internal set; }
 
         /// <summary>
         /// basic constructor
@@ -81,7 +82,7 @@ namespace MembershipManager.DataModel.Company
         #region not implemented yet
         public void Insert()
         {
-            throw new NotImplementedException();
+            DbManager.Db?.Send(ISql.InsertQuery<Structure>(this));
         }
 
         public void Update()

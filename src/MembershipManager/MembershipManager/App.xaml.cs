@@ -2,8 +2,12 @@
 using MembershipManager.DataModel.Company;
 using MembershipManager.Engine;
 using MembershipManager.Resources;
+using Npgsql;
+using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -21,17 +25,32 @@ namespace MembershipManager
 #endif
         private List<Tuple<Action, string>> InitialisationActions = [];
 
+        bool isInitialized = false;
+
         public App()
         {
+            CheckDatabase();
+            if (!isInitialized)
+            {
+                InitialisationActions.Add(new Tuple<Action, string>(() => { InitializeSchema(); }, "Initialisation du schema de la base de donnée"));
+                InitialisationActions.Add(new Tuple<Action, string>(() => { InitalizeTables(); }, "Initialisation des tables de la base de donnée"));
+                InitialisationActions.Add(new Tuple<Action, string>(() => { InitializeLocation(); }, "Initialisation des villes et cantons"));
+            }
             InitialisationActions.Add(new Tuple<Action, string>(() => { Canton.Cantons = ISql.GetAll<Canton>(); }, "Chargement des cantons"));
             InitialisationActions.Add(new Tuple<Action, string>(() => { City.Cities = ISql.GetAll<City>(); }, "Chargement des villes"));
+            if (!isInitialized)
+            {
+                InitialisationActions.Add(new Tuple<Action, string>(() => { InitializeCompany(); }, "Initialisation de la structure et des franchises"));
+            }
             InitialisationActions.Add(new Tuple<Action, string>(() => { Settings.Values = (Settings)Settings.Select(Franchise.CurrentFranchise.Id); }, "Chargement des settings"));
         }
+
+
+
         protected override async void OnStartup(StartupEventArgs e)
         {
 
             InitializeCultures();
-            MainWindow mainWindow = new();
             SplashScreen splashScreen = new();
             splashScreen.Show();
 
@@ -66,6 +85,7 @@ namespace MembershipManager
                 return true;
             });
 
+            MainWindow mainWindow = new();
             splashScreen.Close();
             mainWindow.Show();
         }
@@ -85,6 +105,59 @@ namespace MembershipManager
 
             FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(
                 XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+        }
+
+        private void CheckDatabase()
+        {
+            isInitialized = DbManager.Db.CheckSchema();
+        }
+
+        private void InitializeSchema()
+        {
+            NpgsqlCommand cmd = new();
+            cmd.Connection = new NpgsqlConnection(DbManager.GetConnectionString(false));
+            cmd.CommandText = @"CREATE SCHEMA @schema;";
+            cmd.Parameters.AddWithValue("@schema", ConfigurationManager.AppSettings["Schema"]);
+        }
+
+        private void InitalizeTables()
+        {
+            StringBuilder commandText = new(File.ReadAllText("Resources/SQL/database.sql"));
+            NpgsqlCommand command = new(DbManager.GetConnectionString());
+            command.CommandText = commandText.ToString();
+            DbManager.Db.Send(command);
+
+        }
+
+        private void InitializeLocation()
+        {
+            StringBuilder commandText = new(File.ReadAllText("Resources/SQL/canton.sql"));
+            commandText.AppendLine(File.ReadAllText("Resources/SQL/city.sql"));
+            NpgsqlCommand command = new(DbManager.GetConnectionString());
+            command.CommandText = commandText.ToString();
+            DbManager.Db.Send(command);
+
+        }
+
+        private void InitializeCompany()
+        {
+            City? city = (City?)City.Select(1000);
+
+            if (city is null) throw new KeyNotFoundException();
+
+            new Structure()
+            {
+                Name = "MySportStructure",
+                City = city,
+                HeadOfficeAddress = "Avenue Caserne 10"
+            }.Insert();
+
+            new Franchise()
+            {
+                Address = "Avenue Caserne 10",
+                City = city,
+                StructureName = "MySportStructure"
+            }.Insert();
         }
 
     }

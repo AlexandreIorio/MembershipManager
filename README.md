@@ -163,10 +163,10 @@ Edit `MembershipManager.dll.config` and replace the values of `IP ADDRESS OF SER
     <add key="Port" value="5432"/>
     <add key="User" value="USER"/>
     <add key="Password" value="PASSWORD"/>
+    <add key="Database" value="DATABASE NAME"/>
 
     <!-- Keep these values as default. -->
     <add key="UseSchema" value="True" />
-    <add key="Database" value="membershipmanager"/>
     <add key="Schema" value="membershipmanager"/>
 
   </appSettings>

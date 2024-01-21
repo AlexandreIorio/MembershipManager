@@ -1,4 +1,5 @@
-﻿using MembershipManager.Engine;
+﻿using MembershipManager.DataModel.People;
+using MembershipManager.Engine;
 using NpgsqlTypes;
 using System.Text;
 using System.Windows;
@@ -21,7 +22,7 @@ namespace MembershipManager.DataModel.Company
         /// </summary>
         [DbPrimaryKey(NpgsqlDbType.Integer)]
         [DbAttribute("id")]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         /// <summary>
         /// The name of the franchise.
@@ -39,7 +40,7 @@ namespace MembershipManager.DataModel.Company
         /// The city of the franchise.
         /// </summary>
         [DbRelation("city_id")]
-        City? City { get; set; }
+        public City? City { get; set; }
 
         /// <summary>
         /// basic constructor
@@ -98,7 +99,7 @@ namespace MembershipManager.DataModel.Company
         /// <summary/>
         public void Insert()
         {
-            throw new NotImplementedException();
+            DbManager.Db?.Send(ISql.InsertQuery<Franchise>(this));
         }
 
         /// <summary>

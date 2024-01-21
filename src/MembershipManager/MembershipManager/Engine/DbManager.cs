@@ -214,7 +214,7 @@ namespace MembershipManager.Engine
         /// This method is used to get the connection string from the app.config file
         /// </summary>
         /// <returns></returns>
-        public static string GetConnectionString()
+        public static string GetConnectionString(bool useSchema = true)
         {
 
             System.Collections.Specialized.NameValueCollection AppSetting = ConfigurationManager.AppSettings;
@@ -233,8 +233,8 @@ namespace MembershipManager.Engine
             builder.ConnectionStringBuilder.Database = database;
             
 
-            if (bool.TryParse(ConfigurationManager.AppSettings["UseSchema"], out bool useSchema)
-              && useSchema)
+            if (useSchema && bool.TryParse(ConfigurationManager.AppSettings["UseSchema"], out bool use)
+              && use)
             {
                 string? schema = ConfigurationManager.AppSettings["Schema"];
                 if (schema is null) throw new ArgumentNullException("Schema is null");
@@ -263,6 +263,25 @@ namespace MembershipManager.Engine
         {
             connection.Close();
         }
+
+        public bool CheckSchema()
+        {
+            bool schemaExists = false;
+            NpgsqlCommand cmd = new();
+            cmd.Connection = new NpgsqlConnection(GetConnectionString(false));
+            cmd.CommandText = @"SELECT EXISTS (
+                                    SELECT 1
+                                    FROM information_schema.Schemata
+                                    WHERE schema_name = 'membershipmanager'
+                                ) as schema_exists;";
+            OpenConnection(cmd.Connection);
+            schemaExists = cmd.ExecuteScalar() as bool? ?? false;
+            CloseConnection(cmd.Connection);
+            return schemaExists;
+
+
+        }
+
         #endregion
 
         #region Singleton
