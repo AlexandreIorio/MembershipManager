@@ -20,13 +20,13 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0">Type</Label>
             <WrapPanel Grid.Row="0" Grid.Column="1">
-                <RadioButton GroupName="Type" Content="Entrée" IsChecked="True" />
-                <RadioButton GroupName="Type" Content="Abonnement" IsChecked="{Binding IsSubscription, Mode=TwoWay}"/>
+                <RadioButton  GroupName="Type" Content="Entrée" IsChecked="True" />
+                <RadioButton x:Name="RadioSubscription" GroupName="Type" Content="Abonnement" Click="RadioButton_Click"/>
             </WrapPanel>
             <Label Grid.Row="1">Quantité</Label>
-            <TextBox x:Name="TextBoxQuantity" Grid.Row="1" Grid.Column="1" Text="{Binding Quantity}"/>
+            <TextBox x:Name="TextBoxQuantity" Grid.Row="1" Grid.Column="1" TextChanged="TextBoxQuantity_TextChanged" />
             <Label Grid.Row="2">Prix</Label>
-            <TextBox x:Name="TextBoxAmount" Grid.Row="2" Grid.Column="1" Text="{Binding ComputedAmount}"/>
+            <TextBox x:Name="TextBoxAmount" Grid.Row="2" Grid.Column="1"  TextChanged="TextBoxAmount_TextChanged"/>
 
         </Grid>
     </StackPanel>

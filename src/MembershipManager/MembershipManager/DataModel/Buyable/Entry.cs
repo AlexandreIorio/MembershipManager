@@ -16,7 +16,7 @@ namespace MembershipManager.DataModel.Buyable
 
         [DbAttribute("amount")]
         public int? Amount { get; set; }
-        public double ComputedAmount { get => Amount ?? 0 / 100.0; set => Amount = (int?)(value * 100); }
+        public double ComputedAmount { get => (Amount ?? 0) / 100.0; set => Amount = (int?)(value * 100); }
 
         [DbAttribute("is_subscription")]
         public bool IsSubscription { get; set; }
