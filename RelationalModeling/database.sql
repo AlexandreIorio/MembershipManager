@@ -62,7 +62,7 @@ FOREIGN KEY (city_id) REFERENCES city(id)
 CREATE TABLE member(
     no_avs char(13),
     structure_name varchar(50) NOT NULL,
-    subscription_date date,
+    subscription_date timestamp,
 
     PRIMARY KEY (no_avs),
     FOREIGN KEY (no_avs) REFERENCES person(no_avs),
@@ -72,7 +72,7 @@ CREATE TABLE member(
 CREATE TABLE memberaccount (
     id char(13),
     available_entry int,
-    subscription_issue date,
+    subscription_issue timestamp,
 
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES member(no_avs)
@@ -104,7 +104,7 @@ CREATE TABLE paiement
     account_id varchar(13) NOT NULL,
     amount int NOT NULL,
     payed bool default false,
-    date date NOT NULL,
+    date timestamp NOT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (account_id) REFERENCES memberAccount(id)
@@ -115,7 +115,7 @@ CREATE TABLE bill
 (
     id int,
     issue_date date,
-    payed_date date,
+    payed_date timestamp,
     payed_amount int,
 
     PRIMARY KEY (id),
@@ -129,7 +129,7 @@ CREATE TABLE consumption(
     bill_id int,
     code varchar(50) NOT NULL,
     amount int, --cents
-    date date,
+    date timestamp,
 
     PRIMARY KEY (id),
     FOREIGN KEY (account_id) REFERENCES memberAccount(id),
@@ -246,7 +246,7 @@ CREATE OR REPLACE FUNCTION insert_paiement_and_bill(
     _date DATE ,
     _payed BOOLEAN,
     _issue_date DATE,
-    _payed_date DATE,
+    _payed_date timestamp,
     _payed_amount INT
 ) RETURNS INT AS $$
 DECLARE

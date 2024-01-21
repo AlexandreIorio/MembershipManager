@@ -97,6 +97,7 @@ namespace MembershipManager.DataModel.Financial
                 Date = DateTime.Now;
                 Insert();
                 AssignConsumptions();
+                BillView.Consumptions = Consumption.Views()?.Cast<ConsumptionView>().ToList();
                 return true;
             }
 

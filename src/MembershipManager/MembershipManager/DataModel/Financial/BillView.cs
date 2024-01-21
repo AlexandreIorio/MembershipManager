@@ -52,7 +52,6 @@ namespace MembershipManager.DataModel.Financial
         {
             get
             {
-                ;
                 return Consumptions?.Where(c => c.Bill_id == id).ToList();
             }
         }
