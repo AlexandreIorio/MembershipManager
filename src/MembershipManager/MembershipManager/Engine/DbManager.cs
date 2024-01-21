@@ -20,6 +20,7 @@ namespace MembershipManager.Engine
         public void Send(NpgsqlCommand cmd)
         {
             cmd.Connection = new NpgsqlConnection(GetConnectionString());
+            cmd.Prepare();
             CheckDbValidity(cmd);
             OpenConnection(cmd.Connection);
             cmd.ExecuteNonQuery();
@@ -62,6 +63,7 @@ namespace MembershipManager.Engine
 
             Type type = typeof(T);
             OpenConnection(cmd.Connection);
+            cmd.Prepare();
             NpgsqlDataReader reader = cmd.ExecuteReader();
 
             List<object> results = [];
@@ -222,7 +224,24 @@ namespace MembershipManager.Engine
             string? user = AppSetting["User"];
             string? password = AppSetting["Password"];
 
-            return $"User ID={user}; Password={password}; Host={host}; Port={port};  Database={database};";
+            //Connection string builder
+            Npgsql.NpgsqlDataSourceBuilder builder = new();
+            builder.ConnectionStringBuilder.Username = user;
+            builder.ConnectionStringBuilder.Password = password;
+            builder.ConnectionStringBuilder.Host = host;
+            builder.ConnectionStringBuilder.Port = int.Parse(port);
+            builder.ConnectionStringBuilder.Database = database;
+            
+
+            if (bool.TryParse(ConfigurationManager.AppSettings["UseSchema"], out bool useSchema)
+              && useSchema)
+            {
+                string? schema = ConfigurationManager.AppSettings["Schema"];
+                if (schema is null) throw new ArgumentNullException("Schema is null");
+                builder.ConnectionStringBuilder.SearchPath = schema;
+            }
+
+            return builder.ConnectionString;
 
         }
 
@@ -232,10 +251,9 @@ namespace MembershipManager.Engine
         /// <param name="connection"></param>
         private static void OpenConnection(NpgsqlConnection connection)
         {
+            
             CloseConnection(connection);
             connection.Open();
-            using NpgsqlCommand command = new("SET search_path TO membershipmanager", connection);
-            command.ExecuteNonQuery();
         }
 
         /// <summary>
