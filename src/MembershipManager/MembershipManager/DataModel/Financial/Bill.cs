@@ -9,10 +9,17 @@ using System.Windows;
 
 namespace MembershipManager.DataModel.Financial
 {
+    /// <summary>
+    /// lass representing an open paiement for a member, paiement can be payed or not
+    /// <inheritdoc/>
+    /// </summary>
     [DbTableName("bill")]
     [DbInherit(typeof(Paiement))]
     public class Bill : Paiement, ISql
     {
+        /// <summary>
+        /// Enum to represent the status of a bill
+        /// </summary>
         public enum BillStatus
         {
             Payed,
@@ -20,8 +27,14 @@ namespace MembershipManager.DataModel.Financial
             Expired
         }
 
+        /// <summary>
+        /// Name of the status of a bill
+        /// </summary>
         public static string[] BillStatusNames { get => new string[] { "Payée", "Attente", "Expirée" }; }
 
+        /// <summary>
+        /// Issue date of the bill define by the date of the paiement + the payment terms defined in the config
+        /// </summary>
         [DbAttribute("issue_date")]
         public DateTime? IssueDate
         {
@@ -38,16 +51,31 @@ namespace MembershipManager.DataModel.Financial
 
         private DateTime? _issueDate;
 
+        /// <summary>
+        /// Date of the paiement
+        /// </summary>
         [DbAttribute("payed_date")]
         public DateTime? PayedDate { get; set; }
 
+        /// <summary>
+        /// Amount payed by the member
+        /// </summary>
         [DbAttribute("payed_amount")]
         public int? PayedAmount { get; set; }
 
+        /// <summary>
+        /// basic constructor
+        /// <inheritdoc/>
+        /// </summary>
         public Bill() : base()
         {
         }
 
+        /// <summary>
+        /// Constructor used to create a new bill
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="paiement"></param>
         public Bill(Paiement paiement) : base(paiement)
         {
         }
@@ -56,7 +84,7 @@ namespace MembershipManager.DataModel.Financial
         /// This method is used to generate a bill for a member and assign consumptions to it
         /// </summary>
         /// <exception cref="NullReferenceException"></exception>
-        public void Generate()
+        public bool Generate()
         {
             if (Account is null) throw new NullReferenceException("Account is null");
 
@@ -67,19 +95,12 @@ namespace MembershipManager.DataModel.Financial
                 Date = DateTime.Now;
                 Insert();
                 AssignConsumptions();
-                MessageBox.Show("Facture générée",
-                                         "Information",
-                                         MessageBoxButton.OK,
-                                         MessageBoxImage.Information);
+                return true;
             }
-            else
-            {
-                MessageBox.Show("Aucun montant facturable",
-                                       "Information",
-                                        System.Windows.MessageBoxButton.OK,
-                                        System.Windows.MessageBoxImage.Information);
-            }
+
+            return false;
         }
+
 
         private void AssignConsumptions()
         {
@@ -113,6 +134,10 @@ namespace MembershipManager.DataModel.Financial
             DbManager.Db?.Send(cmd);
         }
 
+        /// <summary>
+        /// Method to get all consumptions of the member related to the current bill
+        /// </summary>
+        /// <returns></returns>
         public List<Consumption> GetConsumptions()
         {
             Npgsql.NpgsqlCommand cmd = new()
@@ -123,26 +148,13 @@ namespace MembershipManager.DataModel.Financial
             return DbManager.Db.Recieve<Consumption>(cmd);
         }
 
-        public void CheckAccount()
-        {
-            if (Account is null) throw new NullReferenceException("Account is null");
-            if (Account.Balance < 0) return;
-
-            MessageBoxResult result = MessageBox.Show("Le solde du compte est positif, aucun paiement n'est nécessaire,\nVoulez-vous marquer la facture comme payée ? ",
-                                                      "Information",
-                                                        System.Windows.MessageBoxButton.YesNo,
-                                                        System.Windows.MessageBoxImage.Information);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                Payed = true;
-                Amount = (int)(-Account.Balance * 100);
-                Date = DateTime.Now;
-                if (Validate()) DbManager.Db?.Send(ISql.InsertQuery<Bill>(this));
-            }
-
-        }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
         public new static ISql? Select(params object[] pk)
         {
 
@@ -152,6 +164,9 @@ namespace MembershipManager.DataModel.Financial
             return bill == null ? throw new KeyNotFoundException() : (ISql)bill;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public new void Insert()
         {
             if (Validate())
@@ -174,11 +189,18 @@ namespace MembershipManager.DataModel.Financial
             }
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public new void Update()
         {
             if (Validate()) DbManager.Db?.Send(ISql.UpdateQuery<Bill>(this));
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
         public new bool Validate()
         {
             StringBuilder message = new();
@@ -214,6 +236,12 @@ namespace MembershipManager.DataModel.Financial
             ISql.Erase<Paiement>(pk);
         }
 
+        /// <summary>
+        /// Method to get all bills of a member
+        /// </summary>
+        /// <param name="sqlParam"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public new static List<SqlViewable>? Views(params NpgsqlParameter[] sqlParam)
         {
             if (sqlParam.Length > 2) throw new ArgumentException();
@@ -246,6 +274,9 @@ namespace MembershipManager.DataModel.Financial
             return DbManager.Db.Views<BillView>(cmd).Cast<SqlViewable>().ToList();
         }
 
+        /// <summary>
+        /// Method to change a bill status
+        /// </summary>
         public void ChangeStatus()
         {
             if (Payed == true)

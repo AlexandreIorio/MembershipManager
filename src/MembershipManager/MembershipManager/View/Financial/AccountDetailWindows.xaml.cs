@@ -130,8 +130,23 @@ namespace MembershipManager.View.Financial
             {
                 Account = Account
             };
-            bill.Generate();
-            RefreshTransactions();
+            if (bill.Generate())
+            {
+                MessageBox.Show("Facture générée",
+                         "Information",
+                         MessageBoxButton.OK,
+                         MessageBoxImage.Information);
+
+                RefreshTransactions();
+            }
+            else
+            {
+                MessageBox.Show("Aucun montant facturable",
+                       "Information",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+            }
+
         }
 
         private void ButtonBuyEntry_Click(object sender, RoutedEventArgs e)
