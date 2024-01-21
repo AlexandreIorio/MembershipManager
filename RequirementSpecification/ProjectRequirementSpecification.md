@@ -48,7 +48,7 @@ To address this significant administrative problem, it is crucial to compile a l
 
 ## Technical specifications
 
-The technical specifications marked with :white_check_mark: are successfully implemented and the specification marked with :x: are not implemented yet 
+The technical specifications marked with :white_check_mark: are successfully implemented, and those marked with :x: are not implemented yet.
 
 ### Data requirements
 To establish such a computerized structure, a database system will be required to store and link the following elements:

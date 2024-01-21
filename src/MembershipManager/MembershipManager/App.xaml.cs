@@ -136,7 +136,6 @@ namespace MembershipManager
             NpgsqlCommand command = new(DbManager.GetConnectionString());
             command.CommandText = commandText.ToString();
             DbManager.Db.Send(command);
-
         }
 
         private void InitializeCompany()
