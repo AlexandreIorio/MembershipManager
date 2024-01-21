@@ -128,12 +128,6 @@ Dockerize or install the database on PC:
             - POSTGRES_USER=YOUR-USERNAME
             # end section
             - POSTGRES_DB=membershipmanager
-
-        adminer:
-            image: adminer
-            restart: always
-            ports:
-            - 8080:8080
     ```
 
 ### 2. Build Database

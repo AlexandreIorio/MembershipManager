@@ -48,49 +48,56 @@ To address this significant administrative problem, it is crucial to compile a l
 
 ## Technical specifications
 
+The technical specifications marked with :white_check_mark: are successfully implemented and the specification marked with :x: are not implemented yet 
+
 ### Data requirements
 To establish such a computerized structure, a database system will be required to store and link the following elements:
 
-#### Users
+#### Users :x: 
 Users represent individuals who access the application. They may include both administrators and regular users who interact with various features and functionalities.
 
-#### Roles and Access
+#### Roles and Access :x: 
 Roles and Access refer to the permissions and privileges assigned to users within the application. This entity helps define who can perform specific actions and access certain parts of the system.
 
-#### Employee
+#### Employee :x: 
 The Employee entity represents individuals who work within the organisation. This entity include attributes to manage and track employee information, roles, and employment details, including the ability to manage contracts and salaries.
 
-#### Members
+#### Members :white_check_mark:
 Members within the application represent individuals who have subscribed to a strucutre, such as gym or fitness center, Climbing center or many other types of strucutre. 
 
-#### Courses
+#### Courses :x: 
 Courses represent educational content or training programs that members can enroll in or access. This entity may include course details, schedules, and resources.
 
-#### Available Products/Subscriptions
+#### Available Products/Subscriptions :white_check_mark:
 Available Products/Subscriptions encompass the offerings members can purchase or subscribe inside the structure. This entity includes product information, pricing, and subscription plans.
 
-#### Billing Process and Control
+#### Billing Process and Control :white_check_mark:
 Billing Process and Control involve the mechanisms and procedures for managing payments and invoices. This entity helps track financial transactions and ensures proper billing procedures are in place.
 
-#### Data Templates to Generate Documents
+#### Data Templates to Generate Documents :x: 
 Data Templates to Generate Documents are templates used to create various types of documents within your application. These templates streamline the process of generating reports, certificates, or other customized documents.
 
-#### Cashier
+#### Cashier :white_check_mark:
 The Cashier entity is responsible for handling payment transactions and processing financial transactions inside the strucutre. It interacts with billing information and payment gateways.
  
-#### Charges and maintenance
+#### Charges and maintenance :x: 
 This entity covers activities and expenditure relating to the repair and overall maintenance of infrastructure, equipment and facilities.
 
-#### Accounting Report
+#### Accounting Report :white_check_mark:
 Accounting Reports generate financial summaries and insights based on the data collected by your application. These reports help users and administrators make informed financial decisions.
 
 
-### Features
+### Base Features
 With this program, a `User` will be able to register `Members` who will subscribe to a `Subscription` provided by the organization. A `Member` can purchase `Products` which can be paid directly to the `Cashier` or recorded in an `Account`. Additionally, a `Member` can enroll in a `Course` within a designated `Room` with an assigned `Teacher`.
 
 A `User` will have the capability to generate `Bills`, print them, or send them via email. Payments will be entered into the system to verify if the `Bills` have been settled. In cases where they are not paid, automatic `Reminders` will be sent.
 
 A `User` with a sufficiently high `Role` will have the authority to manage `Employees`, handle `Charges`, and oversee `Maintenance`. They will also be able to generate various types of `Documents` and `Reports`.
+
+### Current Features
+With this program, you will be able to register `Members` who will subscribe to a `Subscription` provided by the organization. A `Member` can purchase `Products` which can be paid directly to the `Cashier` or recorded in an `Account`. Additionally, a `Member` can enroll in a `Course` within a designated `Room` with an assigned `Teacher`.
+
+You have the capability to generate `Bills`, print them, or send them via email. Payments will be entered into the system to verify if the `Bills` have been settled.
 
 
 
