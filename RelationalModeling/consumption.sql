@@ -1,0 +1,10 @@
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (3, 'Coca Cola Classic', '7562526154634', null, '7624562345', 200, '2023-02-21');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (4, 'Pepsi', '7562526154634', null, '5446274491', 185, '2023-02-24');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (5, 'Kit Kat', '7562526154634', null, '5442439453', 160, '2023-07-22');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (6, '10 entrées 90 CHF', '7562526154634', 2, 'Entrée', 9000, '2023-08-25');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (8, 'Coca Cola Classic', '7564726549682', 3, '7624562345', 200, '2023-12-20');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (9, 'Kit Kat', '7564726549682', 3, '5442439453', 160, '2023-12-20');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (7, '12 mois 778 CHF', '7564726549682', 3, 'Abonnement', 77800, '2023-12-19');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (10, '10 entrées 90 CHF', '7569854624538', null, 'Entrée', 9000, '2024-01-21');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (11, 'Coca Cola Classic', '7568223185668', null, '7624562345', 200, '2024-01-21');
+INSERT INTO membershipmanager.consumption (id, name, account_id, bill_id, code, amount, date) VALUES (12, 'Sprite', '7568223185668', null, '5449778408', 155, '2024-01-21');
