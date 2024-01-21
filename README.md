@@ -113,26 +113,46 @@ Dockerize or install the database on PC:
     - Run `docker pull postgres`
     - Create a `docker-compose.yaml` file and add the following code block, editing `YOUR-DOCKER-PATH`, `YOUR-USERNAME`, and `YOUR-PASSWORD`:
     ```yaml
-    version: '3.1'
-
-    services:
-        postgres:
-            image: postgres
-            ports:
-            - 5432:5432
-            volumes:
-            - YOUR-DOCKER-PATH/postgres:/var/lib/postgresql/data
-            environment:
-            # edit this section
-            - POSTGRES_PASSWORD=YOUR-PASSWORD
-            - POSTGRES_USER=YOUR-USERNAME
-            # end section
-            - POSTGRES_DB=membershipmanager
+  version: '3.8'
+  networks:
+    membership-net:
+      driver: bridge
+  
+  services:
+    postgresql:
+      image: 'bitnami/postgresql:16'
+      container_name: membership_db
+      environment:
+        - POSTGRESQL_USERNAME=<Username>
+        - POSTGRESQL_PASSWORD=<Password>
+        - POSTGRESQL_DATABASE=membershipmanager
+        - POSTGRESQL_POSTGRES_PASSWORD=root
+      ports:
+        - 5432:5432
+      volumes:
+        - .:/data:ro
+      networks:
+        - membership-net
     ```
 
-### 2. Build Database
+### 2. Create + populate database
 
-To build the database, //TODO Explain how to run database.sql
+This is not mandatory as the database is automaticly created when you run the soft for the first time. 
+But if you want to populate the databse to make some test, execute theses script from datagrip or others tools to query the db.
+
+It's important to follow this order :
+  database.sql
+  canton.sql
+  city.sql
+  structure.sql
+  franchise.sql
+  product.sql
+  entry.sql
+  person.sql
+  member.sql
+  paiement.sql
+  bill.sql
+  consumption.sql
 
 ### 3. Install .NET 8.0 Runtime
 
