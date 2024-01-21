@@ -57,7 +57,7 @@ namespace MembershipManager.View.Financial
         private void RefreshTransactions()
         {
 
-            Bills = Bill.Views()?.Cast<BillView>().ToList();
+            Bills = Bill.Views()?.Cast<BillView>().OrderByDescending(x=>x.Date).ToList();
             BillsDataGrid.ItemsSource = Bills;
         }
 
@@ -83,7 +83,7 @@ namespace MembershipManager.View.Financial
                 else if (from is null && To is null) return;
                 else _sortedBills = _sortedBills.Where(b => b.Date?.Date >= from?.Date && b.Date?.Date <= To?.Date).ToList();
             }
-            BillsDataGrid.ItemsSource = _sortedBills;
+            BillsDataGrid.ItemsSource = _sortedBills?.OrderByDescending(x => x.Date).ToList(); 
         }
 
         private void BillsDataGrid_MouseUp(object sender, MouseButtonEventArgs e)

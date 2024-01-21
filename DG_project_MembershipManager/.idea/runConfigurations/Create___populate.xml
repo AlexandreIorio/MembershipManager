@@ -11,6 +11,7 @@
     <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulatePaiement.sql" />
     <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateProduct.sql" />
     <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateEntry.sql" />
+    <script-file value="$PROJECT_DIR$/../RelationalModeling/PopulateBill.sql" />
     <script-mode>FILE</script-mode>
     <data-source id="0c215394-239a-485a-93a6-0ff6ee15e35c" namespace="database/&quot;membershipmanager&quot;/schema/&quot;membershipmanager&quot;" />
     <method v="2" />

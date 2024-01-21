@@ -48,8 +48,8 @@ namespace MembershipManager.DataModel.Financial
             return NoAvs != null;
         }
 
-        public double Balance => _finishedTransactions?.Sum(t => t.ComputedAmount) ?? 0;
-        public double PendingAmount => _pendingTransactions?.Sum(t => t.ComputedAmount) ?? 0;
+        public double? Balance => _finishedTransactions?.Sum(t => t.ComputedAmount) ?? 0;
+        public double? PendingAmount => _pendingTransactions?.Sum(t => t.ComputedAmount) ?? 0;
 
 
         private List<ITransaction> _finishedTransactions

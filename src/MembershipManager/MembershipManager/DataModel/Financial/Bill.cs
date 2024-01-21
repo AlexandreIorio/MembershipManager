@@ -59,8 +59,10 @@ namespace MembershipManager.DataModel.Financial
         public void Generate()
         {
             if (Account is null) throw new NullReferenceException("Account is null");
+            if (Account.Balance is null || Account.Balance > 0) return;
+            if (Account.PendingAmount is null) return;
 
-            double billeableAmount = Account.Balance + Account.PendingAmount;
+            double? billeableAmount = Account.Balance + Account.PendingAmount;
             if (billeableAmount < 0)
             {
                 Amount = (int)(-billeableAmount * 100);
@@ -85,6 +87,7 @@ namespace MembershipManager.DataModel.Financial
         {
             if (Id is null) throw new NullReferenceException("Id is null");
             List<Consumption> consumptions = GetConsumptions();
+            consumptions = consumptions.OrderByDescending(c => c.Date).ToList();
 
             List<int?> consumptionIds = new();
             int? amount = Amount;
