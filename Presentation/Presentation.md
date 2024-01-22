@@ -3,6 +3,21 @@ marp: true
 backgroundImage: url('https://marp.app/assets/hero-background.svg')
 ---
 
+<style>
+    img {
+        background: transparent;
+        box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.5);
+    }
+
+    p, li {
+        text-align: justify;
+    }
+
+    p {
+        margin-bottom: 1em;
+    }
+</style>
+
 # Membership Manager Presentation
 ---
 
