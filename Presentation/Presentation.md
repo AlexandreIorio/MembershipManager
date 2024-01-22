@@ -6,14 +6,14 @@ backgroundImage: url('https://marp.app/assets/hero-background.svg')
 # Membership Manager Presentation
 ---
 
-## D'ou vient l'idée ?
-L'idée découlent d'un réel problème rencontré par un proche des membres du groupe, qui, par la reprise d'une salle de sport s'est retrouvé avec une charge administrative élevée. 
+## D'où vient l'idée ?
+L'idée découle d'un réel problème rencontré par un proche des membres du groupe, qui par la reprise d'une salle de sport s'est retrouvé avec une charge administrative élevée. 
 
 ---
 
-## Quels étaient les problèmes à resoudre ?
+## Quels étaient les problèmes à résoudre ?
 - Le problème est que la gestion des membres est une tâche répétitive et chronophage.
-- La gestion des entrées et abonnements prend du temps à chaques entrée de membre.
+- La gestion des entrées et abonnements prend du temps à chaque entrée de membre.
 - Le contrôle de la facturation sans aide informatique est une tâche difficile et source d'erreur.
 
 ---
@@ -27,7 +27,7 @@ Lors de l'arrivée d'un membre, l'application permet de saisir rapidement le nom
 ---
 
 ## Gestion du compte du membre
-Un interface permet de gérer le compte du membre, de voir ses entrées, ses abonnements et de generer des factures.
+Une interface permet de gérer le compte du membre, de voir ses entrées, ses abonnements et de générer des factures.
 <img src="resources/img/membreaccount.png" width=50%>
 
 ---
@@ -41,7 +41,7 @@ L'application permet d'ajouter un plan d'abonnement ou d'entrée au membre.
 
 ## Gestion des paiements
 
-L'application permet saisir des paiements ou de générer des factures.
+L'application permet de saisir des paiements ou de générer des factures.
 <img src="resources/img/paiement.png" width=20%> <img src="resources/img/facturegeneration.png" width=50%>
 
 ---
@@ -98,7 +98,7 @@ public interface ISql
 
 ---
 
-## Interactions avec la base de données - Requête personalisée
+## Interactions avec la base de données - Requête personnalisée
 
 `bill.cs`
 ```csharp
