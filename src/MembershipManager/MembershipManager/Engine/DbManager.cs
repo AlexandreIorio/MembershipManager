@@ -219,6 +219,7 @@ namespace MembershipManager.Engine
         {
 
             System.Collections.Specialized.NameValueCollection AppSetting = ConfigurationManager.AppSettings;
+            if (AppSetting.Count == 0)throw new ArgumentNullException("Application Setting is null");
             string? host = AppSetting["Host"];
             string? port = AppSetting["Port"];
             string? database = AppSetting["Database"];
